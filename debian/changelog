@@ -1,0 +1,5 @@
+dvisvgm (2.7.3-1) unstable; urgency=medium
+
+  * Initial release (Closes: #932968)
+
+ -- Hilmar Preusse <hille42@web.de>  Thu, 25 Jul 2019 06:09:20 +0200
