@@ -13,6 +13,7 @@ Vcs-Browser: https://github.com/debian-tex/dvisvgm
 Package: dvisvgm
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: texlive-binaries (<= 2019.20190605.51237-2)
 Description: A DVI to SVG converter
  dvisvgm is a utility for TeX/LaTeX users. It converts DVI, EPS, and
  PDF files to the XML-based scalable vector graphics format SVG.
