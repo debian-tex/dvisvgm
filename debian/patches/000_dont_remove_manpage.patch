@@ -1,0 +1,26 @@
+Index: dvisvgm/doc/Makefile.am
+===================================================================
+--- dvisvgm.orig/doc/Makefile.am	2019-07-08 17:24:34.000000000 +0200
++++ dvisvgm/doc/Makefile.am	2019-07-25 23:03:29.744668261 +0200
+@@ -73,7 +73,7 @@
+ 	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub
+ 
+ distclean-local:
+-	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub dvisvgm.1
++	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub
+ 
+ # Ensure that distribution tarballs always contain a recent manpage, i.e.
+ # let "make dist" and "make distcheck" fail if dvisvgm.1 can't be built.
+Index: dvisvgm/doc/Makefile.in
+===================================================================
+--- dvisvgm.orig/doc/Makefile.in	2019-07-12 11:03:08.000000000 +0200
++++ dvisvgm/doc/Makefile.in	2019-07-25 23:04:10.072822267 +0200
+@@ -615,7 +615,7 @@
+ 	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub
+ 
+ distclean-local:
+-	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub dvisvgm.1
++	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub
+ 
+ # Ensure that distribution tarballs always contain a recent manpage, i.e.
+ # let "make dist" and "make distcheck" fail if dvisvgm.1 can't be built.
