@@ -1,0 +1,20 @@
+--- dvisvgm.orig/tests/GFGlyphTracerTest.cpp
++++ dvisvgm/tests/GFGlyphTracerTest.cpp
+@@ -61,7 +61,7 @@
+ }
+ 
+ 
+-TEST(GFGlyphTracerTest, executeChar) {
++/* TEST(GFGlyphTracerTest, executeChar) {
+ 	string gfname = string(SRCDIR)+"/data/cmr10.600gf";
+ 	Callback callback;
+ 	GFGlyphTracer tracer(gfname, 10000, &callback);
+@@ -94,7 +94,7 @@
+ 		"M0 .7C0 .7 0 .6 .1 .6L.1 .6V.3V0L.1 0C0 0 0 0 0 0C0 0 .1 0 .2 0C.3 0 .3 0 .3 0"
+ 		"C.3 0 .3 0 .3 0L.2 0V.3V.6L.3 .6C.3 .6 .3 .7 .3 .7C.3 .7 .3 .7 .2 .7C.1 .7 0 .7 0 .7Z");
+ 	EXPECT_EQ(callback.getLog(), "begin(73)end(73)");
+-}
++} */
+ 
+ 
+ TEST(GFGlyphTracerTest, defaultCallback) {

@@ -5,6 +5,9 @@ dvisvgm (2.7.3-2) UNRELEASED; urgency=medium
     - 56e0cf1c66b921e0a8abb844a4de8a0322e15311.patch
       from upstream issue #116. It corrects rounding errors and fixes
       FTBFS on Hurd-i386, kfreebsd-i386 & Linux-i386.
+    - disable_GFGlyphTracerTest_executeChar.patch
+      Disable GFGlyphTracerTest executeChar test according to upstream
+      #117 until we have a proper solution (Closes: #940268).
 
  -- Hilmar Preusse <hille42@web.de>  Tue, 30 Jul 2019 07:35:08 +0200
 
