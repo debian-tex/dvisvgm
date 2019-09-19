@@ -11,6 +11,7 @@ Build-Depends:
  libbrotli-dev,
  libwoff-dev,
  libfreetype6-dev,
+ libgs-dev,
  pkg-config,
  python
 Standards-Version: 4.1.3
