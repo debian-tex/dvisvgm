@@ -6,7 +6,6 @@ Uploaders: Hilmar Preusse <hille42@web.de>,
            Norbert Preining <norbert@preining.info>
 Build-Depends:
  debhelper-compat (= 11),
- ghostscript,
  libkpathsea-dev,
  libbrotli-dev,
  libwoff-dev,
