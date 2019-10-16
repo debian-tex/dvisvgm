@@ -2,6 +2,7 @@ dvisvgm (2.7.3-3) UNRELEASED; urgency=medium
 
   * Add libgs-dev to BD (Closes: #940700)
   * Add "Enhances: texlive-binaries"
+  * Change BD: libfreetype6-dev -> libfreetype-dev
 
  -- Hilmar Preusse <hille42@web.de>  Thu, 19 Sep 2019 10:24:53 +0200
 

@@ -9,7 +9,7 @@ Build-Depends:
  libkpathsea-dev,
  libbrotli-dev,
  libwoff-dev,
- libfreetype6-dev,
+ libfreetype-dev,
  libgs-dev,
  pkg-config,
  python
