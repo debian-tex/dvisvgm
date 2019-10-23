@@ -1,10 +1,14 @@
 dvisvgm (2.7.3-3) UNRELEASED; urgency=medium
 
+  [ Hilmar Preusse ]
   * Add libgs-dev to BD (Closes: #940700)
   * Add "Enhances: texlive-binaries"
   * Change BD: libfreetype6-dev -> libfreetype-dev
 
- -- Hilmar Preusse <hille42@web.de>  Thu, 19 Sep 2019 10:24:53 +0200
+  [ Norbert Preining ]
+  * Use Python3 (Closes: #943008)
+
+ -- Norbert Preining <norbert@preining.info>  Wed, 23 Oct 2019 13:22:47 +0900
 
 dvisvgm (2.7.3-2) unstable; urgency=medium
 

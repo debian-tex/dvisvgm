@@ -1,0 +1,27 @@
+---
+ src/Makefile.am   |    2 +-
+ tests/Makefile.am |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- dvisvgm.git.orig/src/Makefile.am
++++ dvisvgm.git/src/Makefile.am
+@@ -211,7 +211,7 @@ endif
+ # the command-line parser class is generated from options.xml by opt2cpp
+ $(srcdir)/CommandLine.hpp: options.xml
+ 	rm -f $@
+-	python $(srcdir)/opt2cpp.py $< >$@
++	python3 $(srcdir)/opt2cpp.py $< >$@
+ 
+ # Create a C string definition containing the PostScript routines psdefs.ps needed by class PSInterpreter
+ $(srcdir)/psdefs.cpp: psdefs.ps
+--- dvisvgm.git.orig/tests/Makefile.am
++++ dvisvgm.git/tests/Makefile.am
+@@ -49,7 +49,7 @@ hashcheck_CPPFLAGS = $(LIBS_CFLAGS)
+ hashcheck_LDADD = $(LIBS_LIBS)
+ 
+ hashcheck.cpp: genhashcheck.py $(dvisvgm_srcdir)/src/AGLTable.hpp $(dvisvgm_srcdir)/libs/xxHash/xxhash.h
+-	python $^ >$@
++	python3 $^ >$@
+ 
+ TESTLIBS = libgtest.la ../src/libdvisvgm.la $(LIBS_LIBS) -lfreetype
+ if ENABLE_WOFF
