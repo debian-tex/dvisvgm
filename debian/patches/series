@@ -1,4 +1,3 @@
 000_dont_remove_manpage.patch
-56e0cf1c66b921e0a8abb844a4de8a0322e15311.patch
 disable_GFGlyphTracerTest_executeChar.patch
 python3
