@@ -55,7 +55,6 @@ libdvisvgm_la_SOURCES = \
 	Color.hpp                    Color.cpp \
 	ColorSpecialHandler.hpp      ColorSpecialHandler.cpp \
 	CommandLine.hpp \
-	CRC32.hpp                    CRC32.cpp \
 	Directory.hpp                Directory.cpp \
 	DVIActions.hpp \
 	DLLoader.hpp                 DLLoader.cpp \
@@ -63,6 +62,7 @@ libdvisvgm_la_SOURCES = \
 	DvisvgmSpecialHandler.hpp    DvisvgmSpecialHandler.cpp \
 	DVIToSVG.hpp                 DVIToSVG.cpp \
 	DVIToSVGActions.hpp          DVIToSVGActions.cpp \
+	EllipticalArc.hpp            EllipticalArc.cpp \
 	EmSpecialHandler.hpp         EmSpecialHandler.cpp \
 	EncFile.hpp                  EncFile.cpp \
 	EPSFile.hpp                  EPSFile.cpp \

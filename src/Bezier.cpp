@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <utility>
 #include "Bezier.hpp"
+#include "Matrix.hpp"
 
 using namespace std;
 
@@ -230,8 +231,8 @@ static bool solve_quadratic_equation (double a, double b, double c, double &x1, 
 
 
 /** Returns a tight bounding box parallel to the x- and y-axis. */
-void Bezier::getBBox (BoundingBox &bbox) const {
-	bbox.invalidate();
+BoundingBox Bezier::getBBox () const {
+	BoundingBox bbox;
 	// coefficients of the derivative
 	DPair pa = _points[3] - _points[2]*3.0 + _points[1]*3.0 - _points[0];
 	DPair pb = (_points[2]-_points[1]*2.0+_points[0])*2.0;
@@ -253,4 +254,12 @@ void Bezier::getBBox (BoundingBox &bbox) const {
 	}
 	bbox.embed(_points[0]);
 	bbox.embed(_points[3]);
+	return bbox;
+}
+
+
+Bezier& Bezier::transform (const Matrix &matrix) {
+	for (int i=0; i < 4; i++)
+		_points[i] = matrix*_points[i];
+	return *this;
 }

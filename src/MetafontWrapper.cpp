@@ -18,7 +18,6 @@
 ** along with this program; if not, see <http://www.gnu.org/licenses/>. **
 *************************************************************************/
 
-#include <cstdlib>
 #include <cctype>
 #include <fstream>
 #include <sstream>
@@ -38,7 +37,7 @@ MetafontWrapper::MetafontWrapper (string fname, string dir)
 	// ensure that folder paths ends with slash
 	if (_dir.empty())
 		_dir = "./";
-	else if (_dir != "/" && dir[dir.length()-1] != '/')
+	else if (_dir != "/" && _dir.back() != '/')
 		_dir += '/';
 }
 
@@ -88,7 +87,7 @@ bool MetafontWrapper::call (const string &mode, double mag) {
 		iss.getline(buf, sizeof(buf));
 		string line = buf;
 		if (line.substr(0, 3) == ">> ") {
-			resolution = atoi(line.substr(3).c_str());
+			resolution = stoi(line.substr(3));
 			break;
 		}
 	}

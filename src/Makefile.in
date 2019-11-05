@@ -114,7 +114,12 @@ bin_PROGRAMS = dvisvgm$(EXEEXT)
 @ENABLE_WOFF_TRUE@am__append_13 = $(TTFAUTOHINT_LIBS)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_code_coverage.m4 \
+	$(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
@@ -134,12 +139,12 @@ am__libdvisvgm_la_SOURCES_DIST = AGLTable.hpp BasicDVIReader.hpp \
 	CLCommandLine.hpp CLCommandLine.cpp CMap.hpp CMap.cpp \
 	CMapManager.hpp CMapManager.cpp CMapReader.hpp CMapReader.cpp \
 	CLOption.hpp Color.hpp Color.cpp ColorSpecialHandler.hpp \
-	ColorSpecialHandler.cpp CommandLine.hpp CRC32.hpp CRC32.cpp \
-	Directory.hpp Directory.cpp DVIActions.hpp DLLoader.hpp \
-	DLLoader.cpp DVIReader.hpp DVIReader.cpp \
-	DvisvgmSpecialHandler.hpp DvisvgmSpecialHandler.cpp \
-	DVIToSVG.hpp DVIToSVG.cpp DVIToSVGActions.hpp \
-	DVIToSVGActions.cpp EmSpecialHandler.hpp EmSpecialHandler.cpp \
+	ColorSpecialHandler.cpp CommandLine.hpp Directory.hpp \
+	Directory.cpp DVIActions.hpp DLLoader.hpp DLLoader.cpp \
+	DVIReader.hpp DVIReader.cpp DvisvgmSpecialHandler.hpp \
+	DvisvgmSpecialHandler.cpp DVIToSVG.hpp DVIToSVG.cpp \
+	DVIToSVGActions.hpp DVIToSVGActions.cpp EllipticalArc.hpp \
+	EllipticalArc.cpp EmSpecialHandler.hpp EmSpecialHandler.cpp \
 	EncFile.hpp EncFile.cpp EPSFile.hpp EPSFile.cpp EPSToSVG.hpp \
 	FileFinder.hpp FileFinder.cpp FilePath.hpp FilePath.cpp \
 	FileSystem.hpp FileSystem.cpp FixWord.hpp Font.hpp Font.cpp \
@@ -194,8 +199,8 @@ am_libdvisvgm_la_OBJECTS = BasicDVIReader.lo Bezier.lo \
 	BgColorSpecialHandler.lo Bitmap.lo BoundingBox.lo \
 	Calculator.lo CharMapID.lo CLCommandLine.lo CMap.lo \
 	CMapManager.lo CMapReader.lo Color.lo ColorSpecialHandler.lo \
-	CRC32.lo Directory.lo DLLoader.lo DVIReader.lo \
-	DvisvgmSpecialHandler.lo DVIToSVG.lo DVIToSVGActions.lo \
+	Directory.lo DLLoader.lo DVIReader.lo DvisvgmSpecialHandler.lo \
+	DVIToSVG.lo DVIToSVGActions.lo EllipticalArc.lo \
 	EmSpecialHandler.lo EncFile.lo EPSFile.lo FileFinder.lo \
 	FilePath.lo FileSystem.lo Font.lo FontCache.lo FontEncoding.lo \
 	FontEngine.lo FontManager.lo FontMap.lo FontMetrics.lo \
@@ -250,21 +255,22 @@ am__depfiles_remade = ./$(DEPDIR)/BasicDVIReader.Plo \
 	./$(DEPDIR)/Bitmap.Plo ./$(DEPDIR)/BoundingBox.Plo \
 	./$(DEPDIR)/CLCommandLine.Plo ./$(DEPDIR)/CMap.Plo \
 	./$(DEPDIR)/CMapManager.Plo ./$(DEPDIR)/CMapReader.Plo \
-	./$(DEPDIR)/CRC32.Plo ./$(DEPDIR)/Calculator.Plo \
-	./$(DEPDIR)/CharMapID.Plo ./$(DEPDIR)/Color.Plo \
-	./$(DEPDIR)/ColorSpecialHandler.Plo ./$(DEPDIR)/DLLoader.Plo \
-	./$(DEPDIR)/DVIReader.Plo ./$(DEPDIR)/DVIToSVG.Plo \
-	./$(DEPDIR)/DVIToSVGActions.Plo ./$(DEPDIR)/Directory.Plo \
+	./$(DEPDIR)/Calculator.Plo ./$(DEPDIR)/CharMapID.Plo \
+	./$(DEPDIR)/Color.Plo ./$(DEPDIR)/ColorSpecialHandler.Plo \
+	./$(DEPDIR)/DLLoader.Plo ./$(DEPDIR)/DVIReader.Plo \
+	./$(DEPDIR)/DVIToSVG.Plo ./$(DEPDIR)/DVIToSVGActions.Plo \
+	./$(DEPDIR)/Directory.Plo \
 	./$(DEPDIR)/DvisvgmSpecialHandler.Plo ./$(DEPDIR)/EPSFile.Plo \
-	./$(DEPDIR)/EmSpecialHandler.Plo ./$(DEPDIR)/EncFile.Plo \
-	./$(DEPDIR)/FileFinder.Plo ./$(DEPDIR)/FilePath.Plo \
-	./$(DEPDIR)/FileSystem.Plo ./$(DEPDIR)/Font.Plo \
-	./$(DEPDIR)/FontCache.Plo ./$(DEPDIR)/FontEncoding.Plo \
-	./$(DEPDIR)/FontEngine.Plo ./$(DEPDIR)/FontManager.Plo \
-	./$(DEPDIR)/FontMap.Plo ./$(DEPDIR)/FontMetrics.Plo \
-	./$(DEPDIR)/FontWriter.Plo ./$(DEPDIR)/GFGlyphTracer.Plo \
-	./$(DEPDIR)/GFReader.Plo ./$(DEPDIR)/GFTracer.Plo \
-	./$(DEPDIR)/Ghostscript.Plo ./$(DEPDIR)/HashFunction.Plo \
+	./$(DEPDIR)/EllipticalArc.Plo ./$(DEPDIR)/EmSpecialHandler.Plo \
+	./$(DEPDIR)/EncFile.Plo ./$(DEPDIR)/FileFinder.Plo \
+	./$(DEPDIR)/FilePath.Plo ./$(DEPDIR)/FileSystem.Plo \
+	./$(DEPDIR)/Font.Plo ./$(DEPDIR)/FontCache.Plo \
+	./$(DEPDIR)/FontEncoding.Plo ./$(DEPDIR)/FontEngine.Plo \
+	./$(DEPDIR)/FontManager.Plo ./$(DEPDIR)/FontMap.Plo \
+	./$(DEPDIR)/FontMetrics.Plo ./$(DEPDIR)/FontWriter.Plo \
+	./$(DEPDIR)/GFGlyphTracer.Plo ./$(DEPDIR)/GFReader.Plo \
+	./$(DEPDIR)/GFTracer.Plo ./$(DEPDIR)/Ghostscript.Plo \
+	./$(DEPDIR)/HashFunction.Plo \
 	./$(DEPDIR)/HtmlSpecialHandler.Plo \
 	./$(DEPDIR)/HyperlinkManager.Plo ./$(DEPDIR)/ImageToSVG.Plo \
 	./$(DEPDIR)/InputBuffer.Plo ./$(DEPDIR)/InputReader.Plo \
@@ -588,12 +594,12 @@ libdvisvgm_la_SOURCES = AGLTable.hpp BasicDVIReader.hpp \
 	CLCommandLine.hpp CLCommandLine.cpp CMap.hpp CMap.cpp \
 	CMapManager.hpp CMapManager.cpp CMapReader.hpp CMapReader.cpp \
 	CLOption.hpp Color.hpp Color.cpp ColorSpecialHandler.hpp \
-	ColorSpecialHandler.cpp CommandLine.hpp CRC32.hpp CRC32.cpp \
-	Directory.hpp Directory.cpp DVIActions.hpp DLLoader.hpp \
-	DLLoader.cpp DVIReader.hpp DVIReader.cpp \
-	DvisvgmSpecialHandler.hpp DvisvgmSpecialHandler.cpp \
-	DVIToSVG.hpp DVIToSVG.cpp DVIToSVGActions.hpp \
-	DVIToSVGActions.cpp EmSpecialHandler.hpp EmSpecialHandler.cpp \
+	ColorSpecialHandler.cpp CommandLine.hpp Directory.hpp \
+	Directory.cpp DVIActions.hpp DLLoader.hpp DLLoader.cpp \
+	DVIReader.hpp DVIReader.cpp DvisvgmSpecialHandler.hpp \
+	DvisvgmSpecialHandler.cpp DVIToSVG.hpp DVIToSVG.cpp \
+	DVIToSVGActions.hpp DVIToSVGActions.cpp EllipticalArc.hpp \
+	EllipticalArc.cpp EmSpecialHandler.hpp EmSpecialHandler.cpp \
 	EncFile.hpp EncFile.cpp EPSFile.hpp EPSFile.cpp EPSToSVG.hpp \
 	FileFinder.hpp FileFinder.cpp FilePath.hpp FilePath.cpp \
 	FileSystem.hpp FileSystem.cpp FixWord.hpp Font.hpp Font.cpp \
@@ -667,9 +673,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../libs/defs.am $(am__co
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/Makefile
+	  $(AUTOMAKE) --foreign src/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -773,7 +779,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CMap.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CMapManager.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CMapReader.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CRC32.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Calculator.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CharMapID.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Color.Plo@am__quote@ # am--include-marker
@@ -785,6 +790,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Directory.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DvisvgmSpecialHandler.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EPSFile.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EllipticalArc.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EmSpecialHandler.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EncFile.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FileFinder.Plo@am__quote@ # am--include-marker
@@ -1132,7 +1138,6 @@ distclean: distclean-recursive
 	-rm -f ./$(DEPDIR)/CMap.Plo
 	-rm -f ./$(DEPDIR)/CMapManager.Plo
 	-rm -f ./$(DEPDIR)/CMapReader.Plo
-	-rm -f ./$(DEPDIR)/CRC32.Plo
 	-rm -f ./$(DEPDIR)/Calculator.Plo
 	-rm -f ./$(DEPDIR)/CharMapID.Plo
 	-rm -f ./$(DEPDIR)/Color.Plo
@@ -1144,6 +1149,7 @@ distclean: distclean-recursive
 	-rm -f ./$(DEPDIR)/Directory.Plo
 	-rm -f ./$(DEPDIR)/DvisvgmSpecialHandler.Plo
 	-rm -f ./$(DEPDIR)/EPSFile.Plo
+	-rm -f ./$(DEPDIR)/EllipticalArc.Plo
 	-rm -f ./$(DEPDIR)/EmSpecialHandler.Plo
 	-rm -f ./$(DEPDIR)/EncFile.Plo
 	-rm -f ./$(DEPDIR)/FileFinder.Plo
@@ -1273,7 +1279,6 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f ./$(DEPDIR)/CMap.Plo
 	-rm -f ./$(DEPDIR)/CMapManager.Plo
 	-rm -f ./$(DEPDIR)/CMapReader.Plo
-	-rm -f ./$(DEPDIR)/CRC32.Plo
 	-rm -f ./$(DEPDIR)/Calculator.Plo
 	-rm -f ./$(DEPDIR)/CharMapID.Plo
 	-rm -f ./$(DEPDIR)/Color.Plo
@@ -1285,6 +1290,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f ./$(DEPDIR)/Directory.Plo
 	-rm -f ./$(DEPDIR)/DvisvgmSpecialHandler.Plo
 	-rm -f ./$(DEPDIR)/EPSFile.Plo
+	-rm -f ./$(DEPDIR)/EllipticalArc.Plo
 	-rm -f ./$(DEPDIR)/EmSpecialHandler.Plo
 	-rm -f ./$(DEPDIR)/EncFile.Plo
 	-rm -f ./$(DEPDIR)/FileFinder.Plo
