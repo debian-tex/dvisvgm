@@ -90,7 +90,12 @@ host_triplet = @host@
 target_triplet = @target@
 subdir = doc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_code_coverage.m4 \
+	$(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
@@ -314,12 +319,20 @@ top_srcdir = @top_srcdir@
 # However, the distribution tarball should always contain a recent manpage. We ensure
 # this by adding a dist-hook rule below.
 @BUILD_MANPAGE_TRUE@man_MANS = dvisvgm.1
-EXTRA_DIST = $(man_MANS) conf-dblatex-man.xsl conf-dblatex-pdf.xsl dvisvgm.sty dvisvgm.txt.in tweak-dblatex-pdf.xsl tweak-db-refentry.xsl
+EXTRA_DIST = $(man_MANS) \
+	conf-dblatex-man.xsl \
+	conf-dblatex-pdf.xsl \
+	dvisvgm.txt.in \
+	generate-dvisvgm-sty.xsl \
+	tweak-dblatex-pdf.xsl \
+	tweak-db-refentry.xsl
+
 CONF_DBLATEX_MAN = $(dvisvgm_srcdir)/doc/conf-dblatex-man.xsl
 CONF_DBLATEX_PDF = $(dvisvgm_srcdir)/doc/conf-dblatex-pdf.xsl
 TWEAK_DBLATEX_PDF = $(dvisvgm_srcdir)/doc/tweak-dblatex-pdf.xsl
 TWEAK_DB_ARTICLE = $(dvisvgm_srcdir)/doc/tweak-db-article.xsl
 TWEAK_DB_REFENTRY = $(dvisvgm_srcdir)/doc/tweak-db-refentry.xsl
+GEN_DBLATEX_STY = $(dvisvgm_srcdir)/doc/generate-dvisvgm-sty.xsl
 DB_VARS = man.endnotes.list.enabled=0 man.endnotes.are.numbered=0 man.authors.section.enabled=0
 all: all-am
 
@@ -333,9 +346,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu doc/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign doc/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu doc/Makefile
+	  $(AUTOMAKE) --foreign doc/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -565,7 +578,7 @@ uninstall-man: uninstall-man1
 dvisvgm.1: dvisvgm-man.xml $(CONF_DBLATEX_MAN)
 	xmlto -m $(CONF_DBLATEX_MAN) $(addprefix --stringparam , $(DB_VARS)) man $<
 
-dvisvgm.pdf: dvisvgm-man.xml $(CONF_DBLATEX_PDF) $(TWEAK_DBLATEX_PDF)
+dvisvgm.pdf: dvisvgm-man.xml dvisvgm.sty $(CONF_DBLATEX_PDF) $(TWEAK_DBLATEX_PDF)
 	mv $< $<.tmp
 	xsltproc -o $< $(TWEAK_DBLATEX_PDF) $<.tmp
 	dblatex -bxetex --texstyle=./dvisvgm.sty -p $(CONF_DBLATEX_PDF) $<
@@ -586,18 +599,21 @@ dvisvgm.epub: dvisvgm-article.xml
 	a2x -darticle -fepub -L --icons --icons-dir=. $<
 	mv $(basename $<).epub $@
 
-.SECONDARY: dvisvgm-article.xml dvisvgm-man.xml
+.SECONDARY: dvisvgm-article.xml dvisvgm-man.xml dvisvgm.sty
 
 dvisvgm-man.xml: dvisvgm.txt $(TWEAK_DB_REFENTRY)
 	asciidoc -a icons -a 'iconsdir=.' -a badges -a 'revnumber=@VERSION@' --unsafe -bdocbook -dmanpage -o $@.tmp $<
 	xsltproc -o $@ $(TWEAK_DB_REFENTRY) $@.tmp
 	rm $@.tmp
 
-dvisvgm-article.xml: dvisvgm.txt
+dvisvgm-article.xml: dvisvgm.txt $(TWEAK_DB_ARTICLE)
 	asciidoc -a icons -a 'iconsdir=.' -a badges -a 'revnumber=@VERSION@' --unsafe -bdocbook -darticle -o $@.tmp $<
 	xsltproc -o $@ $(TWEAK_DB_ARTICLE) $@.tmp
 	rm $@.tmp
 	sed -i "s/{VERSION}/@VERSION@/" $@
+
+dvisvgm.sty: dvisvgm-man.xml $(GEN_DBLATEX_STY)
+	xsltproc -o dvisvgm.sty $(GEN_DBLATEX_STY) $<
 
 dvisvgm.txt: dvisvgm.txt.in ../configure.ac
 	sed -e 's/@VERSION[@]/@VERSION@/g' -e 's/@PACKAGE_BUGREPORT[@]/@PACKAGE_BUGREPORT@/g' $< >$@
@@ -612,10 +628,10 @@ man: dvisvgm.1
 pdf: dvisvgm.pdf
 
 clean:
-	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub
+	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.sty dvisvgm.dvi dvisvgm.epub
 
 distclean-local:
-	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.dvi dvisvgm.epub dvisvgm.1
+	rm -f dvisvgm.pdf dvisvgm.html dvisvgm-man.xml dvisvgm-article.xml dvisvgm.txt dvisvgm.sty dvisvgm.dvi dvisvgm.epub dvisvgm.1
 
 # Ensure that distribution tarballs always contain a recent manpage, i.e.
 # let "make dist" and "make distcheck" fail if dvisvgm.1 can't be built.

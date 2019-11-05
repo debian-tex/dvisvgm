@@ -2,12 +2,12 @@
 .\"     Title: dvisvgm
 .\"    Author: Martin Gieseking <martin.gieseking@uos.de>
 .\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
-.\"      Date: 07/12/2019
+.\"      Date: 2019-08-25
 .\"    Manual: dvisvgm Manual
-.\"    Source: dvisvgm 2.7.3
+.\"    Source: dvisvgm 2.8
 .\"  Language: English
 .\"
-.TH "DVISVGM" "1" "07/12/2019" "dvisvgm 2\&.7\&.3" "dvisvgm Manual"
+.TH "DVISVGM" "1" "2019\-08\-25" "dvisvgm 2\&.8" "dvisvgm Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -164,7 +164,12 @@ only affects the bounding box and does not transform the page content\&. Hence, 
 \fB\-C, \-\-cache\fR[=\fIdir\fR]
 .RS 4
 To speed up the conversion process of bitmap fonts, dvisvgm saves intermediate conversion information in cache files\&. By default, these files are stored in
-\fB$HOME/\&.dvisvgm/cache\fR\&. If you prefer a different location, use option
+\fB$XDG_CACHE_HOME/dvisvgm/\fR
+or
+\fB$HOME/\&.cache/dvisvgm\fR
+if
+\fBXDG_CACHE_HOME\fR
+is not set\&. If you prefer a different location, use option
 \fB\-\-cache\fR
 to overwrite the default\&. Furthermore, it is also possible to disable the font caching mechanism completely with option
 \fB\-\-cache=none\fR\&. If argument
@@ -669,7 +674,10 @@ of option
 \fBMD5\fR,
 \fBXXH32\fR, and
 \fBXXH64\fR, where the names can be given in lower case too, like
-\fB\-\-page\-hashes=md5\fR\&.
+\fB\-\-page\-hashes=md5\fR\&. Since version 0\&.7\&.1, xxHash provides an experimental 128\-bit hash function, whose algorithm may still change with the next versions of the library\&. If the corresponding API is available, dvisvgm supports the new hash function and option
+\fB\-\-page\-hashes\fR
+additionally accepts the algorithm specifier
+\fBXXH128\fR\&.
 .sp
 Finally, option
 \fB\-\-page\-hashes\fR
