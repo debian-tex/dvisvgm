@@ -1,5 +1,5 @@
 /*************************************************************************
-** GroupCollapser.hpp                                                   **
+** TextSimplifier.hpp                                                   **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
 ** Copyright (C) 2005-2019 Martin Gieseking <martin.gieseking@uos.de>   **
@@ -22,15 +22,9 @@
 
 #include "OptimizerModule.hpp"
 
-/** Joins the attributes of nested groups and removes groups without attributes. */
-class GroupCollapser : public OptimizerModule {
+class TextSimplifier : public OptimizerModule {
 	public:
-		void execute (XMLElement*, XMLElement *context) override {execute(context);};
-		void execute (XMLElement *context);
-		const char* info () const override;
-
-	protected:
-		static bool moveAttributes (XMLElement &source, XMLElement &dest);
-		static bool collapsible (const XMLElement &elem);
-		static bool unwrappable (const XMLElement &source, const XMLElement &dest);
+		void execute (XMLElement *defs, XMLElement *context) override {execute(context);}
+		static void execute (XMLElement *context);
+		const char *info () const override;
 };

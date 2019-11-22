@@ -2,12 +2,12 @@
 .\"     Title: dvisvgm
 .\"    Author: Martin Gieseking <martin.gieseking@uos.de>
 .\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
-.\"      Date: 2019-08-25
+.\"      Date: 2019-11-12
 .\"    Manual: dvisvgm Manual
-.\"    Source: dvisvgm 2.8
+.\"    Source: dvisvgm 2.8.1
 .\"  Language: English
 .\"
-.TH "DVISVGM" "1" "2019\-08\-25" "dvisvgm 2\&.8" "dvisvgm Manual"
+.TH "DVISVGM" "1" "2019\-11\-12" "dvisvgm 2\&.8\&.1" "dvisvgm Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -545,6 +545,17 @@ is not given\&. You can use argument
 to prevent that\&.
 .RE
 .PP
+\fBsimplify\-text\fR
+.RS 4
+If a
+\fBtext\fR
+element only contains whitespace nodes and
+\fBtspan\fR
+elements, all common inheritable attributes of the latter are moved to the enclosing text element\&. All
+\fBtspan\fR
+elements without further attributes are unwrapped\&.
+.RE
+.PP
 \fBsimplify\-transform\fR
 .RS 4
 Tries to shorten all
@@ -664,10 +675,10 @@ provides a combined hash computed from the DVI data and the command\-line option
 Since the page number isn\(cqt part of the file name by default, different DVI pages with identical contents get the same file name\&. Therefore, only the first one is converted while the others are skipped\&. To create separate files for each page, you can add the page number to the output pattern, e\&.g\&.
 \fB\-\-output="%f\-%p\-%hc"\fR\&.
 .sp
-By default, dvisvgm uses the XXH64 hash algorithm to compute the values provided through
+By default, dvisvgm uses the fast XXH64 hash algorithm to compute the values provided through
 \fB%hd\fR
 and
-\fB%hc\fR\&. It\(cqs extremely fast, and a 64\-bit hash should be sufficient for most documents with an average size of pages\&. Alternatively, XXH32 and MD5 can be used as well\&. The desired algorithm is specified by argument
+\fB%hc\fR\&. 64\-bit hashes should be sufficient for most documents with an average size of pages\&. Alternatively, XXH32 and MD5 can be used as well\&. The desired algorithm is specified by argument
 \fIparams\fR
 of option
 \fB\-\-page\-hashes\fR\&. It takes one of the strings
@@ -1291,8 +1302,8 @@ pdfTeX user manual (\m[blue]https://ctan.org/pkg/pdftex\m[])\&.
 \fBps\fR
 .RS 4
 The famous DVI driver
-\fIdvips\fR
-introduced its own set of specials in order to embed PostScript code into DVI files, which greatly improves the capabilities of DVI documents\&. One aim of dvisvgm is to completely evaluate all PostScript snippets and to convert as many of them as possible to SVG\&. In contrast to dvips, dvisvgm uses floating point arithmetics to compute the precise position of each graphic element, i\&.e\&. it doesn\(cqt round the coordinates\&. Therefore, the relative locations of the graphic elements may slightly differ from those computed by dvips\&.
+\fIdvips\fR (\m[blue]https://www.tug.org/texinfohtml/dvips.html\m[])
+introduced its own set of specials in order to embed PostScript code into DVI files, which greatly improves the capabilities of DVI documents\&. One aim of dvisvgm is to completely evaluate all PostScript fragments and to convert as many of them as possible to SVG\&. In contrast to dvips, dvisvgm uses floating point arithmetics to compute the precise position of each graphic element, i\&.e\&. it doesn\(cqt round the coordinates\&. Therefore, the relative locations of the graphic elements may slightly differ from those computed by dvips\&.
 .sp
 Since PostScript is a rather complex language, dvisvgm does not implement its own PostScript interpreter but relies on
 Ghostscript (\m[blue]https://ghostscript.com\m[])
@@ -1329,66 +1340,75 @@ If you call dvisvgm with option
 The TPIC special set defines instructions for drawing simple geometric objects\&. Some LaTeX packages, like eepic and tplot, use these specials to describe graphics\&.
 .RE
 .SH "EXAMPLES"
-.sp
-.if n \{\
+.PP
+\fBdvisvgm file\fR
 .RS 4
-.\}
-.nf
-dvisvgm file
-.fi
-.if n \{\
+Converts the first page of
+\fIfile\&.dvi\fR
+to
+\fIfile\&.svg\fR\&.
 .RE
-.\}
-.sp
-Converts the first page of \fIfile\&.dvi\fR to \fIfile\&.svg\fR\&.
-.sp
-.if n \{\
+.PP
+\fBdvisvgm \-p1\-5 file\fR
 .RS 4
-.\}
-.nf
-dvisvgm \- < file\&.dvi
-.fi
-.if n \{\
+Converts the first five pages of
+\fIfile\&.dvi\fR
+to
+\fIfile\-1\&.svg\fR,\&...,\fIfile\-5\&.svg\fR\&.
 .RE
-.\}
-.sp
-Converts the first page of \fIfile\&.dvi\fR to \fIstdin\&.svg\fR where the contents of \fIfile\&.dvi\fR is read from \fBstdin\fR\&.
-.sp
-.if n \{\
+.PP
+\fBdvisvgm \-p1\- file\fR
 .RS 4
-.\}
-.nf
-dvisvgm \-z file
-.fi
-.if n \{\
+Converts all pages of
+\fIfile\&.dvi\fR
+to separate SVG files\&.
 .RE
-.\}
-.sp
-Converts the first page of \fIfile\&.dvi\fR to \fIfile\&.svgz\fR with default compression level 9\&.
-.sp
-.if n \{\
+.PP
+\fBdvisvgm \-p1,3 \-O file\fR
 .RS 4
-.\}
-.nf
-dvisvgm \-p5 \-z3 \-ba4\-l \-onewfile file
-.fi
-.if n \{\
+Converts the first and third page of
+\fIfile\&.dvi\fR
+to optimized SVG files\&.
 .RE
-.\}
-.sp
-Converts the fifth page of \fIfile\&.dvi\fR to \fInewfile\&.svgz\fR with compression level 3\&. The bounding box is set to DIN/ISO A4 in landscape format\&.
-.sp
-.if n \{\
+.PP
+\fBdvisvgm \- < file\&.dvi\fR
 .RS 4
-.\}
-.nf
-dvisvgm \-\-transform="R20,w/3,2h/5 T1cm,1cm S2,3" file
-.fi
-.if n \{\
+Converts the first page of
+\fIfile\&.dvi\fR
+to
+\fIstdin\&.svg\fR
+where the contents of
+\fIfile\&.dvi\fR
+is read from
+\fBstdin\fR\&.
 .RE
-.\}
-.sp
-Converts the first page of \fIfile\&.dvi\fR to \fIfile\&.svg\fR where three transformations are applied\&.
+.PP
+\fBdvisvgm \-z file\fR
+.RS 4
+Converts the first page of
+\fIfile\&.dvi\fR
+to
+\fIfile\&.svgz\fR
+with default compression level 9\&.
+.RE
+.PP
+\fBdvisvgm \-p5 \-z3 \-ba4\-l \-o newfile file\fR
+.RS 4
+Converts the fifth page of
+\fIfile\&.dvi\fR
+to
+\fInewfile\&.svgz\fR
+with compression level 3\&. The bounding box is set to DIN/ISO A4 in landscape format\&.
+.RE
+.PP
+\fBdvisvgm \-\-transform="R20,w/3,2h/5 T1cm,1cm S2,3" file\fR
+.RS 4
+Converts the first page of
+\fIfile\&.dvi\fR
+to
+\fIfile\&.svg\fR
+where three transformations are applied\&.
+.RE
 .SH "ENVIRONMENT"
 .sp
 dvisvgm uses the \fBkpathsea\fR library for locating the files that it opens\&. Hence, the environment variables described in the library\(cqs documentation influence the converter\&.

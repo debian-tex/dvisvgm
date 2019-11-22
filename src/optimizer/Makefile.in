@@ -107,7 +107,7 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liboptimizer_la_LIBADD =
 am_liboptimizer_la_OBJECTS = AttributeExtractor.lo GroupCollapser.lo \
-	RedundantElementRemover.lo SVGOptimizer.lo \
+	RedundantElementRemover.lo SVGOptimizer.lo TextSimplifier.lo \
 	TransformSimplifier.lo WSNodeRemover.lo
 liboptimizer_la_OBJECTS = $(am_liboptimizer_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -132,7 +132,7 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/AttributeExtractor.Plo \
 	./$(DEPDIR)/GroupCollapser.Plo \
 	./$(DEPDIR)/RedundantElementRemover.Plo \
-	./$(DEPDIR)/SVGOptimizer.Plo \
+	./$(DEPDIR)/SVGOptimizer.Plo ./$(DEPDIR)/TextSimplifier.Plo \
 	./$(DEPDIR)/TransformSimplifier.Plo \
 	./$(DEPDIR)/WSNodeRemover.Plo
 am__mv = mv -f
@@ -366,6 +366,7 @@ liboptimizer_la_SOURCES = \
 	OptimizerModule.hpp \
 	RedundantElementRemover.hpp RedundantElementRemover.cpp \
 	SVGOptimizer.hpp            SVGOptimizer.cpp \
+	TextSimplifier.hpp          TextSimplifier.cpp \
 	TransformSimplifier.hpp     TransformSimplifier.cpp \
   	WSNodeRemover.hpp           WSNodeRemover.cpp
 
@@ -428,6 +429,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GroupCollapser.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RedundantElementRemover.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SVGOptimizer.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TextSimplifier.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TransformSimplifier.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WSNodeRemover.Plo@am__quote@ # am--include-marker
 
@@ -596,6 +598,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/GroupCollapser.Plo
 	-rm -f ./$(DEPDIR)/RedundantElementRemover.Plo
 	-rm -f ./$(DEPDIR)/SVGOptimizer.Plo
+	-rm -f ./$(DEPDIR)/TextSimplifier.Plo
 	-rm -f ./$(DEPDIR)/TransformSimplifier.Plo
 	-rm -f ./$(DEPDIR)/WSNodeRemover.Plo
 	-rm -f Makefile
@@ -647,6 +650,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/GroupCollapser.Plo
 	-rm -f ./$(DEPDIR)/RedundantElementRemover.Plo
 	-rm -f ./$(DEPDIR)/SVGOptimizer.Plo
+	-rm -f ./$(DEPDIR)/TextSimplifier.Plo
 	-rm -f ./$(DEPDIR)/TransformSimplifier.Plo
 	-rm -f ./$(DEPDIR)/WSNodeRemover.Plo
 	-rm -f Makefile
