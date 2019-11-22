@@ -1,7 +1,363 @@
+2019-11-14  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * NEWS, README.md: 
+  updated NEWS and README 
+
+2019-11-12  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * .appveyor.yml, .travis.yml, configure.ac, src/Doxyfile, src/version.hpp: 
+  set version to 2.8.1 
+
+  * doc/dvisvgm.txt.in: 
+  some minor changes of the manual page 
+
+2019-11-11  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/psdefs.cpp: 
+  added newline at end of file 
+
+2019-11-08  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/optimizer/GroupCollapser.hpp: 
+  made GroupCollapser::moveAttributes() static 
+
+  * doc/dvisvgm.txt.in, src/optimizer/Makefile.am, 
+    src/optimizer/SVGOptimizer.cpp, src/optimizer/TextSimplifier.cpp, 
+    src/optimizer/TextSimplifier.hpp: 
+  added optimizer module TextSimplifier 
+
+  * doc/dvisvgm.txt.in, src/XMLNode.hpp, 
+    src/optimizer/AttributeExtractor.hpp, src/optimizer/TextSimplifier.cpp: 
+  extended functionality of optimizer module 'simplify-text'
+- common 
+  attributes of tspans are moved to the enclosing text element
+- tspans 
+  without attributes are unwrapped 
+
+2019-11-05  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/DVIToSVGActions.cpp, src/DVIToSVGActions.hpp, 
+    src/EmSpecialHandler.cpp, src/EmSpecialHandler.hpp: 
+  removed some constant initializers from constructors 
+
+  * src/DVIToSVGActions.cpp, src/DVIToSVGActions.hpp, 
+    src/EmSpecialHandler.cpp, src/PSInterpreter.cpp, src/PSInterpreter.hpp, 
+    src/PsSpecialHandler.cpp, src/PsSpecialHandler.hpp, 
+    src/SpecialActions.hpp, src/TpicSpecialHandler.cpp, src/psdefs.cpp, 
+    tests/PSInterpreterTest.cpp: 
+  added support for PS operator 'nulldevice' 
+
+2019-10-30  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/FileFinder.cpp: 
+  added PNG, JPEG, and SVG to supported formats of FileFinder 
+
+  * src/PsSpecialHandler.cpp, src/PsSpecialHandler.hpp: 
+  psfile: create absolute or relative paths to reference images
+depending 
+  on the file location and the file path given by the user 
+
+2019-10-29  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/FilePath.cpp, src/FilePath.hpp: 
+  added method to check if a path is absolute or relative 
+
+2019-10-27  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/CMapReader.cpp, src/CMapReader.hpp, tests/CMapReaderTest.cpp: 
+  CMapReader: extracted common code; added test for 'begincidchar' 
+
+2019-10-25  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * tests/Makefile.am, tests/create-makefile: 
+  added missing gtest file to distribution 
+
+  * tests/FontCacheTest.cpp: 
+  remove temporary files created by FontCacheTest 
+
+  * .appveyor.yml, .travis.yml, configure.ac, src/Doxyfile, src/version.hpp: 
+  set version to 2.8 
+
+  * NEWS: 
+  updated NEWS 
+
+2019-10-23  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/CMapReader.cpp, src/CMapReader.hpp: 
+  CMapReader: added support for operator 'begincidchar' (patch by Akira 
+  Kakuto) 
+
+2019-10-20  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/DVIToSVG.cpp, src/DVIToSVG.hpp, src/DVIToSVGActions.cpp, 
+    src/DVIToSVGActions.hpp, src/FilePath.cpp, src/FilePath.hpp, 
+    src/HyperlinkManager.cpp, src/ImageToSVG.cpp, src/ImageToSVG.hpp, 
+    src/PDFToSVG.hpp, src/SVGOutput.cpp, src/SVGOutput.hpp, 
+    src/SpecialActions.hpp, tests/FilePathTest.cpp, tests/SVGOutputTest.cpp: 
+  SVGOutput: renamed 'filename' to 'filepath'; changed return type to 
+  FilePath 
+
+2019-10-18  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * tests/gtest/include/gtest/gtest-death-test.h, 
+    tests/gtest/include/gtest/gtest-matchers.h, 
+    tests/gtest/include/gtest/gtest-message.h, 
+    tests/gtest/include/gtest/gtest-param-test.h, 
+    tests/gtest/include/gtest/gtest-printers.h, 
+    tests/gtest/include/gtest/gtest-spi.h, 
+    tests/gtest/include/gtest/gtest-test-part.h, 
+    tests/gtest/include/gtest/gtest-typed-test.h, 
+    tests/gtest/include/gtest/gtest.h, 
+    tests/gtest/include/gtest/gtest_pred_impl.h, 
+    tests/gtest/include/gtest/internal/gtest-death-test-internal.h, 
+    tests/gtest/include/gtest/internal/gtest-filepath.h, 
+    tests/gtest/include/gtest/internal/gtest-internal.h, 
+    tests/gtest/include/gtest/internal/gtest-param-util.h, 
+    tests/gtest/include/gtest/internal/gtest-port-arch.h, 
+    tests/gtest/include/gtest/internal/gtest-port.h, 
+    tests/gtest/include/gtest/internal/gtest-string.h, 
+    tests/gtest/include/gtest/internal/gtest-type-util.h, 
+    tests/gtest/src/gtest-all.cc, tests/gtest/src/gtest-death-test.cc, 
+    tests/gtest/src/gtest-filepath.cc, tests/gtest/src/gtest-internal-inl.h, 
+    tests/gtest/src/gtest-matchers.cc, tests/gtest/src/gtest-port.cc, 
+    tests/gtest/src/gtest-printers.cc, tests/gtest/src/gtest-test-part.cc, 
+    tests/gtest/src/gtest-typed-test.cc, tests/gtest/src/gtest.cc, 
+    tests/gtest/src/gtest_main.cc, tests/testutil.hpp: 
+  updated gtest to version 1.10 
+
+  * src/PsSpecialHandler.cpp, src/PsSpecialHandler.hpp: 
+  psfile: added support for PDF, JPG, PNG, and SVG files 
+
+  * src/optimizer/TransformSimplifier.cpp, 
+    src/optimizer/TransformSimplifier.hpp: 
+  try to incorporate transformations into positional and size attributes 
+
+  * src/PsSpecialHandler.cpp: 
+  PS handler: minor code enhancements 
+
+2019-10-17  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/PSInterpreter.cpp: 
+  call GS with -dDELAYSAFER if GS version >= 9.50
+Ghostscript 9.50 
+  introduced incompatible changes regarding SAFER which is now
+active by 
+  default. This conflicts with DELAYBIND and WRITESYSTEMDICT, which 
+  are
+necessary for dvisvgm to work 
+  correctly.
+https://www.ghostscript.com/doc/9.50/Use.htm#Safer 
+
+  * tests/HashFunctionTest.cpp: 
+  adapted XXH128 tests to changes in xxhash 0.7.2 
+
+2019-10-08  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * libs/xxHash/xxh3.h, libs/xxHash/xxhash.c, libs/xxHash/xxhash.h: 
+  updated xxhash to version 0.7.2 
+
+2019-10-06  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/EllipticalArc.cpp: 
+  minor changes in EllipticalArc.cpp 
+
+2019-09-19  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/PathClipper.cpp: 
+  prevent warnings about uninitialized variables 
+
+2019-09-17  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * libs/potrace/auxiliary.h, libs/potrace/bitmap.h, libs/potrace/config.h, 
+    libs/potrace/curve.c, libs/potrace/curve.h, libs/potrace/decompose.c, 
+    libs/potrace/decompose.h, libs/potrace/lists.h, 
+    libs/potrace/potracelib.c, libs/potrace/potracelib.h, 
+    libs/potrace/progress.h, libs/potrace/trace.c, libs/potrace/trace.h: 
+  updated potrace to version 1.16 
+
+  * src/Bitmap.cpp, src/Bitmap.hpp: 
+  minor code cleanup of Bitmap class 
+
+2019-09-12  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/GraphicsPath.hpp: 
+  renamed misspelled variables 'largeArgFlag' to 'largeArcFlag' 
+
+  * src/EllipticalArc.cpp: 
+  removed #include "debug.h" 
+
+2019-09-03  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * libs/woff2/src/glyph.cc, libs/woff2/src/normalize.cc: 
+  fixed two compiler warnings in libwoff2
+regarding signed/unsigned 
+  comparison 
+
+2019-08-27  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/XXHashFunction.hpp, tests/HashFunctionTest.cpp: 
+  simplified implementation of XXHashFunction::digestValue() and tests 
+
+2019-08-26  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/StreamReader.cpp, src/StreamReader.hpp, src/VFReader.cpp, 
+    tests/StreamReaderTest.cpp: 
+  removed vector reference from StreamReader::readBytes() 
+
+  * src/CRC32.cpp, src/CRC32.hpp, src/FontCache.cpp, src/FontCache.hpp, 
+    src/HashFunction.cpp, src/HashFunction.hpp, src/Makefile.am, 
+    src/StreamReader.cpp, src/StreamReader.hpp, src/StreamWriter.cpp, 
+    src/StreamWriter.hpp, src/XXHashFunction.hpp, src/utility.hpp, 
+    tests/CRC32Test.cpp, tests/FontCacheTest.cpp, tests/Makefile.am, 
+    tests/StreamReaderTest.cpp, tests/StreamWriterTest.cpp: 
+  replaced CRC32 cache checksums with XXH32 hashes 
+
+2019-08-25  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * doc/dvisvgm.txt.in, libs/xxHash/xxhash.h, src/HashFunction.cpp, 
+    src/XXHashFunction.hpp, tests/HashFunctionTest.cpp: 
+  added support for the experimental 128-bit XXH3 algorithm 
+
+2019-08-24  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/GraphicsPath.hpp: 
+  avoid redundant sequences of closepath (z/Z) commands 
+
+2019-08-19  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/GraphicsPath.hpp, tests/GraphicsPathTest.cpp: 
+  added short versions of 'quadto' and 'cubicto' to GraphicsPath 
+
+2019-08-18  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/TpicSpecialHandler.cpp, tests/TpicSpecialTest.cpp: 
+  use class EllipticalArc to process arcs in tpic handler 
+
+2019-08-15  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * libs/xxHash/Makefile.am, libs/xxHash/xxh3.h, libs/xxHash/xxhash.c, 
+    libs/xxHash/xxhash.h: 
+  updated xxhash to version 0.7.1 
+
+  * src/DVIToSVG.cpp: 
+  print error message on wrong page hash arguments 
+
+2019-08-14  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/EllipticalArc.cpp, src/EllipticalArc.hpp, src/GraphicsPath.hpp, 
+    tests/EllipticalArcTest.cpp, tests/GraphicsPathTest.cpp: 
+  added GraphicsPath::approximateArcs() 
+
+2019-08-13  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/Bezier.cpp, src/Bezier.hpp, src/EllipticalArc.cpp, 
+    src/EllipticalArc.hpp, src/GraphicsPath.hpp, src/Makefile.am, 
+    src/Pair.hpp, src/utility.cpp, src/utility.hpp, 
+    tests/EllipticalArcTest.cpp, tests/Makefile.am: 
+  added support of 'arcto' command to class GraphicsPath 
+
+2019-08-08  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/Bezier.cpp, src/Bezier.hpp, src/PsSpecialHandler.cpp, 
+    src/ShadingPatch.hpp, src/TensorProductPatch.cpp, 
+    src/TensorProductPatch.hpp, src/TriangularPatch.cpp, 
+    src/TriangularPatch.hpp, tests/BezierTest.cpp, 
+    tests/TensorProductPatchTest.cpp, tests/TriangularPatchTest.cpp: 
+  getBBox(): replaced reference parameter with return value 
+
+  * src/PsSpecialHandler.cpp, src/ShadingPatch.hpp, 
+    src/TensorProductPatch.cpp, src/TensorProductPatch.hpp, 
+    src/TriangularPatch.cpp, src/TriangularPatch.hpp, 
+    tests/TensorProductPatchTest.cpp, tests/TriangularPatchTest.cpp: 
+  getBoundaryPath(): replaced reference parameter with return value 
+
+2019-08-04  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/Color.cpp, src/Pair.hpp: 
+  use std::hypot() to compute length of vector 
+
+2019-08-01  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/MD5HashFunction.hpp: 
+  removed 'explicit' from default constructor
+Work around for C++11 bug in 
+  GCC 4.8:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58255 
+
+  * src/FontCache.cpp, src/FontEngine.cpp, src/FontWriter.cpp, 
+    src/GraphicsPath.hpp, src/Pair.hpp, src/PathClipper.cpp, 
+    src/TpicSpecialHandler.cpp, src/optimizer/CMakeLists.txt, 
+    src/optimizer/Makefile.am, tests/FontCacheTest.cpp, 
+    tests/GraphicsPathTest.cpp: 
+  redesigned implementation of class GraphicsPath
+- use variant instances 
+  to store path commands instead of plain structs
+- process commands in 
+  visitor objects
+- removed GraphicsPath::Actions::draw() that exposed 
+  implemenation details
+- simplify iterate() method 
+
+2019-07-29  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/FontCache.cpp: 
+  use direct string concatenation instead of temporary string stream 
+
+2019-07-28  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * doc/Makefile.am: 
+  added missing dependency to Makefile rule 
+
+  * .appveyor.yml, .travis.yml, configure.ac, src/Doxyfile, src/version.hpp: 
+  set version to 2.7.4 
+
+  * NEWS: 
+  updated NEWS 
+
+2019-07-27  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * doc/Makefile.am: 
+  moved generation of dvisvgm.sty to separate rule 
+
+2019-07-26  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/Color.cpp: 
+  use std::round to round color value (fixes #116) 
+
+  * doc/Makefile.am, doc/dvisvgm.sty, doc/dvisvgm.txt.in, 
+    doc/generate-dvisvgm-sty.xsl, doc/tweak-db-article.xsl, 
+    doc/tweak-db-refentry.xsl: 
+  show revision date given in doc/dvisvgm.txt on manual page
+rather than 
+  the build date 
+
+2019-07-25  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/TrueTypeFont.cpp: 
+  call ofstream constructor with std::string instead of C string 
+
+2019-07-23  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/MetafontWrapper.cpp: 
+  replaced atoi() with stoi() 
+
+2019-07-16  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/MetafontWrapper.cpp: 
+  don't access moved string 
+
+  * doc/dvisvgm.txt.in, src/dvisvgm.cpp: 
+  changed cache location to $XDG_CACHE_HOME/dvisvgm
+or ~/.cache/dvisvgm if 
+  $XDG_CACHE_HOME is not set (closes #112) 
+
 2019-07-12  Martin Gieseking  <martin.gieseking@uos.de>
 
   * .appveyor.yml, .travis.yml, configure.ac, src/Doxyfile, src/version.hpp: 
   set version to 2.7.3 
+
+  * NEWS: 
+  updated NEWS 
 
 2019-07-09  Martin Gieseking  <martin.gieseking@uos.de>
 

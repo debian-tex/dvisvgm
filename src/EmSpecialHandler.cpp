@@ -31,10 +31,6 @@
 using namespace std;
 
 
-EmSpecialHandler::EmSpecialHandler () : _linewidth(0.4*72/72.27) {
-}
-
-
 /** Computes the "cut vector" that is used to compute the line shape.
  *  Because each line has a width > 0 the actual shape of the line is a tetragon.
  *  The 4 vertices can be influenced by the cut parameter c that specifies
@@ -79,6 +75,8 @@ static DPair cut_vector (char cuttype, const DPair &linedir, double linewidth) {
  * @param[in] lw line width in PS point units
  * @param[in] actions object providing the actions that can be performed by the SpecialHandler */
 static void create_line (const DPair &p1, const DPair &p2, char c1, char c2, double lw, SpecialActions &actions) {
+	if (actions.outputLocked())
+		return;
 	unique_ptr<XMLElement> node;
 	DPair dir = p2-p1;
 	if (dir.x() == 0 || dir.y() == 0 || (c1 == 'p' && c2 == 'p')) {
