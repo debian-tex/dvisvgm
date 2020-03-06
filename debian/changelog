@@ -1,3 +1,9 @@
+dvisvgm (2.8.2-1) UNRELEASED; urgency=medium
+
+  * New upstream version 2.8.2
+
+ -- Hilmar Preusse <hille42@web.de>  Fri, 06 Mar 2020 21:44:53 +0100
+
 dvisvgm (2.8.1-1) unstable; urgency=medium
 
   * New upstream version 2.8.1
