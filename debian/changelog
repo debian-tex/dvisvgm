@@ -1,9 +1,10 @@
-dvisvgm (2.9-1) UNRELEASED; urgency=medium
+dvisvgm (2.9-1) unstable; urgency=medium
 
+  [ Norbert Preining ]
   * New upstream version 2.9
   * disable man page patch, does not apply
 
- -- Norbert Preining <norbert@preining.info>  Mon, 16 Mar 2020 14:19:27 +0900
+ -- Hilmar Preusse <hille42@web.de>  Mon, 16 Mar 2020 11:28:47 +0100
 
 dvisvgm (2.8.2-1) unstable; urgency=medium
 
