@@ -41,7 +41,7 @@ License: Boost-Software-License
 
 Files: libs/ff-woff/*
 Copyright: 2000 to 2012 George Williams
-	2012 to 2019 The FontForge community
+ 	2012 to 2019 The FontForge community
 License: GPL-3+
 
 Files: libs/md5/*

@@ -1,3 +1,9 @@
+dvisvgm (2.9.1-2) UNRELEASED; urgency=low
+
+  * debian/copyright: use spaces rather than tabs to start continuation lines.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Fri, 31 Jul 2020 11:34:14 -0000
+
 dvisvgm (2.9.1-1) unstable; urgency=medium
 
   * New upstream release (Closes: #956484).
