@@ -1,4 +1,4 @@
-dvisvgm (2.10-1) UNRELEASED; urgency=medium
+dvisvgm (2.10-1) unstable; urgency=medium
 
   [ Debian Janitor ]
   * debian/copyright: use spaces rather than tabs to start continuation lines.
@@ -10,7 +10,7 @@ dvisvgm (2.10-1) UNRELEASED; urgency=medium
   * clean up patches
   * bump standards version, no changes necessary
 
- -- Norbert Preining <norbert@preining.info>  Sat, 15 Aug 2020 02:17:17 +0900
+ -- Hilmar Preusse <hille42@web.de>  Fri, 14 Aug 2020 22:04:45 +0200
 
 dvisvgm (2.9.1-1) unstable; urgency=medium
 
