@@ -1,3 +1,159 @@
+2020-08-12  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * .appveyor.yml, .travis.yml, configure.ac, doc/dvisvgm.1, src/Doxyfile, 
+    src/version.hpp: 
+  set version to 2.10 
+
+  * NEWS: 
+  updated NEWS 
+
+2020-07-27  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * doc/dvisvgm.1, doc/dvisvgm.txt.in, libs/xxHash/xxh3.h, 
+    libs/xxHash/xxhash.h: 
+  updated xxHash to version 0.8 
+
+2020-07-24  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/psdefs.cpp: 
+  redefine internal GS operators .fillstroke and .eofillstroke
+They are 
+  used to implement PDF operators B and B*.
+(closes #139) 
+
+2020-07-16  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/optimizer/TransformSimplifier.cpp: 
+  don't unwind transform attributes of image elements 
+
+  * src/optimizer/GroupCollapser.cpp: 
+  collapse groups w/o attributes first
+in order to recurse into their 
+  descendants. 
+
+  * src/optimizer/TransformSimplifier.cpp: 
+  optimizer: unwind transform attributes of image elements
+if it consists 
+  only of scaling and translations. Merge the scaled translation
+into x and 
+  y, and simplify the remaining matrix(...) expression to scale(...) 
+
+2020-07-15  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/XMLNode.cpp, src/XMLNode.hpp, src/optimizer/GroupCollapser.cpp, 
+    src/optimizer/RedundantElementRemover.cpp, 
+    src/optimizer/WSNodeRemover.cpp: 
+  renamed XMLNode::remove to XMLNode::detach 
+
+2020-07-14  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/optimizer/GroupCollapser.cpp: 
+  don't move inner transforms to outer clipping paths 
+
+  * src/XMLNode.cpp: 
+  fixed XMLElement::unwrap 
+
+  * src/optimizer/GroupCollapser.cpp: 
+  improved optimizer module GroupCollapser 
+
+2020-07-13  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/optimizer/SVGOptimizer.cpp: 
+  simplify transforms before optimizing groups 
+
+  * src/DvisvgmSpecialHandler.cpp: 
+  fixed error message about invalid closing tags 
+
+  * src/DVIToSVGActions.cpp: 
+  handle XML parser errors thrown in EOP 
+
+  * src/DvisvgmSpecialHandler.cpp, src/DvisvgmSpecialHandler.hpp: 
+  reduced number of successive XML error messages 
+
+  * src/DvisvgmSpecialHandler.cpp, src/DvisvgmSpecialHandler.hpp: 
+  renamed XMLParser::flush to XMLParser::finish 
+
+2020-07-07  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/FontCache.cpp, src/HashFunction.cpp, src/HashFunction.hpp, 
+    src/MD5HashFunction.hpp, src/XXHashFunction.hpp, 
+    tests/HashFunctionTest.cpp: 
+  renamed HashFunction::digestValue() to HashFunction::digestBytes() 
+
+  * src/XXHashFunction.hpp: 
+  added XXHashFunction::digestValue() to get the value as encoded by 
+  xxhash 
+
+  * src/FileSystem.cpp, src/FileSystem.hpp: 
+  create dedicated temp folders with each call of dvisvgm 
+
+2020-06-25  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * libs/xxHash/xxh3.h, libs/xxHash/xxhash.c, libs/xxHash/xxhash.h: 
+  updated xxHash to version 0.7.4 
+
+2020-06-23  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/DvisvgmSpecialHandler.cpp, tests/DvisvgmSpecialTest.cpp: 
+  fixed computation of string boundaries after expanding {?(...)}
+(closes 
+  #136) 
+
+2020-05-09  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * .appveyor.yml: 
+  updated FreeType to version 2.10.2 
+
+2020-05-03  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/dvisvgm.cpp: 
+  fixed indentation 
+
+2020-04-24  John Bowman  <bowman@ualberta.ca>
+
+  * src/dvisvgm.cpp: 
+  Fix indentation. 
+
+2020-04-23  John Bowman  <bowman@ualberta.ca>
+
+  * src/dvisvgm.cpp: 
+  Return error codes to shell. 
+
+2020-04-13  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/PathClipper.cpp, src/PathClipper.hpp, src/PsSpecialHandler.cpp: 
+  changed signature of PathClipper::intersect() 
+
+  * src/PathClipper.cpp, src/PathClipper.hpp: 
+  added unite operation to PathClipper 
+
+  * src/GraphicsPath.hpp, src/PsSpecialHandler.cpp: 
+  fixed handling of clippath/eoclip combinations 
+
+2020-04-11  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/DVIToSVGActions.cpp: 
+  fixed bbox debug rectangles 
+
+  * src/Font.cpp, src/Font.hpp: 
+  added italic correction for fake slant 
+
+  * src/DVIReader.cpp, src/DVIReader.hpp, src/FontManager.cpp: 
+  added evaluation of LuaTeX native font definitions 
+
+  * src/DVIReader.cpp: 
+  minor code improvements 
+
+2020-04-10  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/psdefs.cpp: 
+  fixed PS operator 'eoclip' 
+
+2020-03-30  Martin Gieseking  <martin.gieseking@uos.de>
+
+  * src/optimizer/TransformSimplifier.cpp: 
+  optimizer: fixed omission of second scale() parameter 
+
 2020-03-21  Martin Gieseking  <martin.gieseking@uos.de>
 
   * src/Matrix.cpp: 
