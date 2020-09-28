@@ -1,3 +1,15 @@
+dvisvgm (2.10.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Lintian:
+    - I: quilt-patch-missing-description
+    - I: debian-watch-contains-dh_make-template
+    - P: package-uses-old-debhelper-compat-version 11
+    - P: silent-on-rules-requiring-root
+    - I: conflicts-with-version texlive-binaries (x.y.z)
+
+ -- Hilmar Preusse <hille42@web.de>  Mon, 28 Sep 2020 23:50:04 +0200
+
 dvisvgm (2.10-1) unstable; urgency=medium
 
   [ Debian Janitor ]

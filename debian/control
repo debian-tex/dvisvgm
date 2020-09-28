@@ -5,7 +5,7 @@ Maintainer: Debian TeX Task Force <debian-tex-maint@lists.debian.org>
 Uploaders: Hilmar Preusse <hille42@web.de>,
            Norbert Preining <norbert@preining.info>
 Build-Depends:
- debhelper-compat (= 11),
+ debhelper-compat (= 13),
  libkpathsea-dev,
  libbrotli-dev,
  libwoff-dev,
@@ -13,6 +13,7 @@ Build-Depends:
  libgs-dev,
  pkg-config,
  python3
+Rules-Requires-Root: no
 Standards-Version: 4.5.0
 Homepage: https://dvisvgm.de/
 Vcs-Git: https://github.com/debian-tex/dvisvgm.git
@@ -21,7 +22,7 @@ Vcs-Browser: https://github.com/debian-tex/dvisvgm
 Package: dvisvgm
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Conflicts: texlive-binaries (<= 2019.20190605.51237-2)
+Breaks: texlive-binaries (<= 2019.20190605.51237-2)
 Replaces: texlive-binaries (<= 2019.20190605.51237-2)
 Enhances: texlive-binaries
 Description: DVI to SVG converter

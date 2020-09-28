@@ -1,3 +1,5 @@
+Disable GFGlyphTracerTest. Fails on i386 (see upstream #117).
+---
 --- dvisvgm.orig/tests/GFGlyphTracerTest.cpp
 +++ dvisvgm/tests/GFGlyphTracerTest.cpp
 @@ -61,7 +61,7 @@
