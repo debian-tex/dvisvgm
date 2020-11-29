@@ -16,8 +16,3 @@
 
 %:
 	dh $@
-
-override_dh_auto_configure:
-        # run out configure script
-	#dh_auto_configure -- -C --prefix=/usr
-	./configure --prefix=/usr
