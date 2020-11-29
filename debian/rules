@@ -15,7 +15,7 @@
 
 
 %:
-	dh $@ --without autoreconf
+	dh $@
 
 override_dh_auto_configure:
         # run out configure script

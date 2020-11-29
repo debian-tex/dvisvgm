@@ -1,3 +1,9 @@
+dvisvgm (2.11-1) UNRELEASED; urgency=medium
+
+  * New upstream release. Add BD on python3-lxml.
+
+ -- Hilmar Preusse <hille42@web.de>  Sat, 28 Nov 2020 23:02:24 +0100
+
 dvisvgm (2.10.1-1) unstable; urgency=medium
 
   * New upstream release.
