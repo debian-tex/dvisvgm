@@ -1,10 +1,10 @@
-dvisvgm (2.11.1-1) UNRELEASED; urgency=medium
+dvisvgm (2.11.1-1) unstable; urgency=medium
 
   * New upstream version.
     - Remove unneeded override_dh_auto_configure.
     - Fix spelling errors in manual page.
 
- -- Hilmar Preusse <hille42@web.de>  Tue, 26 Jan 2021 22:43:29 +0100
+ -- Hilmar Preusse <hille42@web.de>  Tue, 26 Jan 2021 23:42:44 +0100
 
 dvisvgm (2.11-1) unstable; urgency=medium
 
