@@ -12,8 +12,8 @@ Build-Depends:
  libfreetype-dev,
  libgs-dev,
  pkg-config,
- python3,
- python3-lxml
+ python3 <!nocheck>,
+ python3-lxml <!nocheck>
 Rules-Requires-Root: no
 Standards-Version: 4.5.0
 Homepage: https://dvisvgm.de/
