@@ -244,7 +244,7 @@ class VersionInfo {
 
 	protected:
 		void append (const string &name, const string &version) {
-			_versionPairs.emplace_back(pair<string,string>(name, version));
+			_versionPairs.emplace_back(name, version);
 		}
 
 	private:
@@ -349,7 +349,8 @@ static void set_variables (const CommandLine &cmdline) {
 		string msg = "unknown font format '"+cmdline.fontFormatOpt.value()+"' (supported formats: ";
 		for (const string &format : FontWriter::supportedFormats())
 			msg += format + ", ";
-		msg.erase(msg.end()-2);
+		msg.erase(msg.end()-2, msg.end());
+		msg += ")";
 		throw CL::CommandLineException(msg);
 	}
 	SVGTree::CREATE_USE_ELEMENTS = cmdline.noFontsOpt.value() < 1;
