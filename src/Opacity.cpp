@@ -1,5 +1,5 @@
 /*************************************************************************
-** GFGlyphTracer.hpp                                                    **
+** Opacity.cpp                                                          **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
 ** Copyright (C) 2005-2021 Martin Gieseking <martin.gieseking@uos.de>   **
@@ -18,42 +18,42 @@
 ** along with this program; if not, see <http://www.gnu.org/licenses/>. **
 *************************************************************************/
 
-#ifndef GFGLYPHTRACER_HPP
-#define GFGLYPHTRACER_HPP
+#include "Opacity.hpp"
 
-#include <fstream>
-#include <string>
-#include "GFTracer.hpp"
-#include "Glyph.hpp"
+using namespace std;
 
-class GFGlyphTracer : public GFTracer {
-	public:
-		struct Callback {
-			virtual ~Callback () =default;
-			virtual void setFont (const std::string &fontname) {}
-			virtual void beginChar (uint8_t c) {}
-			virtual void endChar (uint8_t c) {}
-			virtual void emptyChar (uint8_t c) {}
-		};
+string Opacity::cssBlendMode (BlendMode bm) {
+	switch (bm) {
+		case BM_NORMAL    : return "normal";
+		case BM_MULTIPLY  : return "multiply";
+		case BM_SCREEN    : return "screen";
+		case BM_OVERLAY   : return "overlay";
+		case BM_SOFTLIGHT : return "soft-light";
+		case BM_HARDLIGHT : return "hard-light";
+		case BM_COLORDODGE: return "color-dodge";
+		case BM_COLORBURN : return "color-burn";
+		case BM_DARKEN    : return "darken";
+		case BM_LIGHTEN   : return "lighten";
+		case BM_DIFFERENCE: return "difference";
+		case BM_EXCLUSION : return "exclusion";
+		case BM_HUE       : return "hue";
+		case BM_SATURATION: return "saturation";
+		case BM_COLOR     : return "color";
+		case BM_LUMINOSITY: return "luminosity";
+	}
+	return "";
+}
 
-	public:
-		GFGlyphTracer () : GFTracer(_ifs, 0) {}
-		GFGlyphTracer (const std::string &fname, double upp, Callback *cb=nullptr);
-		void reset (const std::string &fname, double upp);
-		void setCallback (Callback *cb) {_callback = cb;}
-		bool executeChar (uint8_t c) override;
-		void moveTo (double x, double y) override;
-		void lineTo (double x, double y) override;
-		void curveTo (double c1x, double c1y, double c2x, double c2y, double x, double y) override;
-		void closePath () override;
-		void endChar (uint32_t c) override;
-		void setGlyph (Glyph &glyph)   {_glyph = &glyph;}
-		const Glyph& getGlyph () const {return *_glyph;}
 
-	private:
-		std::ifstream _ifs;
-		Glyph *_glyph = nullptr;
-		Callback *_callback = nullptr;
-};
+bool Opacity::operator == (const Opacity &opacity) const {
+	return opacity._fillalpha == _fillalpha
+		&& opacity._strokealpha == _strokealpha
+		&& opacity._blendMode == _blendMode;
+}
 
-#endif
+
+bool Opacity::operator != (const Opacity &opacity) const {
+	return opacity._fillalpha != _fillalpha
+		|| opacity._strokealpha != _strokealpha
+		|| opacity._blendMode != _blendMode;
+}
