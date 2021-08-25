@@ -16,3 +16,6 @@
 
 %:
 	dh $@
+
+override_dh_auto_test:
+	: do nothing here, otherwise test suite is run.
