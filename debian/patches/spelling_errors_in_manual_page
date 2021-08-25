@@ -4,19 +4,10 @@ Forwarded: Not done, could be done.
 Author: Hilmar Preusse <hille42@web.de>
 Last-Update: 20210126
 
-Index: dvisvgm/doc/dvisvgm.1
+Index: dvisvgm-2.12/doc/dvisvgm.1
 ===================================================================
---- dvisvgm.orig/doc/dvisvgm.1	2021-01-26 22:40:22.377641564 +0100
-+++ dvisvgm/doc/dvisvgm.1	2021-01-26 23:07:37.087171079 +0100
-@@ -46,7 +46,7 @@
- .sp
- However, TeX\(cqs main source for font descriptions is Metafont, which produces bitmap output (GF files)\&. That\(cqs why not all obtainable TeX fonts are available in a scalable format\&. In these cases, dvisvgm tries to vectorize Metafont\(cqs output by tracing the glyph bitmaps\&. The results are not as perfect as most (manually optimized) PFB or OTF counterparts, but are nonetheless really nice in most cases\&.
- .sp
--When running dvisvgm without option \fB\-\-no\-fonts\fR, it creates \fIfont\fR elements (\fB<font>\fR\&...\fB</font>\fR) to embed the font data into the SVG files\&. Unfortunately, only few SVG renderers support these elements yet\&. Most web browsers and vector graphics applications don\(cqt evaluate them properly so that the text components of the resulting graphics might look strange\&. In order to create more compatible SVG files, command\-line option \fB\-\-no\-fonts\fR can be given to replace the font elements by plain graphics paths\&. Most web browsers (but only few external SVG renderers) also suppport WOFF and WOFF2 fonts that can be used instead of the default SVG fonts\&. Option \fB\-\-font\-format\fR offers the functionality to change the format applied to the fonts being embedded\&. This, however, only works when converting DVI files\&. Text present in PDF and PostScript files is always converted to path elements\&.
-+When running dvisvgm without option \fB\-\-no\-fonts\fR, it creates \fIfont\fR elements (\fB<font>\fR\&...\fB</font>\fR) to embed the font data into the SVG files\&. Unfortunately, only few SVG renderers support these elements yet\&. Most web browsers and vector graphics applications don\(cqt evaluate them properly so that the text components of the resulting graphics might look strange\&. In order to create more compatible SVG files, command\-line option \fB\-\-no\-fonts\fR can be given to replace the font elements by plain graphics paths\&. Most web browsers (but only few external SVG renderers) also support WOFF and WOFF2 fonts that can be used instead of the default SVG fonts\&. Option \fB\-\-font\-format\fR offers the functionality to change the format applied to the fonts being embedded\&. This, however, only works when converting DVI files\&. Text present in PDF and PostScript files is always converted to path elements\&.
- .SH "OPTIONS"
- .sp
- dvisvgm provides a POSIX\-compliant command\-line interface with short and long option names\&. They may be given before and/or after the name of the file to be converted\&. Also, the order of specifying the options is not significant, i\&.e\&. you can add them in any order without changing dvisvgm\(cqs behavior\&. Certain options accept or require additional parameters which are directly appended to or separated by whitespace from a short option (e\&.g\&. \fB\-v0\fR or \fB\-v 0\fR)\&. Long options require an additional equals sign (\fB=\fR) between option name and argument but without any surrounding whitespace (e\&.g\&. \fB\-\-verbosity=0\fR)\&. Multiple short options that don\(cqt expect a further parameter can be combined after a single dash (e\&.g\&. \fB\-ejs\fR rather than \fB\-e \-j \-s\fR)\&.
+--- dvisvgm-2.12.orig/doc/dvisvgm.1	2021-08-25 23:01:17.248004618 +0200
++++ dvisvgm-2.12/doc/dvisvgm.1	2021-08-25 23:01:17.240004618 +0200
 @@ -509,7 +509,7 @@
  Prints a list of registered special handlers and exits\&. Each handler processes a set of special statements belonging to the same category\&. In most cases, the categories are identified by the prefix of the special statements\&. It\(cqs usually a leading string followed by a colon or a blank, e\&.g\&.
  \fIcolor\fR
@@ -26,7 +17,7 @@ Index: dvisvgm/doc/dvisvgm.1
  \fB\-\-no\-specials\fR\&. All special statements not covered by one of the special handlers are silently ignored\&.
  .RE
  .PP
-@@ -839,7 +839,7 @@
+@@ -840,7 +840,7 @@
  .PP
  \fB\-R, \-\-relative\fR
  .RS 4
@@ -35,7 +26,7 @@ Index: dvisvgm/doc/dvisvgm.1
  \fB\-\-relative\fR
  is given, relative commands are created instead\&. This slightly reduces the size of the SVG files in most cases\&.
  .RE
-@@ -867,7 +867,7 @@
+@@ -868,7 +868,7 @@
  \fB/tmp\fR
  on Linux systems\&. Option
  \fB\-\-tmpdir\fR
@@ -44,7 +35,7 @@ Index: dvisvgm/doc/dvisvgm.1
  .sp
  If the optional parameter
  \fIpath\fR
-@@ -1364,7 +1364,7 @@
+@@ -1365,7 +1365,7 @@
  The hyperref specification defines several variants on how to mark hyperlinked areas in a DVI file\&. dvisvgm supports the plain HyperTeX special constructs as created with hyperref package option
  \fIhypertex\fR\&. By default, all linked areas of the document are marked by a rectangle\&. Option
  \fB\-\-linkmark\fR
@@ -53,7 +44,7 @@ Index: dvisvgm/doc/dvisvgm.1
  hyperref manual (\m[blue]https://ctan.org/pkg/hyperref\m[])\&.
  .RE
  .PP
-@@ -1387,7 +1387,7 @@
+@@ -1388,7 +1388,7 @@
  \fIpdf:pagesize\fR
  is similar to the
  \fIpapersize\fR
@@ -62,19 +53,10 @@ Index: dvisvgm/doc/dvisvgm.1
  \fB\-\-bbox=papersize\fR
  must be given\&.
  .sp
-Index: dvisvgm/doc/dvisvgm.txt.in
+Index: dvisvgm-2.12/doc/dvisvgm.txt.in
 ===================================================================
---- dvisvgm.orig/doc/dvisvgm.txt.in	2021-01-26 22:40:22.389641551 +0100
-+++ dvisvgm/doc/dvisvgm.txt.in	2021-01-26 23:09:42.395005480 +0100
-@@ -69,7 +69,7 @@
- elements yet. Most web browsers and vector graphics applications don't evaluate them properly so
- that the text components of the resulting graphics might look strange. In order to create more
- compatible SVG files, command-line option *--no-fonts* can be given to replace the font elements
--by plain graphics paths. Most web browsers (but only few external SVG renderers) also suppport
-+by plain graphics paths. Most web browsers (but only few external SVG renderers) also support
- WOFF and WOFF2 fonts that can be used instead of the default SVG fonts. Option *--font-format*
- offers the functionality to change the format applied to the fonts being embedded. This, however,
- only works when converting DVI files. Text present in PDF and PostScript files is always
+--- dvisvgm-2.12.orig/doc/dvisvgm.txt.in	2021-08-25 23:01:17.248004618 +0200
++++ dvisvgm-2.12/doc/dvisvgm.txt.in	2021-08-25 23:01:17.240004618 +0200
 @@ -360,7 +360,7 @@
  prefix of the special statements. It's usually a leading string followed by a colon or a blank,
  e.g. 'color' or 'ps'. The listed handler names, however, don't need to match these prefixes, e.g.
@@ -84,7 +66,7 @@ Index: dvisvgm/doc/dvisvgm.txt.in
  of the special handlers are silently ignored.
  
  *-M, --mag*='factor'::
-@@ -563,7 +563,7 @@
+@@ -568,7 +568,7 @@
  This option is equivalent to *-TR*'angle'.
  
  *-R, --relative*::
@@ -93,7 +75,7 @@ Index: dvisvgm/doc/dvisvgm.txt.in
  i.e. each command expects either absolute coordinates or coordinates relative to the
  current drawing position. By default, dvisvgm creates paths made up of absolute commands.
  If option *--relative* is given, relative commands are created instead. This slightly reduces
-@@ -580,7 +580,7 @@
+@@ -585,7 +585,7 @@
  *--tmpdir*[='path']::
  In some cases, dvisvgm needs to create temporary files to work properly. These files go to
  the system's temporary folder by default, e.g. +/tmp+ on Linux systems. Option *--tmpdir*
@@ -102,7 +84,7 @@ Index: dvisvgm/doc/dvisvgm.txt.in
  does not create this folder, so you must ensure that it actually exists before running dvisvgm.
  +
  If the optional parameter 'path' is omitted, dvisvgm prints the location of the system's
-@@ -835,7 +835,7 @@
+@@ -840,7 +840,7 @@
  *html*::
  The hyperref specification defines several variants on how to mark hyperlinked areas in a DVI file. dvisvgm
  supports the plain HyperTeX special constructs as created with hyperref package option 'hypertex'.
