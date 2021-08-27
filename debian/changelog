@@ -8,6 +8,7 @@ dvisvgm (2.12-1) UNRELEASED; urgency=medium
   * New upstream release, refresh / update patches.
   * Improve disable_GFGlyphTracerTest_executeChar.patch: comment unused
     variable.
+  * Disable test suite in d/rules, readd as autopkgtest.
 
  -- Hilmar Preusse <hille42@web.de>  Wed, 25 Aug 2021 13:38:43 +0200
 
