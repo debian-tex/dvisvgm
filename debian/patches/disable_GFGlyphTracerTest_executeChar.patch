@@ -1,9 +1,24 @@
 Disable GFGlyphTracerTest. Fails on i386 (see upstream #117).
 ---
---- dvisvgm.orig/tests/GFGlyphTracerTest.cpp
-+++ dvisvgm/tests/GFGlyphTracerTest.cpp
-@@ -61,7 +61,7 @@
- }
+Index: dvisvgm/tests/GFGlyphTracerTest.cpp
+===================================================================
+--- dvisvgm.orig/tests/GFGlyphTracerTest.cpp	2021-08-27 00:14:12.339035067 +0200
++++ dvisvgm/tests/GFGlyphTracerTest.cpp	2021-08-27 00:14:31.014932308 +0200
+@@ -42,7 +42,7 @@
+ 
+ 
+ // Returns an SVG path string with scaled values.
+-static string scaled_pathstr (const Glyph &glyph) {
++/* static string scaled_pathstr (const Glyph &glyph) {
+ 	ostringstream oss;
+ 	glyph.writeSVG(oss, false);
+ 	istringstream iss(oss.str());
+@@ -58,10 +58,10 @@
+ 		}
+ 	}
+ 	return resultstream.str();
+-}
++} */
  
  
 -TEST(GFGlyphTracerTest, executeChar) {

@@ -6,6 +6,8 @@ dvisvgm (2.12-1) UNRELEASED; urgency=medium
 
   [ Hilmar Preusse ]
   * New upstream release, refresh / update patches.
+  * Improve disable_GFGlyphTracerTest_executeChar.patch: comment unused
+    variable.
 
  -- Hilmar Preusse <hille42@web.de>  Wed, 25 Aug 2021 13:38:43 +0200
 
