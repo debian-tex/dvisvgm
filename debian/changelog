@@ -1,4 +1,4 @@
-dvisvgm (2.12-1) UNRELEASED; urgency=medium
+dvisvgm (2.12-1) unstable; urgency=medium
 
   [ Helmut Grohne ]
   * Annotate python dependencies used for testing <!nocheck>.
@@ -10,7 +10,7 @@ dvisvgm (2.12-1) UNRELEASED; urgency=medium
     variable.
   * Disable test suite in d/rules, readd as autopkgtest.
 
- -- Hilmar Preusse <hille42@web.de>  Wed, 25 Aug 2021 13:38:43 +0200
+ -- Hilmar Preusse <hille42@web.de>  Fri, 27 Aug 2021 09:14:36 +0200
 
 dvisvgm (2.11.1-1) unstable; urgency=medium
 
