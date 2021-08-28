@@ -1,5 +1,5 @@
 Tests: test-suite
-Depends: debhelper-compat (= 13),
+Depends: build-essential,
 	libkpathsea-dev,
 	libbrotli-dev,
 	libwoff-dev,

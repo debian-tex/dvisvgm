@@ -1,3 +1,11 @@
+dvisvgm (2.12-2) unstable; urgency=medium
+
+  * Add build-essential as needed for autopkg test.
+  * Bump Standards Version to 4.6.0, no changes needded.
+  * Lintian overrride: debian-watch-does-not-check-gpg-signature
+
+ -- Hilmar Preusse <hille42@web.de>  Sat, 28 Aug 2021 08:19:22 +0200
+
 dvisvgm (2.12-1) unstable; urgency=medium
 
   [ Helmut Grohne ]
