@@ -1,8 +1,8 @@
 Description: Fix spelling errors in manual page.
 Origin: Hilmar Preusse <hille42@web.de>
-Forwarded: Not done, could be done.
+Forwarded: https://github.com/mgieseki/dvisvgm/issues/159
 Author: Hilmar Preusse <hille42@web.de>
-Last-Update: 20210126
+Last-Update: 20210827
 
 Index: dvisvgm-2.12/doc/dvisvgm.1
 ===================================================================
