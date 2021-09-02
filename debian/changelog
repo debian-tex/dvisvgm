@@ -1,9 +1,9 @@
-dvisvgm (2.12-3) UNRELEASED; urgency=medium
+dvisvgm (2.12-3) unstable; urgency=medium
 
   * Exclude armhf from autopkg test arches: it fails b/c of
     ABI change warnings.
 
- -- Hilmar Preusse <hille42@web.de>  Sat, 28 Aug 2021 15:18:40 +0200
+ -- Hilmar Preusse <hille42@web.de>  Thu, 02 Sep 2021 14:28:07 +0200
 
 dvisvgm (2.12-2) unstable; urgency=medium
 
