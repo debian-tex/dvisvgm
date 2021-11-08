@@ -9,4 +9,4 @@ Depends: build-essential,
 	pkg-config,
 	python3,
 	python3-lxml
-Restrictions: build-needed
+Restrictions: build-needed, allow-stderr
