@@ -1,6 +1,7 @@
 dvisvgm (2.12-4) UNRELEASED; urgency=medium
 
   * autopkgtest: Restrictions: (...), allow-stderr
+    -> re-enable test on armhf.
 
  -- Hilmar Preusse <hille42@web.de>  Mon, 08 Nov 2021 13:57:47 +0100
 

@@ -1,5 +1,5 @@
 Tests: test-suite
-Architecture: !armhf
+#Architecture: !armhf
 Depends: build-essential,
 	libkpathsea-dev,
 	libbrotli-dev,
