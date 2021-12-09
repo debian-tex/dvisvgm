@@ -1,9 +1,11 @@
-dvisvgm (2.12-4) UNRELEASED; urgency=medium
+dvisvgm (2.12-4) unstable; urgency=medium
 
   * autopkgtest: Restrictions: (...), allow-stderr
     -> re-enable test on armhf.
+  * Add commit 4f6b45d1b9dd96cc8d6dbc2400c65460d5bb2fb3 from upstream
+    to prevent compiler warnings in test suite.
 
- -- Hilmar Preusse <hille42@web.de>  Mon, 08 Nov 2021 13:57:47 +0100
+ -- Hilmar Preusse <hille42@web.de>  Thu, 09 Dec 2021 08:37:06 +0100
 
 dvisvgm (2.12-3) unstable; urgency=medium
 
