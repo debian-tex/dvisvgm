@@ -2,7 +2,7 @@
 ** FileSystem.cpp                                                       **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2021 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -34,8 +34,6 @@
 #endif
 
 
-using namespace std;
-
 #ifdef _WIN32
 	#include <direct.h>
 	#include "windows.hpp"
@@ -51,6 +49,8 @@ using namespace std;
 	const char FileSystem::PATHSEP = '/';
 #endif
 
+
+using namespace std;
 
 string FileSystem::TMPDIR;
 FileSystem::TemporaryDirectory FileSystem::_tmpdir;

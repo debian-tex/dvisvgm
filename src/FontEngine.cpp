@@ -2,7 +2,7 @@
 ** FontEngine.cpp                                                       **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2021 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -234,6 +234,33 @@ int FontEngine::getVAdvance (const Character &c) const {
 		if (FT_HAS_VERTICAL(_currentFace))
 			return _currentFace->glyph->metrics.vertAdvance;
 		return _currentFace->glyph->metrics.horiAdvance;
+	}
+	return 0;
+}
+
+
+int FontEngine::getWidth (const Character &c) const {
+	if (_currentFace) {
+		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		return _currentFace->glyph->metrics.width;
+	}
+	return 0;
+}
+
+
+int FontEngine::getHeight (const Character &c) const {
+	if (_currentFace) {
+		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		return _currentFace->glyph->metrics.horiBearingY;
+	}
+	return 0;
+}
+
+
+int FontEngine::getDepth (const Character &c) const {
+	if (_currentFace) {
+		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		return _currentFace->glyph->metrics.height - _currentFace->glyph->metrics.horiBearingY;
 	}
 	return 0;
 }
