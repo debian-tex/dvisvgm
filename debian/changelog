@@ -3,8 +3,9 @@ dvisvgm (2.13-1) unstable; urgency=medium
   * New upstream release, disable applied patches.
   * autopkgtest: Restrictions: (...), allow-stderr
     -> re-enable test on armhf.
+  * Update d/copyright, lintian override.
 
- -- Hilmar Preusse <hille42@web.de>  Thu, 09 Dec 2021 08:37:06 +0100
+ -- Hilmar Preusse <hille42@web.de>  Mon, 24 Jan 2022 00:07:27 +0100
 
 dvisvgm (2.12-3) unstable; urgency=medium
 
