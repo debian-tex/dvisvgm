@@ -1,3 +1,44 @@
+dvisvgm-2.13 (2022-01-20)
+- allow for conversion of multiple EPS files given on the command-line
+- added variables n and N to option --output representing the current file
+  number and total number of files given on the command-line, respectively
+- fixed selection of hash algorithm
+- improved computation of glyph height and depth
+- extended several paragraphs of the manual page with more detailed information
+- SVG optimizer: simplify transform attributes also when collapsing groups
+- updated bundled xxHash library to version 0.8.1
+- updated bundled gtest to version 1.11
+
+dvisvgm-2.12 (2021-08-16)
+- added transparency support of SVG elements created outside the PS handler
+  (GH issue #148)
+- fixed spacing issue caused by unexpected newline characters in SVG output
+- fixed PS error occurred when defining (yet unsupported) PS shading patterns
+- fixed issue in color handling of PS tiling patterns (GH issue #158)
+- fixed displaced graphics occurred if PDF MediaBox is not located at the origin
+- fixed handling of root directories of file paths
+- improved handling of drive letters (Windows only)
+- several code refactorings and improvements
+
+dvisvgm-2.11.1 (2021-01-21)
+- fixed possible ambiguity of GID to charcode mappings (GH issue #147)
+- refactored representation of token objects in calculator class
+- few minor code and test improvements
+
+dvisvgm-2.11 (2020-11-28)
+- added fallback mechanism for JFM-based virtual fonts proposed
+  by Takuji Tanaka (GH issue #144)
+- improved detection of proper CMap files for current encoding
+- fixed processing of Unicode surrogates present in CMap files
+- fixed handling of pdf:mapline and pdf:mapfile specials
+
+dvisvgm-2.10.1 (2020-09-22)
+- added support for new Ghostscript transparency operators
+  .setfillconstantalpha and .setstrokeconstantalpha
+- added support for new Ghostscript versioning scheme introduced with GS 9.53.0
+- added few additional information to the manual page
+- updated bundled brotli library to version 1.0.9
+
 dvisvgm-2.10 (2020-08-12)
 - added evaluation of LuaTeX native font definitions
 - added computation of of italic correction for fake slanted glyphs

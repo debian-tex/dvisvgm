@@ -2,7 +2,7 @@
 ** FontEngine.cpp                                                       **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2020 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -103,7 +103,7 @@ bool FontEngine::setFont (const Font &font) {
 		return true;
 
 	if (const char *path=font.path()) {
-		auto pf = dynamic_cast<const PhysicalFont*>(&font);
+		auto pf = font_cast<const PhysicalFont*>(&font);
 		if (setFont(path, font.fontIndex(), pf ? pf->getCharMapID() : CharMapID())) {
 			_currentFont = &font;
 			return true;
@@ -131,37 +131,38 @@ bool FontEngine::setCharMap (const CharMapID &charMapID) {
 }
 
 
-/** Returns a character map that maps from character indexes to character codes
+/** Returns a character map that maps from glyph indexes to character codes
  *  of the current encoding.
  *  @param[out] charmap the resulting charmap */
-void FontEngine::buildCharMap (RangeMap &charmap) {
+void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) {
 	charmap.clear();
-	FT_UInt glyph_index;
-	uint32_t charcode = FT_Get_First_Char(_currentFace, &glyph_index);
-	while (glyph_index) {
-		charmap.addRange(glyph_index, glyph_index, charcode);
-		charcode = FT_Get_Next_Char(_currentFace, charcode, &glyph_index);
+	FT_UInt gid;  // index of current glyph
+	uint32_t charcode = FT_Get_First_Char(_currentFace, &gid);
+	while (gid) {
+		if (!charmap.valueAt(gid))
+			charmap.addRange(gid, gid, charcode);
+		charcode = FT_Get_Next_Char(_currentFace, charcode, &gid);
 	}
 }
 
 
-/** Creates a charmap that maps from the custom character encoding to unicode.
+/** Creates a charmap that maps from the custom character encoding to Unicode.
  *  @return pointer to charmap if it could be created, 0 otherwise */
 unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () {
 	FT_CharMap ftcharmap = _currentFace->charmap;
 	if (FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) != 0)
 		return nullptr;
-	RangeMap index_to_source_chrcode;
-	buildCharMap(index_to_source_chrcode);
+	RangeMap gidToCharCodeMap;
+	buildGidToCharCodeMap(gidToCharCodeMap);
 	if (FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) != 0)
 		return nullptr;
 	auto charmap = util::make_unique<RangeMap>();
-	FT_UInt glyph_index;
-	uint32_t unicode_point = FT_Get_First_Char(_currentFace, &glyph_index);
-	while (glyph_index) {
-		uint32_t custom_charcode = index_to_source_chrcode.valueAt(glyph_index);
-		charmap->addRange(custom_charcode, custom_charcode, unicode_point);
-		unicode_point = FT_Get_Next_Char(_currentFace, unicode_point, &glyph_index);
+	FT_UInt gid;  // index of current glyph
+	uint32_t ucCharcode = FT_Get_First_Char(_currentFace, &gid);  // Unicode code point
+	while (gid) {
+		uint32_t customCharcode = gidToCharCodeMap.valueAt(gid);
+		charmap->addRange(customCharcode, customCharcode, ucCharcode);
+		ucCharcode = FT_Get_Next_Char(_currentFace, ucCharcode, &gid);
 	}
 	FT_Set_Charmap(_currentFace, ftcharmap);
 	return std::move(charmap);
@@ -238,6 +239,33 @@ int FontEngine::getVAdvance (const Character &c) const {
 }
 
 
+int FontEngine::getWidth (const Character &c) const {
+	if (_currentFace) {
+		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		return _currentFace->glyph->metrics.width;
+	}
+	return 0;
+}
+
+
+int FontEngine::getHeight (const Character &c) const {
+	if (_currentFace) {
+		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		return _currentFace->glyph->metrics.horiBearingY;
+	}
+	return 0;
+}
+
+
+int FontEngine::getDepth (const Character &c) const {
+	if (_currentFace) {
+		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		return _currentFace->glyph->metrics.height - _currentFace->glyph->metrics.horiBearingY;
+	}
+	return 0;
+}
+
+
 int FontEngine::charIndex (const Character &c) const {
 	if (!_currentFace || !_currentFace->charmap)
 		return c.type() == Character::NAME ? 0 : c.number();
@@ -307,7 +335,7 @@ int FontEngine::getCharMapIDs (vector<CharMapID> &charmapIDs) const {
 	if (_currentFace) {
 		for (int i=0; i < _currentFace->num_charmaps; i++) {
 			FT_CharMap charmap = _currentFace->charmaps[i];
-			charmapIDs.emplace_back(CharMapID(charmap->platform_id, charmap->encoding_id));
+			charmapIDs.emplace_back(charmap->platform_id, charmap->encoding_id);
 		}
 	}
 	return charmapIDs.size();

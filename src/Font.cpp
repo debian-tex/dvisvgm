@@ -2,7 +2,7 @@
 ** Font.cpp                                                             **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2020 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -495,7 +495,7 @@ const FontEncoding* PhysicalFontImpl::encoding () const {
 
 bool PhysicalFontImpl::findAndAssignBaseFontMap () {
 	const FontEncoding *enc = encoding();
-	if (enc && enc->mapsToCharIndex()) {
+	if (enc && !enc->mapsToUnicode() && enc->mapsToCharIndex()) {
 		// try to find a base font map that maps from character indexes to a suitable
 		// target encoding supported by the font file
 		if (const FontEncoding *bfmap = enc->findCompatibleBaseFontMap(this, _charmapID))
@@ -621,14 +621,14 @@ double NativeFont::italicCorr(int c) const {
 double NativeFont::charHeight (int c) const {
 	FontEngine::instance().setFont(*this);
 	int upem = FontEngine::instance().getUnitsPerEM();
-	return upem ? (scaledSize()*FontEngine::instance().getAscender()/upem) : 0;
+	return upem ? (scaledSize()*FontEngine::instance().getHeight(Character(Character::INDEX, c))/upem) : 0;
 }
 
 
 double NativeFont::charDepth (int c) const {
 	FontEngine::instance().setFont(*this);
 	int upem = FontEngine::instance().getUnitsPerEM();
-	return upem ? (scaledSize()*FontEngine::instance().getDescender()/upem) : 0;
+	return upem ? (scaledSize()*FontEngine::instance().getDepth(Character(Character::INDEX, c))/upem) : 0;
 }
 
 
@@ -636,7 +636,7 @@ bool NativeFontImpl::findAndAssignBaseFontMap () {
 	FontEngine &fe = FontEngine::instance();
 	fe.setFont(*this);
 	fe.setUnicodeCharMap();
-	fe.buildCharMap(_toUnicodeMap);
+	fe.buildGidToCharCodeMap(_toUnicodeMap);
 	if (!_toUnicodeMap.addMissingMappings(fe.getNumGlyphs()))
 		Message::wstream(true) << "incomplete Unicode mapping for native font " << name() << " (" << filename() << ")\n";
 	return true;
@@ -679,3 +679,11 @@ const vector<uint8_t>* VirtualFontImpl::getDVI (int c) const {
 	return (it == _charDefs.end() ? nullptr : &it->second);
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+void PhysicalFont::visit (FontVisitor &visitor) {visitor.visited(this);}
+void VirtualFont::visit (FontVisitor &visitor) {visitor.visited(this);}
+void NativeFont::visit (FontVisitor &visitor) {visitor.visited(this);}
+void PhysicalFont::visit (FontVisitor &visitor) const {visitor.visited(this);}
+void VirtualFont::visit (FontVisitor &visitor) const {visitor.visited(this);}
+void NativeFont::visit (FontVisitor &visitor) const {visitor.visited(this);}
