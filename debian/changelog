@@ -1,9 +1,8 @@
-dvisvgm (2.12-4) unstable; urgency=medium
+dvisvgm (2.13-1) unstable; urgency=medium
 
+  * New upstream release, disable applied patches.
   * autopkgtest: Restrictions: (...), allow-stderr
     -> re-enable test on armhf.
-  * Add commit 4f6b45d1b9dd96cc8d6dbc2400c65460d5bb2fb3 from upstream
-    to prevent compiler warnings in test suite.
 
  -- Hilmar Preusse <hille42@web.de>  Thu, 09 Dec 2021 08:37:06 +0100
 
