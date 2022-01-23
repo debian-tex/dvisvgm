@@ -2,3 +2,4 @@ disable_GFGlyphTracerTest_executeChar.patch
 python3
 #spelling_errors_in_manual_page
 #4f6b45d1b9dd96cc8d6dbc2400c65460d5bb2fb3.diff
+typo_in_manual_page
