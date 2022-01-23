@@ -3,11 +3,11 @@ Upstream-Name: dvisvgm
 Source: <https://dvisvgm.de/>
 
 Files: *
-Copyright: 2005-2019 Martin Gieseking <martin.gieseking@uos.de>
+Copyright: 2005-2022 Martin Gieseking <martin.gieseking@uos.de>
 License: GPL-3+
 
 Files: src/*
-Copyright: 2005-2019 Martin Gieseking <martin.gieseking@uos.de>
+Copyright: 2005-2022 Martin Gieseking <martin.gieseking@uos.de>
 License: GPL-3+
 
 Files: libs/brotli/*
@@ -97,7 +97,7 @@ License: OpenSSL-License
  Hudson (tjh@cryptsoft.com).
 
 Files: libs/potrace/*
-Copyright: 2001-2017 Peter Selinger
+Copyright: 2001-2019 Peter Selinger
 License: GPL-2+
 
 Files: libs/woff2/*
@@ -105,7 +105,7 @@ Copyright: 2013-2017 by the WOFF2 Authors.
 License: MIT
 
 Files: libs/xxHash/*
-Copyright: 2012-2016 by Yann Collet
+Copyright: 2012-2020 by Yann Collet
 License: BSD-2-clause
  Copyright (c) The Regents of the University of California.
  All rights reserved.
@@ -135,7 +135,7 @@ License: BSD-2-clause
  SUCH DAMAGE.
 
 Files: debian/*
-Copyright: 2019 Hilmar Preusse <hille42@web.de>
+Copyright: 2019-2022 Hilmar Preusse <hille42@web.de>
 License: GPL-2+
 
 License: GPL-2+
@@ -190,4 +190,3 @@ License: MIT
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
-
