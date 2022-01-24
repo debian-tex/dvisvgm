@@ -2,7 +2,7 @@
 ** DVIToSVG.cpp                                                         **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2021 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -569,16 +569,18 @@ void DVIToSVG::HashSettings::setParameters (const string &paramstr) {
 		auto it = paramMap.find(name);
 		if (it != paramMap.end())
 			_params.insert(it->second);
-		else if (_algo.empty() && HashFunction::isSupportedAlgorithm(name))
-			_algo = name;
-		else if (!name.empty()) {
-			string msg = "invalid hash parameter '"+name+"' (supported algorithms: ";
-			for (string str : HashFunction::supportedAlgorithms())
-				msg += str + ", ";
-			msg.pop_back();
-			msg.pop_back();
-			msg += ')';
-			throw MessageException(msg);
+		else if (_algo.empty()) {
+			if (HashFunction::isSupportedAlgorithm(name))
+				_algo = name;
+			else if (!name.empty()) {
+				string msg = "invalid hash parameter '" + name + "' (supported algorithms: ";
+				for (string str: HashFunction::supportedAlgorithms())
+					msg += str + ", ";
+				msg.pop_back();
+				msg.pop_back();
+				msg += ')';
+				throw MessageException(msg);
+			}
 		}
 	}
 	// set default hash algorithm if none is given
