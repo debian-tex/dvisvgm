@@ -1,3 +1,9 @@
+dvisvgm (2.13.1-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Hilmar Preusse <hille42@web.de>  Sat, 29 Jan 2022 14:58:09 +0100
+
 dvisvgm (2.13-2) unstable; urgency=medium
 
   * Fix d/changelog: removed entry for 2.12-4 in last upload....
