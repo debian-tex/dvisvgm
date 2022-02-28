@@ -1,10 +1,8 @@
 Fix typo in manual page, needs to be forwarded to uptsream.
 ---
-Index: dvisvgm/doc/dvisvgm.1
-===================================================================
---- dvisvgm.orig/doc/dvisvgm.1	2022-01-23 23:06:21.710318611 +0100
-+++ dvisvgm/doc/dvisvgm.1	2022-01-23 23:57:55.166235264 +0100
-@@ -1401,7 +1401,7 @@
+--- dvisvgm.orig/doc/dvisvgm.1
++++ dvisvgm/doc/dvisvgm.1
+@@ -1410,7 +1410,7 @@
  \fIpdf:pagesize\fR
  is similar to the
  \fIpapersize\fR
