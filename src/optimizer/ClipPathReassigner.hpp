@@ -1,5 +1,5 @@
 /*************************************************************************
-** version.hpp                                                          **
+** ClipPathReassigner.hpp                                               **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
 ** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
@@ -18,11 +18,26 @@
 ** along with this program; if not, see <http://www.gnu.org/licenses/>. **
 *************************************************************************/
 
-#ifndef VERSION_HPP
-#define VERSION_HPP
+#pragma once
 
-constexpr const char *PROGRAM_NAME = "dvisvgm";
-constexpr const char *PROGRAM_VERSION = "2.13.3";
+#include <string>
+#include <vector>
+#include "OptimizerModule.hpp"
 
-#endif
+class ClipPathReassigner : public OptimizerModule {
+	struct NamedPathString {
+		NamedPathString () =default;
+		NamedPathString (const std::string &svgPathName, const char *svgPathString) : name(svgPathName), pathString(svgPathString) {}
+		std::string name;
+		const char *pathString = nullptr;
+	};
+
+	public:
+		void execute (XMLElement*, XMLElement *context) override;
+		const char* info () const override;
+
+	private:
+		std::vector<NamedPathString> _namedPathStrings;
+
+};
 
