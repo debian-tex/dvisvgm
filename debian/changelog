@@ -1,3 +1,11 @@
+dvisvgm (2.13.4-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+  * Fix entry in d/NEWS (Closes: #1006713).
+  * Replace deps for test suite by "@builddeps@".
+
+ -- Hilmar Preusse <hille42@web.de>  Sat, 23 Apr 2022 23:31:44 +0200
+
 dvisvgm (2.13.3-1) unstable; urgency=medium
 
   * New upstream release, refresh patches.
