@@ -1,3 +1,9 @@
+dvisvgm (2.14-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Hilmar Preusse <hille42@web.de>  Mon, 15 Aug 2022 00:16:46 +0200
+
 dvisvgm (2.13.4-1) unstable; urgency=medium
 
   * New upstream release.
