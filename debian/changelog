@@ -1,6 +1,7 @@
 dvisvgm (2.14-1) UNRELEASED; urgency=medium
 
   * New upstream release.
+  * Add libpotrace-dev, libssl-dev & libxxhash-dev to B-D.
 
  -- Hilmar Preusse <hille42@web.de>  Mon, 15 Aug 2022 00:16:46 +0200
 

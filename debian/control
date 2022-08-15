@@ -11,6 +11,9 @@ Build-Depends:
  libwoff-dev,
  libfreetype-dev,
  libgs-dev,
+ libpotrace-dev,
+ libssl-dev,
+ libxxhash-dev,
  pkg-config,
  python3 <!nocheck>,
  python3-lxml <!nocheck>
