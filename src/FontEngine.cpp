@@ -29,6 +29,7 @@
 #include "Font.hpp"
 #include "FontEngine.hpp"
 #include "FontStyle.hpp"
+#include "fonts/Base14Fonts.hpp"
 #include "Message.hpp"
 #include "utility.hpp"
 
@@ -88,7 +89,19 @@ string FontEngine::version () {
 bool FontEngine::setFont (const string &fname, int fontindex, const CharMapID &charMapID) {
 	if (_currentFace && FT_Done_Face(_currentFace))
 		Message::estream(true) << "failed to release font\n";
-	if (FT_New_Face(_library, fname.c_str(), fontindex, &_currentFace)) {
+	if (fname.size() <= 6 || fname.substr(0, 6) == "sys://") {
+		if (const MemoryFontData *data = find_base14_font(fname.substr(6))) {
+			FT_Open_Args args;
+			args.flags = FT_OPEN_MEMORY;
+			args.memory_base = reinterpret_cast<const FT_Byte*>(data->data);
+			args.memory_size = FT_Long(data->size);
+			if (FT_Open_Face(_library, &args, fontindex, &_currentFace)) {
+				Message::estream(true) << "can't read memory font " << fname << '\n';
+				return false;
+			}
+		}
+	}
+	else if (FT_New_Face(_library, fname.c_str(), fontindex, &_currentFace)) {
 		Message::estream(true) << "can't read font file " << fname << '\n';
 		return false;
 	}
@@ -116,6 +129,12 @@ bool FontEngine::setFont (const Font &font) {
 bool FontEngine::isCIDFont() const {
 	FT_Bool cid_keyed;
 	return FT_Get_CID_Is_Internally_CID_Keyed(_currentFace, &cid_keyed) == 0 && cid_keyed;
+}
+
+
+/** Returns true if the current font contains vertical layout data. */
+bool FontEngine::hasVerticalMetrics () const {
+	return FT_HAS_VERTICAL(_currentFace);
 }
 
 
@@ -179,6 +198,27 @@ const char* FontEngine::getStyleName () const {
 }
 
 
+/** Returns the PS name of the current font. */
+const char* FontEngine::getPSName () const {
+	return _currentFace ? FT_Get_Postscript_Name(_currentFace) : nullptr;
+}
+
+
+/** Returns the PS name of a font given by a file.
+ *  @param[in] fname name/path of the font file
+ *  @return the PS name */
+string FontEngine::getPSName (const string &fname) const {
+	string psname;
+	FT_Face face;
+	if (FT_New_Face(_library, fname.c_str(), 0, &face) == 0) {
+		if (const char *ptr = FT_Get_Postscript_Name(face))
+			psname = ptr;
+		FT_Done_Face(face);
+	}
+	return psname;
+}
+
+
 int FontEngine::getUnitsPerEM () const {
 	return _currentFace ? _currentFace->units_per_EM : 0;
 }
@@ -200,16 +240,6 @@ int FontEngine::getDescender () const {
 }
 
 
-int FontEngine::getAdvance (int c) const {
-	if (_currentFace) {
-		FT_Fixed adv=0;
-		FT_Get_Advance(_currentFace, c, FT_LOAD_NO_SCALE, &adv);
-		return adv;
-	}
-	return 0;
-}
-
-
 int FontEngine::getHAdvance () const {
 	if (_currentFace) {
 		auto table = static_cast<TT_OS2*>(FT_Get_Sfnt_Table(_currentFace, ft_sfnt_os2));
@@ -219,21 +249,26 @@ int FontEngine::getHAdvance () const {
 }
 
 
+/** Returns the horizontal advance width of a given character in font units. */
 int FontEngine::getHAdvance (const Character &c) const {
 	if (_currentFace) {
-		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
-		return _currentFace->glyph->metrics.horiAdvance;
+		FT_Fixed adv=0;
+		FT_Get_Advance(_currentFace, charIndex(c), FT_LOAD_NO_SCALE, &adv);
+		return adv;
 	}
 	return 0;
 }
 
 
+/** Returns the vertical advance width of a given character in font units. */
 int FontEngine::getVAdvance (const Character &c) const {
 	if (_currentFace) {
-		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
+		FT_Fixed adv=0;
+		auto flags = FT_LOAD_NO_SCALE;
 		if (FT_HAS_VERTICAL(_currentFace))
-			return _currentFace->glyph->metrics.vertAdvance;
-		return _currentFace->glyph->metrics.horiAdvance;
+			flags |= FT_LOAD_VERTICAL_LAYOUT;
+		FT_Get_Advance(_currentFace, charIndex(c), flags, &adv);
+		return adv;
 	}
 	return 0;
 }
@@ -266,6 +301,13 @@ int FontEngine::getDepth (const Character &c) const {
 }
 
 
+int FontEngine::getCharIndexByGlyphName(const char *name) const {
+	if (_currentFace)
+		return int(FT_Get_Name_Index(_currentFace, name));
+	return 0;
+}
+
+
 int FontEngine::charIndex (const Character &c) const {
 	if (!_currentFace || !_currentFace->charmap)
 		return c.type() == Character::NAME ? 0 : c.number();
@@ -280,22 +322,6 @@ int FontEngine::charIndex (const Character &c) const {
 }
 
 
-/** Get first available character of the current font face. */
-int FontEngine::getFirstChar () const {
-	if (_currentFace)
-		return _currentChar = FT_Get_First_Char(_currentFace, &_currentGlyphIndex);
-	return 0;
-}
-
-
-/** Get the next available character of the current font face. */
-int FontEngine::getNextChar () const {
-	if (_currentFace && _currentGlyphIndex)
-		return _currentChar = FT_Get_Next_Char(_currentFace, _currentChar, &_currentGlyphIndex);
-	return getFirstChar();
-}
-
-
 /** Returns the number of glyphs present in the current font face. */
 int FontEngine::getNumGlyphs () const {
 	return _currentFace ? _currentFace->num_glyphs : 0;
@@ -306,15 +332,15 @@ int FontEngine::getNumGlyphs () const {
  * @param[in] c char code
  * @return glyph name */
 string FontEngine::getGlyphName (const Character &c) const {
+	string ret;
 	if (c.type() == Character::NAME)
-		return c.name();
-
-	if (_currentFace && FT_HAS_GLYPH_NAMES(_currentFace)) {
+		ret = c.name();
+	else if (_currentFace && FT_HAS_GLYPH_NAMES(_currentFace)) {
 		char buf[256];
 		FT_Get_Glyph_Name(_currentFace, charIndex(c), buf, 256);
-		return string(buf);
+		ret = string(buf);
 	}
-	return "";
+	return ret;
 }
 
 
@@ -335,7 +361,7 @@ int FontEngine::getCharMapIDs (vector<CharMapID> &charmapIDs) const {
 	if (_currentFace) {
 		for (int i=0; i < _currentFace->num_charmaps; i++) {
 			FT_CharMap charmap = _currentFace->charmaps[i];
-			charmapIDs.emplace_back(charmap->platform_id, charmap->encoding_id);
+			charmapIDs.emplace_back(uint8_t(charmap->platform_id), uint8_t(charmap->encoding_id));
 		}
 	}
 	return charmapIDs.size();
@@ -344,14 +370,14 @@ int FontEngine::getCharMapIDs (vector<CharMapID> &charmapIDs) const {
 
 CharMapID FontEngine::setUnicodeCharMap () {
 	if (_currentFace && FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) == 0)
-		return CharMapID(_currentFace->charmap->platform_id, _currentFace->charmap->encoding_id);
+		return CharMapID(uint8_t(_currentFace->charmap->platform_id), uint8_t(_currentFace->charmap->encoding_id));
 	return CharMapID();
 }
 
 
 CharMapID FontEngine::setCustomCharMap () {
 	if (_currentFace && FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) == 0)
-		return CharMapID(_currentFace->charmap->platform_id, _currentFace->charmap->encoding_id);
+		return CharMapID(uint8_t(_currentFace->charmap->platform_id), uint8_t(_currentFace->charmap->encoding_id));
 	return CharMapID();
 }
 

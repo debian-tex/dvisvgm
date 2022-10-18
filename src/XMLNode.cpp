@@ -63,6 +63,14 @@ unique_ptr<XMLNode> XMLNode::removeNext () {
 	return oldnext;
 }
 
+
+XMLElement* XMLNode::nextElement () const {
+	for (XMLNode *node = next(); node; node = node->next())
+		if (node->toElement())
+			return node->toElement();
+	return nullptr;
+}
+
 /////////////////////////////////////////////////////////////////////
 
 XMLElement::XMLElement (string name) : _name(std::move(name)) {
@@ -375,7 +383,8 @@ ostream& XMLElement::write (ostream &os) const {
 		if (attrib.name.front() != '@')
 			os << attrib.name << "='" << attrib.value << '\'';
 		else {
-			os << attrib.name.substr(1) << "='";
+			bool keep = (attrib.name.size() > 1 && attrib.name[1] == '@');
+			os << attrib.name.substr(keep ? 2 : 1) << "='";
 			auto pos = attrib.value.find("base64,");
 			if (pos == string::npos)
 				os << attrib.value;
@@ -387,7 +396,7 @@ ostream& XMLElement::write (ostream &os) const {
 					os << '\n';
 					util::base64_copy(ifs, os, 200);
 					ifs.close();
-					if (!KEEP_ENCODED_FILES)
+					if (!KEEP_ENCODED_FILES && !keep)
 						FileSystem::remove(fname);
 				}
 			}
