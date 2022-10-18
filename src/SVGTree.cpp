@@ -91,6 +91,13 @@ void SVGTree::setFont (int num, const Font &font) {
 }
 
 
+pair<int,const Font*> SVGTree::getFontPair () const {
+	if (_charHandler)
+		return {_charHandler->getFontID(), _charHandler->getFont()};
+	return {0, nullptr};
+}
+
+
 bool SVGTree::setFontFormat (string formatstr) {
 	auto pos = formatstr.find(',');
 	string opt;
@@ -258,7 +265,7 @@ void SVGTree::append (const PhysicalFont &font, const set<int> &chars, GFGlyphTr
 			auto fontNode = util::make_unique<XMLElement>("font");
 			string fontname = font.name();
 			fontNode->addAttribute("id", fontname);
-			fontNode->addAttribute("horiz-adv-x", font.hAdvance());
+			fontNode->addAttribute("horiz-adv-x", font.hAverageAdvance());
 
 			auto faceNode = util::make_unique<XMLElement>("font-face");
 			faceNode->addAttribute("font-family", fontname);

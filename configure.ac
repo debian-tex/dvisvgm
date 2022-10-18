@@ -3,9 +3,9 @@
 #
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.71])
-AC_INIT([dvisvgm],[2.14],[martin.gieseking@uos.de])
-DATE="August 2022"
+AC_PREREQ(2.59)
+AC_INIT([dvisvgm],[3.0],[martin.gieseking@uos.de])
+DATE="October 2022"
 AC_CONFIG_SRCDIR(src)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -18,6 +18,7 @@ AC_DEFINE_UNQUOTED([TARGET_SYSTEM], ["$target"])
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CC_C99
 AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX([11])
 AM_PROG_AR
@@ -145,6 +146,7 @@ AC_CHECK_LIB(z, gzopen)
 
 # Check for header files.
 AC_HEADER_DIRENT
+AC_HEADER_STDC
 AC_CHECK_HEADERS_ONCE([libintl.h stdlib.h string.h strings.h unistd.h])
 
 # Check for typedefs, structures, and compiler characteristics.
@@ -155,6 +157,7 @@ AC_STRUCT_TM
 # Check for library functions.
 AC_FUNC_STAT
 AC_CHECK_FUNCS_ONCE([ftime gettimeofday sigaction umask uselocale])
+AX_GCC_BUILTIN(__builtin_clz)
 
 # add options for selection of "optional" library locations
 # currently these libraries are mandatory; the --with-foo options
@@ -217,9 +220,9 @@ AC_SUBST(AM_LDFLAGS)
 AC_CONFIG_FILES([
 	Makefile
 	libs/Makefile
+	libs/boost/Makefile
 	libs/brotli/Makefile
 	libs/clipper/Makefile
-	libs/ff-woff/Makefile
 	libs/md5/Makefile
 	libs/potrace/Makefile
 	libs/variant/Makefile
@@ -228,7 +231,9 @@ AC_CONFIG_FILES([
 	m4/Makefile
 	src/Makefile
 	src/version.hpp
+	src/fonts/Makefile
 	src/optimizer/Makefile
+	src/ttf/Makefile
 	tests/Makefile
 	tests/data/Makefile
 	doc/Makefile])
