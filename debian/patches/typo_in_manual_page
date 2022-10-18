@@ -1,8 +1,8 @@
 Fix typo in manual page, needs to be forwarded to uptsream.
 ---
---- dvisvgm.orig/doc/dvisvgm.1
-+++ dvisvgm/doc/dvisvgm.1
-@@ -1410,7 +1410,7 @@
+--- dvisvgm_30.orig/doc/dvisvgm.1
++++ dvisvgm_30/doc/dvisvgm.1
+@@ -1461,7 +1461,7 @@
  \fIpdf:pagesize\fR
  is similar to the
  \fIpapersize\fR
