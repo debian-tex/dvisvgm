@@ -9,6 +9,7 @@ Build-Depends:
  libkpathsea-dev,
  libbrotli-dev,
  libwoff-dev,
+ libgs-dev,
  libfreetype-dev,
  libpotrace-dev,
  libssl-dev,
@@ -16,8 +17,6 @@ Build-Depends:
  pkg-config,
  python3 <!nocheck>,
  python3-lxml <!nocheck>
-Build-Conflicts:
- libgs-dev
 Rules-Requires-Root: no
 Standards-Version: 4.6.0
 Homepage: https://dvisvgm.de/

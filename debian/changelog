@@ -1,11 +1,13 @@
 dvisvgm (3.0-2) UNRELEASED; urgency=medium
 
-  * Remove libgs-dev from Build-Depends, move it to Build-Conflicts,
-    dvisvgm does not build any more with ghostscript > 10.x.
-    (Closes: #1022714).
-  * Add mupdf-tools to Recommends.
+  * Add commit 9bf81fd0b6e7876e5079e917ed7e12163b9e7f7f from upstream
+    to solve build failurss w/ ghostscript >= 10.x . (Closes: #1022714).
+  * Add mupdf-tools to Recommends as per upstream:
+    "A new PDF handler based on mutool has been added to keep
+    dvisvgm's PDF conversion functionality available after the removal
+    of Ghostscript's old PDF interpreter announced for version 10.1.0."
 
- -- Hilmar Preusse <hille42@web.de>  Tue, 25 Oct 2022 08:29:20 +0200
+ -- Hilmar Preusse <hille42@web.de>  Wed, 26 Oct 2022 10:26:15 +0200
 
 dvisvgm (3.0-1) experimental; urgency=medium
 
