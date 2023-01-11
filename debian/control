@@ -6,6 +6,7 @@ Uploaders: Hilmar Preusse <hille42@web.de>,
            Norbert Preining <norbert@preining.info>
 Build-Depends:
  debhelper-compat (= 13),
+ autoconf-archive,
  libkpathsea-dev,
  libbrotli-dev,
  libwoff-dev,
