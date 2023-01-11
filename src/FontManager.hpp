@@ -2,7 +2,7 @@
 ** FontManager.hpp                                                      **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -67,7 +67,7 @@ class FontManager {
 		int fontID (int n) const;
 		int fontID (const Font *font) const;
 		int fontID (const std::string &name) const;
-		int fontID (const std::string &name, double ptsize) const;
+		int fontID (std::string name, double ptsize) const;
 		int fontnum (int id) const;
 		int vfFirstFontNum (const VirtualFont *vf) const;
 		Font* vfFirstFont (const VirtualFont *vf) const;

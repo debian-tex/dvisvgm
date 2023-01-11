@@ -2,7 +2,7 @@
 ** PDFHandler.cpp                                                       **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -671,9 +671,17 @@ void PDFHandler::doFillText (XMLElement *trcFillTextElement) {
 					int glyph;
 					if (font->isCIDFont())
 						glyph = parse_attr_value<int>(charElement, "glyph");
-					else
+					else {
 						glyph = font->charIndexByName(parse_attr_value<string>(charElement, "glyph"));
-					auto utf8 = compose_utf8_char(charElement, glyph);
+						if (glyph == 0)
+							glyph = parse_attr_value<int>(charElement, "glyph");
+					}
+					// determine code point of current character
+					string utf8;
+					if (charElement->hasAttribute("unicode"))
+						utf8 = parse_attr_value<string>(charElement, "unicode");
+					if (utf8.empty())
+						utf8 = compose_utf8_char(charElement, glyph);
 					if (glyph == 0 || utf8.empty())
 						continue;
 					DPair p(parse_attr_value<double>(charElement, "x"), parse_attr_value<double>(charElement, "y"));

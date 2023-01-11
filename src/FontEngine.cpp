@@ -2,7 +2,7 @@
 ** FontEngine.cpp                                                       **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -128,22 +128,24 @@ bool FontEngine::setFont (const Font &font) {
 
 bool FontEngine::isCIDFont() const {
 	FT_Bool cid_keyed;
-	return FT_Get_CID_Is_Internally_CID_Keyed(_currentFace, &cid_keyed) == 0 && cid_keyed;
+	return _currentFace && FT_Get_CID_Is_Internally_CID_Keyed(_currentFace, &cid_keyed) == 0 && cid_keyed;
 }
 
 
 /** Returns true if the current font contains vertical layout data. */
 bool FontEngine::hasVerticalMetrics () const {
-	return FT_HAS_VERTICAL(_currentFace);
+	return _currentFace && FT_HAS_VERTICAL(_currentFace);
 }
 
 
 bool FontEngine::setCharMap (const CharMapID &charMapID) {
-	for (int i=0; i < _currentFace->num_charmaps; i++) {
-		FT_CharMap ft_cmap = _currentFace->charmaps[i];
-		if (ft_cmap->platform_id == charMapID.platform_id && ft_cmap->encoding_id == charMapID.encoding_id) {
-			FT_Set_Charmap(_currentFace, ft_cmap);
-			return true;
+	if (_currentFace) {
+		for (int i = 0; i < _currentFace->num_charmaps; i++) {
+			FT_CharMap ft_cmap = _currentFace->charmaps[i];
+			if (ft_cmap->platform_id == charMapID.platform_id && ft_cmap->encoding_id == charMapID.encoding_id) {
+				FT_Set_Charmap(_currentFace, ft_cmap);
+				return true;
+			}
 		}
 	}
 	return false;
@@ -168,22 +170,24 @@ void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) {
 /** Creates a charmap that maps from the custom character encoding to Unicode.
  *  @return pointer to charmap if it could be created, 0 otherwise */
 unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () {
-	FT_CharMap ftcharmap = _currentFace->charmap;
-	if (FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) != 0)
-		return nullptr;
-	RangeMap gidToCharCodeMap;
-	buildGidToCharCodeMap(gidToCharCodeMap);
-	if (FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) != 0)
-		return nullptr;
 	auto charmap = util::make_unique<RangeMap>();
-	FT_UInt gid;  // index of current glyph
-	uint32_t ucCharcode = FT_Get_First_Char(_currentFace, &gid);  // Unicode code point
-	while (gid) {
-		uint32_t customCharcode = gidToCharCodeMap.valueAt(gid);
-		charmap->addRange(customCharcode, customCharcode, ucCharcode);
-		ucCharcode = FT_Get_Next_Char(_currentFace, ucCharcode, &gid);
+	if (_currentFace) {
+		FT_CharMap ftcharmap = _currentFace->charmap;
+		if (FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) != 0)
+			return nullptr;
+		RangeMap gidToCharCodeMap;
+		buildGidToCharCodeMap(gidToCharCodeMap);
+		if (FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) != 0)
+			return nullptr;
+		FT_UInt gid;  // index of current glyph
+		uint32_t ucCharcode = FT_Get_First_Char(_currentFace, &gid);  // Unicode code point
+		while (gid) {
+			uint32_t customCharcode = gidToCharCodeMap.valueAt(gid);
+			charmap->addRange(customCharcode, customCharcode, ucCharcode);
+			ucCharcode = FT_Get_Next_Char(_currentFace, ucCharcode, &gid);
+		}
+		FT_Set_Charmap(_currentFace, ftcharmap);
 	}
-	FT_Set_Charmap(_currentFace, ftcharmap);
 	return std::move(charmap);
 }
 
@@ -276,8 +280,8 @@ int FontEngine::getVAdvance (const Character &c) const {
 
 int FontEngine::getWidth (const Character &c) const {
 	if (_currentFace) {
-		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
-		return _currentFace->glyph->metrics.width;
+		if (FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE) == 0)
+			return _currentFace->glyph->metrics.width;
 	}
 	return 0;
 }
@@ -285,8 +289,8 @@ int FontEngine::getWidth (const Character &c) const {
 
 int FontEngine::getHeight (const Character &c) const {
 	if (_currentFace) {
-		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
-		return _currentFace->glyph->metrics.horiBearingY;
+		if (FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE) == 0)
+			return _currentFace->glyph->metrics.horiBearingY;
 	}
 	return 0;
 }
@@ -294,17 +298,15 @@ int FontEngine::getHeight (const Character &c) const {
 
 int FontEngine::getDepth (const Character &c) const {
 	if (_currentFace) {
-		FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE);
-		return _currentFace->glyph->metrics.height - _currentFace->glyph->metrics.horiBearingY;
+		if (FT_Load_Glyph(_currentFace, charIndex(c), FT_LOAD_NO_SCALE) == 0)
+			return _currentFace->glyph->metrics.height - _currentFace->glyph->metrics.horiBearingY;
 	}
 	return 0;
 }
 
 
 int FontEngine::getCharIndexByGlyphName(const char *name) const {
-	if (_currentFace)
-		return int(FT_Get_Name_Index(_currentFace, name));
-	return 0;
+	return _currentFace ? int(FT_Get_Name_Index(_currentFace, name)) : 0;
 }
 
 
@@ -440,11 +442,13 @@ static bool trace_outline (FT_Face face, const Font *font, int index, Glyph &gly
 		}
 		FT_Outline outline = face->glyph->outline;
 		// apply style parameters if set
-		if (const FontStyle *style = font->style()) {
-			FT_Matrix matrix = {to_16dot16(style->extend), to_16dot16(style->slant), 0, to_16dot16(1)};
-			FT_Outline_Transform(&outline, &matrix);
-			if (style->bold != 0)
-				FT_Outline_Embolden(&outline, style->bold/font->scaledSize()*face->units_per_EM);
+		if (font) {
+			if (const FontStyle *style = font->style()) {
+				FT_Matrix matrix = {to_16dot16(style->extend), to_16dot16(style->slant), 0, to_16dot16(1)};
+				FT_Outline_Transform(&outline, &matrix);
+				if (style->bold != 0)
+					FT_Outline_Embolden(&outline, style->bold/font->scaledSize()*face->units_per_EM);
+			}
 		}
 		const FT_Outline_Funcs funcs = {moveto, lineto, quadto, cubicto, 0, 0};
 		FT_Outline_Decompose(&outline, &funcs, &glyph);

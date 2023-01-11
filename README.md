@@ -16,7 +16,7 @@ _dvisvgm_ is a utility for TeX/LaTeX users. It converts
 [PDF](https://en.wikipedia.org/wiki/PDF) files to the
 XML-based scalable vector graphics format [SVG](https://www.w3.org/TR/SVG).
 The latest releases support standard DVI files (version 2) as well as DVI output
-created by [pTeX](http://www.ascii.co.jp/pb/ptex) in vertical mode (version 3),
+created by [pTeX](https://ctan.org/pkg/ptex) in vertical mode (version 3),
 and [XeTeX](http://scripts.sil.org/xetex) (versions 5 to 7, also known as XDV).
 
 To get an impression of the conversion results, have a look at the
@@ -24,7 +24,7 @@ To get an impression of the conversion results, have a look at the
 
 Short overview of the main features:
 
-* Complete font support including [virtual fonts](http://www.tex.ac.uk/cgi-bin/texfaq2html?label=virtualfonts), evaluation of [font encodings](http://www.tex.ac.uk/cgi-bin/texfaq2html?label=whatenc), CMap files, sub-font definitions and font maps.
+* Complete font support including [virtual fonts](https://texfaq.org/FAQ-virtualfonts), evaluation of [font encodings](https://texfaq.org/FAQ-whatenc), CMap files, sub-font definitions and font maps.
 * Glyph outlines of all required fonts are embedded into the generated SVG files.
 * The font data can be embedded in SVG, TrueType, WOFF, or WOFF2 format.
 * Glyph outlines of fonts that are not available in a vector format are generated on-the-fly by vectorizing [METAFONT](https://en.wikipedia.org/wiki/Metafont)'s bitmap output.
@@ -32,12 +32,12 @@ Short overview of the main features:
 * Computes tight bounding boxes for the generated graphics, but supports common paper formats and arbitrary user-defined sizes as well.
 * Option `--eps` allows to convert [EPS](https://en.wikipedia.org/wiki/Encapsulated_PostScript) files to SVG.
 * Option `--pdf` allows to convert [PDF](https://en.wikipedia.org/wiki/PDF) documents to SVG.
-* [Intersections of clipping paths](https://dvisvgm.de/Clipping) can be computed directly instead of delegating this task to the SVG renderer. This increases the compatibility of the generated SVG files.
+* [Intersections of clipping paths](https://dvisvgm.de/Clipping) can be computed directly instead of delegating this task to the SVG renderer which increases the compatibility of the generated SVG files.
 * Approximates PostScript [color gradient fills](https://dvisvgm.de/Gradients) not directly supported by SVG 1.1.
 * The generated SVG structure and data can be improved with the built-in [SVG optimizer](https://dvisvgm.de/Manpage/#opt-optimize).
 * Optionally creates compressed [SVGZ](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics#Compression) files.
 * Provides options for applying page transformations, like translation, rotation, scaling, and skewing.
-* Evaluates several [specials](http://www.tex.ac.uk/cgi-bin/texfaq2html?label=specials) including color, emTeX, tpic, hyperref/HyperTeX, papersize, PDF hyperlink and mapfile, as well as PostScript specials.
+* Evaluates several [specials](https://texfaq.org/FAQ-specials) including color, emTeX, tpic, hyperref/HyperTeX, papersize, PDF hyperlink and mapfile, as well as PostScript specials.
 * The converter was successfully tested on various Linux ([TeX Live](https://www.tug.org/texlive)) and Windows ([MiKTeX](https://www.miktex.org), TeX Live) systems.
 * _dvisvgm_ has been added to [TeX Live](https://www.tug.org/texlive), [MiKTeX](https://www.miktex.org), and [MacPorts](https://www.macports.org). It is therefore available for a wide range of operating systems.
 
@@ -76,7 +76,7 @@ _dvisvgm_ relies on the following free libraries:
   files in the large `texmf` tree. Please ensure that you use the kpathsea version
   coming with or matching your TeX system.
 
-* [OpenSSL crypto library](https://www.openssl.org)
+* [OpenSSL crypto library](https://www.openssl.org)  
   _dvisvgm_ comes with a bundled implementation of the MD5 hash algorithm which can optionally
   be replaced with the corresponding function of the OpenSSL crypto library. If the
   configuration script finds the OpenSSL development files on the build system, it links
@@ -157,7 +157,7 @@ preferably use the [bug tracker at GitHub](https://github.com/mgieseki/dvisvgm/i
 Copyright
 ---------
 
-Copyright &copy; 2005&ndash;2022 [Martin Gieseking](mailto:martin.gieseking@uos.de)
+Copyright &copy; 2005&ndash;2023 [Martin Gieseking](mailto:martin.gieseking@uos.de)
 
 This program is free software; you can redistribute it and/or modify it under the terms
 of the GNU General Public License as published by the Free Software Foundation; either

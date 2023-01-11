@@ -2,7 +2,7 @@
 ** PsSpecialHandler.cpp                                                 **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -155,7 +155,9 @@ void PsSpecialHandler::executeAndSync (istream &is, bool updatePos) {
 		_actions->getColor().getRGB(r, g, b);
 		ostringstream oss;
 		oss << '\n' << r << ' ' << g << ' ' << b << " setrgbcolor ";
+		PSFilter *filter = _psi.setFilter(nullptr);  // don't apply any filters here
 		_psi.execute(oss.str(), false);
+		_psi.setFilter(filter);
 	}
 	_psi.execute(is);
 	if (updatePos) {
