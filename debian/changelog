@@ -1,3 +1,9 @@
+dvisvgm (3.0.1-1) UNRELEASED; urgency=medium
+
+  * New upstream release, considered to be stable by upstream author.
+
+ -- Hilmar Preusse <hille42@web.de>  Wed, 11 Jan 2023 10:11:42 +0100
+
 dvisvgm (3.0-2) experimental; urgency=medium
 
   * Add commit 9bf81fd0b6e7876e5079e917ed7e12163b9e7f7f from upstream
