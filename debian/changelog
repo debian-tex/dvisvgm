@@ -1,8 +1,12 @@
-dvisvgm (3.0.1-1) UNRELEASED; urgency=medium
+dvisvgm (3.0.1-1) unstable; urgency=medium
 
-  * New upstream release, considered to be stable by upstream author.
+  * New upstream release, considered to be stable by upstream
+    author. No risc, no fun: upload to unstable.
+  * Add autoconf-archive & libttfautohint-dev to B-D. Do not enable
+    ttfautohint yet, as considered to be experimental.
+  * Bump Standards version, no changes needed.
 
- -- Hilmar Preusse <hille42@web.de>  Wed, 11 Jan 2023 10:11:42 +0100
+ -- Hilmar Preusse <hille42@web.de>  Wed, 11 Jan 2023 21:45:24 +0100
 
 dvisvgm (3.0-2) experimental; urgency=medium
 

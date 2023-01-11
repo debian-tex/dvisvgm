@@ -3,11 +3,11 @@ Upstream-Name: dvisvgm
 Source: <https://dvisvgm.de/>
 
 Files: *
-Copyright: 2005-2022 Martin Gieseking <martin.gieseking@uos.de>
+Copyright: 2005-2023 Martin Gieseking <martin.gieseking@uos.de>
 License: GPL-3+
 
 Files: src/*
-Copyright: 2005-2022 Martin Gieseking <martin.gieseking@uos.de>
+Copyright: 2005-2023 Martin Gieseking <martin.gieseking@uos.de>
 License: GPL-3+
 
 Files: libs/brotli/*
@@ -130,7 +130,7 @@ License: BSD-2-clause
  SUCH DAMAGE.
 
 Files: debian/*
-Copyright: 2019-2022 Hilmar Preusse <hille42@web.de>
+Copyright: 2019-2023 Hilmar Preusse <hille42@web.de>
 License: GPL-2+
 
 License: GPL-2+
