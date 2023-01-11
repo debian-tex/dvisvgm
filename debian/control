@@ -15,6 +15,7 @@ Build-Depends:
  libpotrace-dev,
  libssl-dev,
  libxxhash-dev,
+ libttfautohint-dev,
  pkg-config,
  python3 <!nocheck>,
  python3-lxml <!nocheck>
