@@ -1,6 +1,8 @@
---- dvisvgm.orig/src/Ghostscript.cpp
-+++ dvisvgm/src/Ghostscript.cpp
-@@ -378,19 +378,9 @@
+diff --git a/src/Ghostscript.cpp b/src/Ghostscript.cpp
+index f4aa6e00..f5580df2 100644
+--- a/src/Ghostscript.cpp
++++ b/src/Ghostscript.cpp
+@@ -375,19 +375,9 @@ const char* Ghostscript::error_name (int code) {
  	if (code < 0)
  		code = -code;
  	const char *error_names[] = { ERROR_NAMES };
