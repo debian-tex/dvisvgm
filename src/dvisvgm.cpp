@@ -2,7 +2,7 @@
 ** dvisvgm.cpp                                                          **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -256,9 +256,9 @@ class VersionInfo {
 
 static void print_version (bool extended) {
 	string versionstr = string(PROGRAM_NAME)+" "+PROGRAM_VERSION;
-#ifdef TARGET_SYSTEM
-	if (extended && strlen(TARGET_SYSTEM) > 0)
-		versionstr += " (" TARGET_SYSTEM ")";
+#ifdef HOST_SYSTEM
+	if (extended && strlen(HOST_SYSTEM) > 0)
+		versionstr += " (" HOST_SYSTEM ")";
 #endif
 	cout << versionstr << '\n';
 	if (extended) {

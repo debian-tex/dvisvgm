@@ -2,7 +2,7 @@
 ** FontManager.cpp                                                      **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2022 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -83,7 +83,8 @@ int FontManager::fontID (const string &name) const {
 }
 
 
-int FontManager::fontID (const string &name, double ptsize) const {
+int FontManager::fontID (string name, double ptsize) const {
+	std::replace(name.begin(), name.end(), '+', '-');
 	for (auto it = _fonts.begin(); it != _fonts.end(); ++it) {
 		if (auto nativeFont = font_cast<NativeFont*>(it->get())) {
 			if (nativeFont->name() == name && nativeFont->scaledSize() == ptsize)
