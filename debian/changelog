@@ -1,9 +1,26 @@
-dvisvgm (2.14-2) unstable; urgency=medium
+dvisvgm (3.0.1-1) UNRELEASED; urgency=medium
 
-  * Add patch from upstream to fix build failure with gs 10.
-    (Closes: #1022714).
+  * New upstream release, considered to be stable by upstream author.
 
- -- Hilmar Preusse <hille42@web.de>  Tue, 25 Oct 2022 21:51:42 +0200
+ -- Hilmar Preusse <hille42@web.de>  Wed, 11 Jan 2023 10:11:42 +0100
+
+dvisvgm (3.0-2) experimental; urgency=medium
+
+  * Add commit 9bf81fd0b6e7876e5079e917ed7e12163b9e7f7f from upstream
+    to solve build failurss w/ ghostscript >= 10.x . (Closes: #1022714).
+  * Add mupdf-tools to Recommends as per upstream:
+    "A new PDF handler based on mutool has been added to keep
+    dvisvgm's PDF conversion functionality available after the removal
+    of Ghostscript's old PDF interpreter announced for version 10.1.0."
+
+ -- Hilmar Preusse <hille42@web.de>  Tue, 08 Nov 2022 10:50:27 +0100
+
+dvisvgm (3.0-1) experimental; urgency=medium
+
+  * New upstream. Considered to be beta by upstream author.
+    - Refreshed patches.
+
+ -- Hilmar Preusse <hille42@web.de>  Tue, 18 Oct 2022 23:13:12 +0200
 
 dvisvgm (2.14-1) unstable; urgency=medium
 

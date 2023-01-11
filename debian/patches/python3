@@ -4,9 +4,9 @@ Replace python by python3 in Makfiles.
  tests/Makefile.am |    2 +-
  4 files changed, 4 insertions(+), 4 deletions(-)
 
---- dvisvgm.orig/src/Makefile.am
-+++ dvisvgm/src/Makefile.am
-@@ -215,7 +215,7 @@
+--- dvisvgm_30.orig/src/Makefile.am
++++ dvisvgm_30/src/Makefile.am
+@@ -211,7 +211,7 @@
  # the command-line parser class is generated from options.xml by opt2cpp
  $(srcdir)/CommandLine.hpp: options.xml
  	rm -f $@
@@ -15,8 +15,8 @@ Replace python by python3 in Makfiles.
  
  # Create a C string definition containing the PostScript routines psdefs.ps needed by class PSInterpreter
  $(srcdir)/psdefs.cpp: psdefs.ps
---- dvisvgm.orig/tests/Makefile.am
-+++ dvisvgm/tests/Makefile.am
+--- dvisvgm_30.orig/tests/Makefile.am
++++ dvisvgm_30/tests/Makefile.am
 @@ -50,7 +50,7 @@
  hashcheck_LDADD = $(LIBS_LIBS)
  
@@ -25,4 +25,4 @@ Replace python by python3 in Makfiles.
 +	python3 $^ >$@
  
  TESTLIBS = libgtest.la ../src/libdvisvgm.la $(LIBS_LIBS) -lfreetype
- if ENABLE_WOFF
+ TESTLIBS += $(CODE_COVERAGE_LDFLAGS)
