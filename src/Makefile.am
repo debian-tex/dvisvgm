@@ -16,6 +16,7 @@ include ../libs/defs.am
 dvisvgm_LDADD = \
 	$(noinst_LTLIBRARIES) \
 	../libs/clipper/libclipper.a \
+	../libs/md5/libmd5.a \
 	$(FREETYPE_LIBS) \
 	$(POTRACE_LIBS) \
 	$(XXHASH_LIBS) \
@@ -29,13 +30,12 @@ dvisvgm_LDADD += \
 	$(BROTLI_LIBS)
 endif
 
-if USE_BUNDLED_MD5
-dvisvgm_LDADD += ../libs/md5/libmd5.a
-else
-dvisvgm_LDADD += $(LIBCRYPTO_LIBS)
-endif
-
 dvisvgm_DEPENDENCIES = $(noinst_LTLIBRARIES)
+
+if TEXLIVE_BUILD
+dvisvgm_DEPENDENCIES += $(KPATHSEA_DEPEND) $(ZLIB_DEPEND) $(FREETYPE2_DEPEND)
+dvisvgm_DEPENDENCIES += $(POTRACE_DEPEND)
+endif
 
 libdvisvgm_la_SOURCES = \
 	AGLTable.hpp \
@@ -170,11 +170,16 @@ endif
 
 EXTRA_DIST = options.xml options.dtd iapi.h ierrors.h MiKTeXCom.hpp MiKTeXCom.cpp
 
-AM_CFLAGS = -Wall \
+if !TEXLIVE_BUILD
+WARNING_CFLAGS = -Wall
+WARNING_CXXFLAGS = -Wall -Wnon-virtual-dtor
+endif
+
+AM_CFLAGS = $(WARNING_CFLAGS) \
 	$(ZLIB_CFLAGS) \
 	$(CODE_COVERAGE_CFLAGS)
 
-AM_CXXFLAGS = -Wall -Wnon-virtual-dtor \
+AM_CXXFLAGS = $(WARNING_CXXFLAGS) \
 	-I$(dvisvgm_srcdir)/libs/clipper \
 	-I$(dvisvgm_srcdir)/libs/variant/include \
 	$(KPSE_CFLAGS) \
@@ -200,14 +205,9 @@ AM_CXXFLAGS +=  \
 AM_LDFLAGS += $(TTFAUTOHINT_LIBS)
 endif
 
-if USE_BUNDLED_MD5
 AM_CXXFLAGS += -I$(dvisvgm_srcdir)/libs/md5
-else
-AM_CXXFLAGS += $(LIBCRYPTO_CFLAGS)
-endif
 
-
-
+if !TEXLIVE_BUILD
 # the command-line parser class is generated from options.xml by opt2cpp
 $(srcdir)/CommandLine.hpp: options.xml
 	rm -f $@
@@ -220,5 +220,17 @@ $(srcdir)/psdefs.cpp: psdefs.ps
 	fi
 
 psdefs.ps: ;
+endif !TEXLIVE_BUILD
 
 CLEANFILES = *.gcda *.gcno
+
+if TEXLIVE_BUILD
+# Rebuild libkpathsea:
+@KPATHSEA_RULE@
+# Rebuild libfreetype:
+@FREETYPE2_RULE@
+# Rebuild libz:
+@ZLIB_RULE@
+# Rebuild potrace:
+@POTRACE_RULE@
+endif TEXLIVE_BUILD
