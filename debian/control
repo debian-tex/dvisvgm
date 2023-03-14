@@ -13,7 +13,6 @@ Build-Depends:
  libgs-dev,
  libfreetype-dev,
  libpotrace-dev,
- libssl-dev,
  libxxhash-dev,
  libttfautohint-dev,
  pkg-config,
