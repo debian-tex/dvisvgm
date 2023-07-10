@@ -1378,9 +1378,9 @@ void PsSpecialHandler::ClippingStack::push (const Path &path, int saveID) {
 	if (!_stack.empty())
 		prependedPath = _stack.top().prependedPath;
 	if (path.empty())
-		_stack.emplace(Entry(saveID));
+		_stack.emplace(saveID);
 	else
-		_stack.emplace(Entry(path, ++_maxID, saveID));
+		_stack.emplace(path, ++_maxID, saveID);
 	_stack.top().prependedPath = prependedPath;
 }
 
@@ -1470,7 +1470,7 @@ void PsSpecialHandler::ClippingStack::setPrependedPath () {
 }
 
 
-vector<const char*> PsSpecialHandler::prefixes() const {
+vector<const char*> PsSpecialHandler::prefixes () const {
 	vector<const char*> pfx {
 		"header=",    // read and execute PS header file prior to the following PS statements
 		"pdffile=",   // process PDF file

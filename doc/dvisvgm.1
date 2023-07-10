@@ -2,12 +2,12 @@
 .\"     Title: dvisvgm
 .\"    Author: Martin Gieseking <martin.gieseking@uos.de>
 .\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
-.\"      Date: 2023-02-21
+.\"      Date: 2023-07-05
 .\"    Manual: dvisvgm Manual
-.\"    Source: dvisvgm 3.0.4
+.\"    Source: dvisvgm 3.1
 .\"  Language: English
 .\"
-.TH "DVISVGM" "1" "2023\-02\-21" "dvisvgm 3\&.0\&.4" "dvisvgm Manual"
+.TH "DVISVGM" "1" "2023\-07\-05" "dvisvgm 3\&.1" "dvisvgm Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -297,6 +297,25 @@ predefined colors (\m[blue]https://www.w3.org/TR/SVG11/types.html#ColorKeywords\
 \fB\-\-comments\fR
 .RS 4
 Adds comments with further information about selected data to the SVG file\&. Currently, only font elements and font CSS rules related to native fonts are annotated\&.
+.RE
+.PP
+\fB\-\-currentcolor\fR[=\fIcolor\fR]
+.RS 4
+This option tells dvisvgm to replace the specified color with CSS variable
+\fBcurrentColor\fR
+which holds the current foreground color set by CSS property
+\fBcolor\fR\&. This way an application or website can change the color via CSS without the need to modify the SVG code\&.
+.sp
+The optional argument of
+\fB\-\-currentcolor\fR
+specifies the RGB color value to be replaced and must be given as either
+three or six digit hex color value (\m[blue]https://www.w3.org/TR/css-color/#typedef-hex-color\m[])
+preceded by character
+\fB#\fR, e\&.g\&.
+\fB#0000ff\fR
+or
+\fB#00f\fR
+for blue\&. If the optional argument is omitted, black is assumed\&.
 .RE
 .PP
 \fB\-\-embed\-bitmaps\fR
@@ -853,15 +872,14 @@ If this option is given, dvisvgm does not expect a DVI but a PDF input file, and
 \fB\-\-page\fR
 can be used to select different pages, page ranges, and/or page sequences\&.
 .sp
-If a Ghostcript version < 10\&.1\&.0 is found, dvisvgm uses Ghostscript to process the PDF file\&. In this case, the conversion is realized by creating a single
+If a Ghostcript version < 10\&.01\&.0 is found, dvisvgm uses Ghostscript to process the PDF file\&. In this case, the conversion is realized by creating a single
 \fIpdffile\fR
 special command which is forwarded to dvisvgm\(cqs PostScript special handler\&. Therefore, this option is only available if dvisvgm was built with PostScript support enabled, and requires Ghostscript to be accessible\&. See option
 \fB\-\-libgs\fR
 for further information\&.
 .sp
-As of Ghostscript 10\&.1\&.0, this will no longer work due to the introduction of a new PDF interpreter\&. Therefore, an alternative conversion module based on
-mutool (\m[blue]https://mupdf.com/docs/mutool.html\m[])
-has been introduced\&. It\(cqs automatically invoked if Ghostscript can\(cqt be used and if a working
+As of Ghostscript 10\&.01\&.0, this will no longer work due to the introduction of a new PDF interpreter\&. Therefore, an alternative conversion module based on
+\fImutool\fR, a utility which is part of the [MuPDF](\m[blue]\fBhttps://mupdf\&.com\fR\m[]) package, has been introduced\&. It\(cqs automatically invoked if Ghostscript can\(cqt be used and if a working
 \fBmutool\fR
 executable is present in a directory which is part of the system\(cqs search path\&.
 .sp
@@ -1405,6 +1423,16 @@ allows for applying the current transformation matrix to the bounding box\&.
 This variant of the bbox special assigns an absolute (final) bounding box to the resulting SVG\&. After executing this command, dvisvgm doesn\(cqt further alter the bounding box coordinates, except this special is called again later\&. The points (\fIx1\fR,\fIy1\fR) and (\fIx2\fR,\fIy2\fR) denote the absolute coordinates of two diagonal corners of the rectangle\&. As with the relative special variant described above, the optional modifier
 \fBtransform\fR
 allows for applying the current transformation matrix to the bounding box\&.
+.RE
+.PP
+\fBdvisvgm:message\fR \fImsg\fR
+.RS 4
+Prints the given text
+\fImsg\fR
+to the console\&. It may also contain the macros
+\fI{?\&...}\fR
+mentioned above (see
+\fBdvisvgm:raw\fR)\&.
 .sp
 The following TeX snippet adds two raw SVG elements to the output and updates the bounding box accordingly:
 .sp
@@ -1422,6 +1450,19 @@ The following TeX snippet adds two raw SVG elements to the output and updates th
 .if n \{\
 .RE
 .\}
+.RE
+.PP
+\fBdvisvgm:currentcolor\fR [on|off]
+.RS 4
+This special works similar to option
+\fB\-\-currentcolor\fR
+but doesn\(cqt require an explicit color argument\&. Instead, it takes the currently active color and replaces it with
+\fBcurrentColor\fR\&. Therefore, the result depends on the placement of the special and the preceding color changes\&. Argument
+\fBon\fR
+\(en which activates the
+\fIcurrentColor\fR
+functionality \(en can be omitted\&. When called with argument
+\fBoff\fR, the functionality is deactivated again\&.
 .RE
 .RE
 .PP
@@ -1666,7 +1707,7 @@ T}
 .sp
 \fBExample:\fR \fBer=01:pi=*5\fR sets the colors of error messages (\fBer\fR) to red (\fB1\fR) on black (\fB0\fR), and those of progress indicators (\fBpi\fR) to cyan (\fB5\fR) on default background (\fB*\fR)\&.
 .sp
-Variable \fBDVISVGM_PDF_PROC\fR allows you to select the desired PDF processor\&. dvisvgm requires either Ghostscript (version < 10\&.1\&.0) or mutool to process PDF files\&. IF \fBDVISVGM_PDF_PROC\fR is not set, dvisvgm tries to detect the available processors\&. See option \fB\-\-pdf\fR for further information\&. To select a specific PDF processor, you can set \fBDVISVGM_PDF_PROC\fR to \fBgs\fR or \fBmutool\fR which forces the use of Ghostscript and mutool respectively\&.
+Variable \fBDVISVGM_PDF_PROC\fR allows you to select the desired PDF processor\&. dvisvgm requires either Ghostscript (version < 10\&.01\&.0) or mutool to process PDF files\&. IF \fBDVISVGM_PDF_PROC\fR is not set, dvisvgm tries to detect the available processors\&. See option \fB\-\-pdf\fR for further information\&. To select a specific PDF processor, you can set \fBDVISVGM_PDF_PROC\fR to \fBgs\fR or \fBmutool\fR which forces the use of Ghostscript and mutool respectively\&.
 .SH "FILES"
 .sp
 The location of the following files is determined by the kpathsea library\&. To check the actual kpathsea configuration you can use the \fBkpsewhich\fR utility\&.

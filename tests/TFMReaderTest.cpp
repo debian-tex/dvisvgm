@@ -40,7 +40,8 @@ class TFMReaderTest : public ::testing::Test {
 			string fname = string(SRCDIR)+"/data/cmr10.tfm";
 			ifstream ifs(fname, ios::binary);
 			ASSERT_TRUE(ifs.is_open()) << "failed opening " << fname;
-			tfm = util::make_unique<TFM>(ifs);
+			tfm = util::make_unique<TFM>();
+			tfm->read(ifs);
 		}
 
 	protected:
@@ -52,8 +53,8 @@ TEST_F(TFMReaderTest, properties) {
 	ASSERT_NE(tfm, nullptr);
 	EXPECT_EQ(tfm->getChecksum(), 0x4BF16079u);
 	EXPECT_FALSE(tfm->verticalLayout());
-	EXPECT_EQ(tfm->firstChar(), 0);
-	EXPECT_EQ(tfm->lastChar(), 127);
+	EXPECT_EQ(tfm->firstChar(), 0u);
+	EXPECT_EQ(tfm->lastChar(), 127u);
 	EXPECT_DOUBLE_EQ(tfm->getDesignSize(), 10.0*72.0/72.27);
 }
 
