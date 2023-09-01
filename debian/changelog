@@ -1,11 +1,10 @@
-dvisvgm (3.1.1-1) UNRELEASED; urgency=medium
+dvisvgm (3.1.1+ds-1) unstable; urgency=medium
 
   * New upstream release, refresh patches.
   * Remove pre-built manual page from upstream tar ball, instead
-    install all BD's to regenerate it during build. This
-    (Closes: #1049855).
+    install all BD's to regenerate it during build (Closes: #1049855).
 
- -- Hilmar Preusse <hille42@web.de>  Fri, 01 Sep 2023 00:28:10 +0200
+ -- Hilmar Preusse <hille42@web.de>  Fri, 01 Sep 2023 11:49:02 +0200
 
 dvisvgm (3.1-1) unstable; urgency=medium
 
