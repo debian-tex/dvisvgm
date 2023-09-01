@@ -22,7 +22,7 @@ Martin Gieseking <@PACKAGE_BUGREPORT@>
 :man source: dvisvgm
 :man version: @VERSION@
 :man manual: dvisvgm Manual
-:revdate: 2023-07-05 10:37 +0200
+:revdate: 2023-08-08 10:36 +0200
 
 Name
 ----
@@ -430,6 +430,10 @@ are performed by running separate optimizer modules specified by optional argume
 It may consist of a single module name or a comma-separated list of several module names.
 The corresponding modules are executed one by one in the given order and thus transform the
 XML tree gradually.
+A leading hyphen (+-+) can be used to exclude a module from processing. For example
++-Oall,-collapse-groups+ performs all optimizations except +collapse-groups+. If the first
+module name in the list starts with a hyphen, dvisvgm automatically inserts +all+ at the
+beginning, i.e. +-O-collapse-groups+ is identical to +-Oall,-collapse-groups+.
 +
 The following list describes the currently available optimizer modules.
 
@@ -442,8 +446,8 @@ The following list describes the currently available optimizer modules.
 
   *all*;;
   Performs all optimizations listed below. This is also the default if option *--optimize* is
-  used without argument. The modules are executed in a predefined order that usually leads to the
-  best results. *all* can't be combined with other module names.
+  used without any arguments. The modules are executed in a predefined order that usually leads
+  to the best results. *all* must be the only or the first entry in the list of module names.
 
   *collapse-groups*;;
   Combines nested group elements (+<g>+...+</g>+) that contain only a single group each. If possible,
@@ -590,7 +594,7 @@ See option *--libgs* for further information.
 +
 As of Ghostscript 10.01.0, this will no longer work due to the introduction of a new PDF interpreter.
 Therefore, an alternative conversion module based on _mutool_, a utility which is part of the
-[MuPDF](https://mupdf.com) package, has been introduced. It's automatically invoked if Ghostscript
+https://mupdf.com[MuPDF] package, has been introduced. It's automatically invoked if Ghostscript
 can't be used and if a working +mutool+ executable is present in a directory which is part of the
 system's search path.
 +
@@ -880,10 +884,6 @@ dvisvgm offers its own small set of specials. The following list gives a brief o
   The points ('x1','y1') and ('x2','y2') denote the absolute coordinates of two diagonal corners of the rectangle.
   As with the relative special variant described above, the optional modifier +transform+ allows for applying the
   current transformation matrix to the bounding box.
-
-  *dvisvgm:message* 'msg';;
-  Prints the given text 'msg' to the console. It may also contain the macros '{?...}' mentioned above
-  (see *dvisvgm:raw*).
 +
 The following TeX snippet adds two raw SVG elements to the output and updates the bounding box accordingly:
 +
@@ -902,6 +902,10 @@ The following TeX snippet adds two raw SVG elements to the output and updates th
   it takes the currently active color and replaces it with `currentColor`. Therefore, the result depends on the
   placement of the special and the preceding color changes. Argument `on` &#x2013; which activates the 'currentColor'
   functionality &#x2013; can be omitted. When called with argument `off`, the functionality is deactivated again.
+
+  *dvisvgm:message* 'msg';;
+  Prints the given text 'msg' to the console. It may also contain the macros '{?...}' mentioned above
+  (see *dvisvgm:raw*).
 
 *em*::
 These specials were introduced with the 'emTeX' distribution by Eberhard Mattes. They provide line drawing
