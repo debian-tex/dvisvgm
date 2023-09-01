@@ -1,6 +1,9 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: dvisvgm
 Source: <https://dvisvgm.de/>
+Files-Excluded:
+ doc/dvisvgm.1
+ src/version.hpp
 
 Files: *
 Copyright: 2005-2023 Martin Gieseking <martin.gieseking@uos.de>
