@@ -1,3 +1,9 @@
+dvisvgm (3.1.2+ds-1) unstable; urgency=medium
+
+  * New upstream release, disable upstreamed patch.
+
+ -- Hilmar Preusse <hille42@web.de>  Sat, 14 Oct 2023 13:50:25 +0200
+
 dvisvgm (3.1.1+ds-1) unstable; urgency=medium
 
   * New upstream release, refresh patches.
