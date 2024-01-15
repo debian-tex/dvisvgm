@@ -1,4 +1,7 @@
-Replace python by python3 in Makfiles.
+Description: Replace python by python3 in Makfiles.
+Forwarded: not-needed
+Origin: Debian author.
+Author: Norbert Preining <norbert@preining.info>
 ---
  src/Makefile.am   |    2 +-
  tests/Makefile.am |    2 +-
