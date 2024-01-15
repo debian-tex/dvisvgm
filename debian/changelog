@@ -1,3 +1,14 @@
+dvisvgm (3.2+ds-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Remove obsolete patches, add DEP-3 header to the remainings.
+  * Remove obsolete lintian override.
+  * Reorder copyright file, move license wording to the bottom.
+  * Enable some hardening flags in d/rules.
+  * d/gbp.conf: "gbp pull" should update pristine-tar too.
+
+ -- Hilmar Preusse <hille42@web.de>  Mon, 15 Jan 2024 08:16:53 +0000
+
 dvisvgm (3.1.2+ds-1) unstable; urgency=medium
 
   * New upstream release, disable upstreamed patch.
