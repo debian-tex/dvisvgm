@@ -1,3 +1,16 @@
+dvisvgm-3.2 (2024-01-11)
+- PDF handler: fixed a rounding issue that could lead to slightly bigger
+  text extents (GH issue #256)
+- added macros {?pageno}, {?svgfile}, and {?svgpath} to the dvisvgm special
+  commands
+- added separate verbosity flag 8 for user messages printed by special
+  dvisvgm:message
+- added command-line option --message to allow for printing user messages
+  after writing an SVG file (GH issue #258)
+- applied upstream patch regarding undefined type punning to the bundled
+  woff2 library
+- few improvements of the manual page  
+
 dvisvgm-3.1.2 (2023-10-12)
 - improved evaluation of graphic extents created by the 'preview' package
   (GH issue #246)
@@ -64,9 +77,9 @@ dvisvgm-3.0.1 (2023-01-10)
 - improved processing of fonts when using the new PDF handler
 
 dvisvgm-3.0 (2022-10-16)
-- added new PDF handler based on mutool to keep the PDF functionality available
-  which can't no longer be realized with as of Ghostscript 10.1.0 due to the
-  replacement of its PDF interpreter
+- added a new PDF handler based on mutool to keep the PDF functionality
+  available which can no longer be realized with Ghostscript 10.1.0 due to
+  the replacement of its PostScript-based PDF interpreter
 - replaced the bundled minimal Fontforge library (ff-woff) with a dedicated,
   newly implemented library for embedding TTF/WOFF data into the SVG files
 - added option --embed-bitmaps to embed bitmaps into the generated SVG files

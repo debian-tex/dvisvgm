@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of dvisvgm -- a fast DVI to SVG converter          //
-// Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   //
+// Copyright (C) 2005-2024 Martin Gieseking <martin.gieseking@uos.de>   //
 //                                                                      //
 // This program is free software; you can redistribute it and/or        //
 // modify it under the terms of the GNU General Public License as       //
@@ -22,7 +22,7 @@ Martin Gieseking <@PACKAGE_BUGREPORT@>
 :man source: dvisvgm
 :man version: @VERSION@
 :man manual: dvisvgm Manual
-:revdate: 2023-09-12 16:36 +0200
+:revdate: 2024-01-06 14:30 +0100
 
 Name
 ----
@@ -239,6 +239,9 @@ dimensions, they don't necessarily correspond with the bounds of the visual glyp
 and/or height of some glyphs may be larger (or smaller) than the respective TFM values. As a result,
 this can lead to clipped characters at the bounds of the SVG graphics. With option *--exact-bbox*
 given, dvisvgm analyzes the actual shape of each character and derives a usually tight bounding box.
++
+This option only affects the processing of DVI files. When converting EPS or PDF files, the bounding
+box information stored in these files are used to derive the SVG bounding box.
 
 *-f, --font-format*='format'::
 Selects the file format used to embed font data into the generated SVG output when converting DVI
@@ -389,6 +392,15 @@ Sets the magnification factor applied in conjunction with Metafont calls prior t
 The larger this value, the better the tracing results. Nevertheless, large magnification values
 can cause Metafont arithmetic errors due to number overflows. So, use this option with care.
 The default setting usually produces nice results.
+
+*--message*='text'::
+Prints a given message to the console after an SVG file has been written. Argument 'text' may consist
+of static text and the macros listed below in the description of special command +dvisvgm:raw+.
+For example, +--message="page {?pageno} written to {?svgfile}"+ prints the message with the macros
+expanded after the conversion of each page of a DVI or PDF file or after processing an EPS file.
++
+The output of option *--message* is not affected by the specified verbosity level, i.e. it prints
+the text even with +--verbosity=0+.
 
 *--no-merge*::
 Puts every single character in a separate 'text' element with corresponding 'x' and 'y' attributes.
@@ -746,10 +758,11 @@ Controls the type of messages printed during a dvisvgm run:
   *1*;; error messages only
   *2*;; warning messages only
   *4*;; informational messages only
+  *8*;; user messages only (e.g. created by special +dvisvgm:message+)
 
 +
 [NOTE]
-By adding these values you can combine the categories. The default level is 7, i.e. all
+By adding these values you can combine the categories. The default level is 15, i.e. all
 messages are printed.
 +
 
@@ -807,8 +820,10 @@ dvisvgm offers its own small set of specials. The following list gives a brief o
   that the resulting SVG is still valid. Opening and closing tags may be distributed among different 'raw'
   specials. The tags themselves can also be split but must be continued with the immediately following 'raw'
   special. Both syntactically incorrect and wrongly nested tags lead to error messages.
-  Parameter 'text' may also contain the expressions *{?x}*, *{?y}*, *{?color}*, and *{?matrix}* that expand to
-  the current 'x' or 'y' coordinate, the current color, and current transformation matrix, respectively.
+  Parameter 'text' may also contain the expressions *{?x}*, *{?y}*, *{?color}*, *{?matrix}*, *{?pageno}*,
+  *{?svgfile}*, and *{?svgpath}* that expand to the current 'x' or 'y' coordinate, the current color, the
+  current transformation matrix, the current page number, and the relative and absolute path of the SVG file
+  being created, respectively.
   Character sequence *{?nl}* expands to a newline character. Finally, constructions of the form *{?(__expr__)}*
   enable the evaluation of mathematical expressions which may consist of basic arithmetic operations including
   modulo. Like above, the variables 'x' and 'y' represent the current coordinates.
@@ -1089,7 +1104,7 @@ Written by {author} <{email}>
 
 Copying
 -------
-Copyright (C) 2005-2023 Martin Gieseking. Free use of this software is
+Copyright (C) 2005-2024 Martin Gieseking. Free use of this software is
 granted under the terms of the GNU General Public License (GPL) version 3
 or, (at your option) any later version.
 

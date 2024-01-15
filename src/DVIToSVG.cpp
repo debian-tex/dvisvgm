@@ -2,7 +2,7 @@
 ** DVIToSVG.cpp                                                         **
 **                                                                      **
 ** This file is part of dvisvgm -- a fast DVI to SVG converter          **
-** Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>   **
+** Copyright (C) 2005-2024 Martin Gieseking <martin.gieseking@uos.de>   **
 **                                                                      **
 ** This program is free software; you can redistribute it and/or        **
 ** modify it under the terms of the GNU General Public License as       **
@@ -124,10 +124,17 @@ void DVIToSVG::convert (unsigned first, unsigned last, HashFunction *hashFunc) {
 			string fname = path.shorterAbsoluteOrRelative();
 			if (fname.empty())
 				fname = "<stdout>";
-			if (success)
-				Message::mstream(false, Message::MC_PAGE_WRITTEN) << "\noutput written to " << fname << '\n';
-			else
+			if (!success)
 				Message::wstream(true) << "failed to write output to " << fname << '\n';
+			else {
+				Message::mstream(false, Message::MC_PAGE_WRITTEN) << "\noutput written to " << fname << '\n';
+				if (!_userMessage.empty()) {
+					if (auto specialActions = dynamic_cast<SpecialActions*>(_actions.get())) {
+						string msg = specialActions->expandText(_userMessage);
+						Message::ustream(true) << msg << "\n";
+					}
+				}
+			}
 			_svg.reset();
 			_actions->reset();
 		}
