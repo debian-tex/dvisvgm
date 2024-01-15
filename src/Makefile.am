@@ -1,5 +1,5 @@
 ## This file is part of dvisvgm
-## Copyright (C) 2005-2023 Martin Gieseking <martin.gieseking@uos.de>
+## Copyright (C) 2005-2024 Martin Gieseking <martin.gieseking@uos.de>
 ##
 ## Process this file with automake.
 
@@ -127,7 +127,7 @@ libdvisvgm_la_SOURCES = \
 	ShadingPatch.hpp             ShadingPatch.cpp \
 	SignalHandler.hpp            SignalHandler.cpp \
 	SourceInput.hpp              SourceInput.cpp \
-	SpecialActions.hpp \
+	SpecialActions.hpp           SpecialActions.cpp \
 	SpecialHandler.hpp \
 	SpecialManager.hpp           SpecialManager.cpp \
 	StreamReader.hpp             StreamReader.cpp \
