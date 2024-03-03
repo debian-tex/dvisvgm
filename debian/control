@@ -18,7 +18,7 @@ Build-Depends:
  libpotrace-dev,
  libxxhash-dev,
  libttfautohint-dev,
- pkg-config,
+ pkgconf,
  python3 <!nocheck>,
  python3-lxml <!nocheck>
 Rules-Requires-Root: no
