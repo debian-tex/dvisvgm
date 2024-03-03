@@ -4,8 +4,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([dvisvgm],[3.2],[martin.gieseking@uos.de])
-DATE="January 2024"
+AC_INIT([dvisvgm],[3.2.1],[martin.gieseking@uos.de])
+DATE="February 2024"
 AC_CONFIG_SRCDIR(src)
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -118,6 +118,9 @@ AM_CONDITIONAL(HAVE_POTRACE, [test "x$have_potrace" = "xyes"])
 AM_CONDITIONAL(HAVE_BROTLI, [test "x$have_brotli" = "xyes"])
 AM_CONDITIONAL(HAVE_WOFF2, [test "x$have_woff2" = "xyes"])
 AM_CONDITIONAL(HAVE_XXHASH, [test "x$have_xxhash" = "xyes"])
+
+# Dummy required for TL build sections in automake files
+AM_CONDITIONAL(WIN32, false)
 
 AS_IF([test "x$enable_woff" != "xyes"],
 	[AC_DEFINE([DISABLE_WOFF], 1, [Define if WOFF support is disabled])],
