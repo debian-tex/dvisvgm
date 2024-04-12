@@ -1,3 +1,9 @@
+dvisvgm (3.3+ds-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Hilmar Preusse <hille42@web.de>  Fri, 12 Apr 2024 09:25:21 +0200
+
 dvisvgm (3.2.2+ds-1) unstable; urgency=medium
 
   * New upstream release.
