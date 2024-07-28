@@ -32,10 +32,10 @@
 using namespace std;
 
 
-void DVIToSVGActions::reset() {
+void DVIToSVGActions::reset () {
 	FontManager::instance().resetUsedChars();
 	_bbox.invalidate();
-	_bgcolor = Color::TRANSPARENT;
+	_bgcolor = Color(0, Color::ColorSpace::TRANSPARENT);
 }
 
 
@@ -167,7 +167,7 @@ void DVIToSVGActions::setRule (double x, double y, double height, double width) 
 	rect->addAttribute("height", height);
 	rect->addAttribute("width", width);
 	rect->setTransform(getMatrix());
-	rect->setFillColor(_svg.getColor());
+	rect->setFillColor(_svg.getFillColor());
 	_svg.appendToPage(std::move(rect));
 
 	// update bounding box
@@ -228,7 +228,7 @@ void DVIToSVGActions::endPage (unsigned pageno) {
 	}
 	Matrix matrix = _dvireader->getPageTransformation();
 	_svg.transformPage(matrix);
-	if (_bgcolor != Color::TRANSPARENT) {
+	if (!_bgcolor.isTransparent()) {
 		// create a rectangle filled with the background color
 		auto rect = util::make_unique<SVGElement>("rect");
 		rect->addAttribute("x", _bbox.minX());

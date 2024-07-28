@@ -651,7 +651,7 @@ void PDFHandler::doFillText (XMLElement *trcFillTextElement) {
 				filename = "sys://"+fontname;
 			double ptsize = matrix_extent({trm[0], trm[1], 0, trm[2], trm[3]});
 			ptsize = round(100*ptsize)/100;
-			int fontID = FontManager::instance().registerFont(filename, fontname, ptsize);
+			int fontID = FontManager::instance().registerFont(filename, std::move(fontname), ptsize);
 			if (fontID >= 0) {
 				auto font = font_cast<NativeFont*>(FontManager::instance().getFontById(fontID));
 				if (font != _currentFont) {
@@ -668,7 +668,7 @@ void PDFHandler::doFillText (XMLElement *trcFillTextElement) {
 				_svg->setMatrix(matrix);
 				string colorspace = parse_attr_value<string>(trcFillTextElement, "colorspace");
 				string colorval = parse_attr_value<string>(trcFillTextElement, "color");
-				_svg->setColor(to_color(colorspace, colorval));
+				_svg->setFillColor(to_color(colorspace, colorval));
 				for (const XMLNode *spanchild : *spanElement) {
 					const XMLElement *charElement = spanchild->toElement();
 					if (!charElement || charElement->name() != "g" || !charElement->hasAttribute("glyph"))
@@ -805,7 +805,7 @@ void PDFHandler::collectObjects () {
 			string fontname = mtShow(to_string(entry.first) + "/FontName", SearchPattern(R"(/((\w|[+-])+))", "$1"));
 			if (!psFontname.empty() && fontname.find('+') == string::npos)
 				fontname = std::move(psFontname);
-			_objDict.emplace(fontname, ObjID(entry.first, 0, filepath));
+			_objDict.emplace(fontname, ObjID(entry.first, 0, std::move(filepath)));
 		}
 	}
 }

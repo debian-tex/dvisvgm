@@ -35,7 +35,6 @@ bool Color::SUPPRESS_COLOR_NAMES = true;
 
 const Color Color::BLACK(uint32_t(0));
 const Color Color::WHITE(uint8_t(255), uint8_t(255), uint8_t(255));
-const Color Color::TRANSPARENT(0, ColorSpace::RGB, true);
 
 
 inline uint8_t double_to_byte (double v) {
@@ -44,13 +43,43 @@ inline uint8_t double_to_byte (double v) {
 }
 
 
-Color::Color (const string &psname) {
-	if (!setPSName(psname, false))
+/** Reads n double values from input stream is. The values may be
+ *  separated by whitespace and/or commas. */
+static valarray<double> read_doubles (istream &is, int n) {
+	valarray<double> values(n);
+	for (double &val : values) {
+		is >> ws;
+		if (!util::read_double(is, val))
+			val = 0;
+		is >> ws;
+		if (is.peek() == ',') {
+			is.get();
+			is >> ws;
+		}
+	}
+	return values;
+}
+
+
+/** Creates a color object from a string specifying the color. It can
+ *  either be a PS color name or one of the color functions rgb(r,g,b),
+ *  cmyk(c,m,y,k) where the parameters are numbers in the interval
+ *  from 0 to 1. */
+Color::Color (const string &colorstr) {
+	if (colorstr.substr(0, 4) == "rgb(") {
+		istringstream iss(colorstr.substr(4));
+		setRGB(read_doubles(iss, 3));
+	}
+	else if (colorstr.substr(0, 5) == "cmyk(") {
+		istringstream iss(colorstr.substr(5));
+		setCMYK(read_doubles(iss, 4));
+	}
+	else if (!setPSName(colorstr, false))
 		setGray(uint8_t(0));
 }
 
 
-Color::Color (const valarray<double> &values, ColorSpace cs) noexcept : _cspace(cs), _transparent(false) {
+Color::Color (const valarray<double> &values, ColorSpace cs) noexcept : _cspace(cs) {
 	int n = numComponents(cs);
 	int i=0;
 	_value = 0;
@@ -62,7 +91,6 @@ Color::Color (const valarray<double> &values, ColorSpace cs) noexcept : _cspace(
 void Color::setRGB (uint8_t r, uint8_t g, uint8_t b)  {
 	_value = (r << 16) | (g << 8) | b;
 	_cspace = ColorSpace::RGB;
-	_transparent = false;
 }
 
 
@@ -91,7 +119,6 @@ bool Color::setRGBHexString (string hexString) {
 			try {
 				_value = stoi(hexString, nullptr, 16);
 				_cspace = ColorSpace::RGB;
-				_transparent = false;
 				return true;
 			}
 			catch (...) {
@@ -108,7 +135,6 @@ bool Color::setRGBHexString (string hexString) {
  *  @return true if color name could be applied properly */
 bool Color::setPSName (string name, bool case_sensitive) {
 	_cspace = ColorSpace::RGB;
-	_transparent = false;
 	if (name[0] == '#') {
 		char *p=nullptr;
 		_value = uint32_t(strtol(name.c_str()+1, &p, 16));
@@ -231,7 +257,6 @@ void Color::setHSB (double h, double s, double b) {
 void Color::setCMYK (uint8_t c, uint8_t m, uint8_t y, uint8_t k) {
 	_value = (c << 24) | (m << 16) | (y << 8) | k;
 	_cspace = ColorSpace::CMYK;
-	_transparent = false;
 }
 
 
@@ -251,6 +276,7 @@ void Color::set (ColorSpace colorSpace, VectorIterator<double> &it) {
 		case ColorSpace::RGB : setRGB(*it, *(it+1), *(it+2)); it+=3; break;
 		case ColorSpace::LAB : setLab(*it, *(it+1), *(it+2)); it+=3; break;
 		case ColorSpace::CMYK: setCMYK(*it, *(it+1), *(it+2), *(it+3)); it+=4; break;
+		default: ;
 	}
 }
 
@@ -551,6 +577,7 @@ valarray<double> Color::getRGBDouble () const {
 			XYZ2RGB(rgbValues, values);
 			rgbValues = std::move(values);
 			break;
+		default: ;
 	}
 	return rgbValues;
 }
@@ -587,7 +614,7 @@ void Color::getRGB (valarray<double> &rgb) const {
 void Color::getXYZ (double &x, double &y, double &z) const {
 	valarray<double> rgb(3), xyz(3);
 	getRGB(rgb);
-	RGB2XYZ(rgb, xyz);
+	RGB2XYZ(std::move(rgb), xyz);
 	x = xyz[0];
 	y = xyz[1];
 	z = xyz[2];
@@ -759,6 +786,7 @@ int Color::numComponents (ColorSpace colorSpace) {
 		case ColorSpace::LAB:
 		case ColorSpace::RGB:  return 3;
 		case ColorSpace::CMYK: return 4;
+		default: ;
 	}
 	return 0;
 }
