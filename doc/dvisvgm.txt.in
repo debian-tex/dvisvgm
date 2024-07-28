@@ -22,7 +22,7 @@ Martin Gieseking <@PACKAGE_BUGREPORT@>
 :man source: dvisvgm
 :man version: @VERSION@
 :man manual: dvisvgm Manual
-:revdate: 2024-03-28 10:35 +0100
+:revdate: 2024-04-30 13:07 +0200
 
 Name
 ----
@@ -221,8 +221,9 @@ Embeds the contents of bitmap files into the generated SVG files instead of addi
 Because of the base64-encoded data, the SVG files are usually much bigger but at the same time
 more portable because they don't rely on external bitmap files.
 +
-This option only affects bitmaps referenced in DVI/XDV files, e.g. added by +\includegraphics+.
-Bitmaps in PostScript or PDF files are always embedded. Also see option *bitmap-format*.
+This option only affects bitmaps referenced in DVI/XDV files, e.g. by +\includegraphics+ or
+special command +dvisvgm:img+ (see below). Bitmaps present in PostScript or PDF files are always
+embedded. Also see option *bitmap-format*.
 
 *-E, --eps*::
 If this option is given, dvisvgm does not expect a DVI but a single or multiple EPS input files,
@@ -842,6 +843,18 @@ the user turn it off.
 *color*::
 Statements of this command set provide instructions to change the text/paint color. For an overview of the
 exact syntax, see the documentation of dvips, for instance.
++
+dvisvgm extends the dvips syntax of the color specials by two optional modifiers to enable the differentiation
+between fill and stroke colors, i.e. colors used to fill enclosed areas and to draw lines, respectively.
+If one of the color specifiers, like a color name or a color model followed by a sequence of color components,
+is preceded by +fill+ or +stroke+, only the corresponding color is changed. Without these modifiers both colors
+are affected. Example: +color push fill rgb 1 0 1+ pushes a new color pair onto the color stack whereby the fill
+color is set to magenta and the stroke color retains its current value.
++color push rgb 1 0 1+ pushes a color pair with both colors set to magenta.
++
+Additionally, the new special *color set* is introduced. Its syntax is the same as the one of *color push*
+including the optional +fill+ and +stroke+ modifiers. Instead of pushing a new color pair it modifies the
+topmost one on the stack. If the color stack is empty, the default (black) fill/stroke color is changed.
 
 *dvisvgm*::
 The following list gives a brief overview of dvisvgm's own set of currently supported specials.
@@ -851,11 +864,19 @@ The following list gives a brief overview of dvisvgm's own set of currently supp
   that the resulting SVG is still valid. Opening and closing tags may be distributed among different 'raw'
   specials. The tags themselves can also be split but must be continued with the immediately following 'raw'
   special. Both syntactically incorrect and wrongly nested tags lead to error messages.
-  Parameter 'text' may also contain the expressions *{?x}*, *{?y}*, *{?color}*, *{?matrix}*, *{?pageno}*,
-  *{?svgfile}*, and *{?svgpath}* that expand to the current 'x' or 'y' coordinate, the current color, the
-  current transformation matrix, the current page number, and the relative and absolute path of the SVG file
-  being created, respectively.
-  Character sequence *{?nl}* expands to a newline character. Finally, constructions of the form *{?(__expr__)}*
+  +
+  Parameter 'text' may also contain the expressions *{?x}*, *{?y}*, *{?color}*, *{?fillcolor}*, *{?strokecolor}*,
+  *{?matrix}*, *{?pageno}*, *{?svgfile}*, and *{?svgpath}* that respectively expand to the current 'x' and 'y'
+  coordinate, an RGB hex string of the current active fill and stroke color, the current transformation matrix,
+  the current page number, and the relative and absolute path of the SVG file being created. *{?color}* expands
+  to the same string as *{?fillcolor}* and is still available for compatibility with older dvisvgm versions that
+  didn't distinguish between fill and stroke colors (see information about color specials below).
+  +
+  As SVG doesn't support CMYK colors, e.g. in +fill+ and +stroke+ attributes, dvisvgm provides macro
+  *{?cmyk(_c_,_m_,_y_,_k_)}* to create an RGB hex string from a CMYK color. It can be used instead of
+  a combination of color/PostScript specials and color macros to directly insert a CMYK color value.
+  +
+  Character sequence *{?nl}* expands to a newline character. Finally, constructions of the form *{?(_expr_)}*
   enable the evaluation of mathematical expressions which may consist of basic arithmetic operations including
   modulo. Like above, the variables 'x' and 'y' represent the current coordinates.
   Example: +{?(-10*(x+2y)-5)}+.
@@ -881,10 +902,18 @@ The following list gives a brief overview of dvisvgm's own set of currently supp
   <defs> section of the current SVG document only once.
 
   *dvisvgm:img* 'width' 'height' 'file';;
-  Creates an image element at the current graphic position referencing the given file. JPEG, PNG, and SVG images
-  can be used here. However, dvisvgm does not check the file format or the file name suffix. The lengths 'width'
-  and 'height' can be given together with a unit specifier (see option *--bbox*) or as plain floating point numbers.
-  In the latter case, TeX point units are assumed (1in = 72.27pt).
+  Creates an +image+ element using the current graphic position, transformation matrix, the specified extents,
+  and the given filename. This special command also updates the bounding box of the resulting SVG to entirely
+  enclose the transformed image. The image itself is positioned such that the lower left corner of the
+  untransformed image lies at the current graphic position. The length 'width' and 'height' specify the extents
+  of the untransformed image. For a list of supported length units see option *--bbox*. Plain numbers without an
+  appended unit specifier imply TeX points (1in = 72.27pt).
+  +
+  Parameter 'file' can be a plain filename or a relative or absolute path of a file. By default, dvisvgm just
+  creates links referencing the image file so that the SVG renderer will evaluate the filename or path relative
+  to the location of the generated SVG file. If option *--embed-bitmaps* is given, JPEG and PNG images are
+  embedded into the SVG document. As this requires base64-encoding of the image data, the resulting SVG files
+  can become quite big.
 
   *dvisvgm:bbox* lock;;
   Locks the bounding box of the current page and prevents it from further updating, i.e. graphics elements added
