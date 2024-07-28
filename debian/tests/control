@@ -1,4 +1,4 @@
 Tests: test-suite
 #Architecture: !armhf
 Depends: @builddeps@
-Restrictions: build-needed, allow-stderr
+Restrictions: allow-stderr
