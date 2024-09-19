@@ -1,3 +1,9 @@
+dvisvgm (3.4.1+ds-1) unstable; urgency=medium
+
+  * New upstream release, refresh patches.
+
+ -- Hilmar Preuße <hille42@debian.org>  Thu, 19 Sep 2024 09:52:23 +0200
+
 dvisvgm (3.4+ds-1) unstable; urgency=medium
 
   * New upstream release.

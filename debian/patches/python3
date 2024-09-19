@@ -7,8 +7,8 @@ Author: Norbert Preining <norbert@preining.info>
  tests/Makefile.am |    2 +-
  4 files changed, 4 insertions(+), 4 deletions(-)
 
---- dvisvgm-3.2.1+ds.orig/src/Makefile.am
-+++ dvisvgm-3.2.1+ds/src/Makefile.am
+--- dvisvgm-3.4.1+ds.orig/src/Makefile.am
++++ dvisvgm-3.4.1+ds/src/Makefile.am
 @@ -234,7 +234,7 @@
  # the command-line parser class is generated from options.xml by opt2cpp
  $(srcdir)/CommandLine.hpp: options.xml
@@ -18,9 +18,9 @@ Author: Norbert Preining <norbert@preining.info>
  
  # Create a C string definition containing the PostScript routines psdefs.ps needed by class PSInterpreter
  $(srcdir)/psdefs.cpp: psdefs.ps
---- dvisvgm-3.2.1+ds.orig/tests/Makefile.am
-+++ dvisvgm-3.2.1+ds/tests/Makefile.am
-@@ -43,7 +43,7 @@
+--- dvisvgm-3.4.1+ds.orig/tests/Makefile.am
++++ dvisvgm-3.4.1+ds/tests/Makefile.am
+@@ -44,7 +44,7 @@
  hashcheck_LDADD = $(LIBS_LIBS)
  
  hashcheck.cpp: genhashcheck.py $(dvisvgm_srcdir)/src/AGLTable.hpp $(dvisvgm_srcdir)/libs/xxHash/xxhash.h
