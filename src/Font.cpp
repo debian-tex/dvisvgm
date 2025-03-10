@@ -43,7 +43,7 @@ uint32_t Font::unicode (uint32_t c) const {
 }
 
 
-/** Returns the encoding object of this font which is asigned in a map file.
+/** Returns the encoding object of this font which is assigned in a map file.
  *  If there's no encoding assigned, the function returns 0. */
 const FontEncoding* Font::encoding () const {
 	if (const FontMap::Entry *entry = fontMapEntry())
@@ -200,7 +200,7 @@ bool PhysicalFont::isCIDFont () const {
 }
 
 
-/** Retrieve the IDs of all charachter maps available in the font file.
+/** Retrieve the IDs of all character maps available in the font file.
  *  @param[out] charMapIDs IDs of the found character maps
  *  @return number of found character maps */
 int PhysicalFont::collectCharMapIDs (std::vector<CharMapID> &charMapIDs) const {
@@ -218,7 +218,7 @@ int PhysicalFont::collectCharMapIDs (std::vector<CharMapID> &charMapIDs) const {
 Character PhysicalFont::decodeChar (uint32_t c) const {
 	if (const FontEncoding *enc = encoding())
 		return enc->decode(c);
-	return Character(Character::CHRCODE, c);
+	return {Character::CHRCODE, c};
 }
 
 
@@ -359,7 +359,7 @@ bool PhysicalFont::getGlyph (int c, GraphicsPath<int32_t> &glyph, GFGlyphTracer:
 						_cache.setGlyph(c, glyph);
 					return true;
 				}
-				catch (GFException &e) {
+				catch (GFException &) {
 					// @@ print error message
 				}
 			}
@@ -410,11 +410,11 @@ int PhysicalFont::traceAllGlyphs (bool includeCached, GFGlyphTracer::Callback *c
 			int fchar = metrics->firstChar();
 			int lchar = metrics->lastChar();
 			string gfname;
-			Glyph glyph;
 			if (createGF(gfname)) {
 				_cache.read(name(), CACHE_PATH);
 				double ds = getMetrics() ? getMetrics()->getDesignSize() : 1;
 				GFGlyphTracer tracer(gfname, unitsPerEm()/ds, cb);
+				Glyph glyph;
 				tracer.setGlyph(glyph);
 				for (int i=fchar; i <= lchar; i++) {
 					if (includeCached || !_cache.getGlyph(i)) {
@@ -436,7 +436,7 @@ int PhysicalFont::traceAllGlyphs (bool includeCached, GFGlyphTracer::Callback *c
 /** Computes the exact bounding box of a glyph.
  *  @param[in]  c character code of the glyph
  *  @param[out] bbox the computed bounding box
- *  @param[in]  cb optional calback object forwarded to the tracer
+ *  @param[in]  cb optional callback object forwarded to the tracer
  *  @return true if the box could be computed successfully */
 bool PhysicalFont::getExactGlyphBox (int c, BoundingBox& bbox, GFGlyphTracer::Callback* cb) const {
 	Glyph glyph;

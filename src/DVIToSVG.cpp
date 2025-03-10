@@ -113,7 +113,7 @@ void DVIToSVG::convert (unsigned first, unsigned last, HashFunction *hashFunc) {
 		else {
 			executePage(i);
 			SVGOptimizer(_svg).execute();
-			embedFonts(_svg.rootNode());
+			embedFonts();
 			bool success = _svg.write(_out.getPageStream(currentPageNumber(), numberOfPages(), hashTriple));
 			_out.finish();
 			string fname = path.shorterAbsoluteOrRelative();
@@ -292,7 +292,7 @@ void DVIToSVG::leaveEndPage (unsigned) {
 				}
 				bbox.set(lengths);
 			}
-			catch (const MessageException &e) {
+			catch (const MessageException &) {
 			}
 		}
 	}
@@ -346,10 +346,9 @@ static void collect_chars (unordered_map<const Font*, set<int>> &fontmap) {
 }
 
 
-/** Adds the font information to the SVG tree.
- *  @param[in] svgElement the font nodes are added to this node */
-void DVIToSVG::embedFonts (XMLElement *svgElement) {
-	if (!svgElement || !_actions) // no dvi actions => no chars written => no fonts to embed
+/** Adds the font information to the SVG tree. */
+void DVIToSVG::embedFonts () {
+	if (!_actions) // no dvi actions => no chars written => no fonts to embed
 		return;
 
 	auto &usedCharsMap = FontManager::instance().getUsedChars();
@@ -402,7 +401,7 @@ static vector<string> extract_prefixes (const char *ignorelist) {
  *  the corresponding prefixes can be given separated by non alpha-numeric characters,
  *  e.g. "color, ps, em" or "color: ps em" etc.
  *  A single "*" in the ignore list disables all specials.
- *  @param[in] ignorelist list of hanlder names to ignore
+ *  @param[in] ignorelist list of handler names to ignore
  *  @param[in] pswarning if true, shows warning about disabled PS support
  *  @return the SpecialManager that handles special statements */
 void DVIToSVG::setProcessSpecials (const char *ignorelist, bool pswarning) {
