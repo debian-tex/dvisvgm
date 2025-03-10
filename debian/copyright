@@ -6,11 +6,11 @@ Files-Excluded:
  src/version.hpp
 
 Files: *
-Copyright: 2005-2024 Martin Gieseking <martin.gieseking@uos.de>
+Copyright: 2005-2025 Martin Gieseking <martin.gieseking@uos.de>
 License: GPL-3+
 
 Files: src/*
-Copyright: 2005-2024 Martin Gieseking <martin.gieseking@uos.de>
+Copyright: 2005-2025 Martin Gieseking <martin.gieseking@uos.de>
 License: GPL-3+
 
 Files: libs/brotli/*
@@ -38,7 +38,7 @@ Copyright: 2012-2020 by Yann Collet
 License: BSD-2-clause
 
 Files: debian/*
-Copyright: 2019-2024 Hilmar Preusse <hille42@web.de>
+Copyright: 2019-2025 Hilmar Preusse <hille42@web.de>
 License: GPL-2+
 
 License: GPL-2+
