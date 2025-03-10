@@ -31,6 +31,7 @@
 #include "FontStyle.hpp"
 #include "fonts/Base14Fonts.hpp"
 #include "Message.hpp"
+#include "Unicode.hpp"
 #include "utility.hpp"
 
 using namespace std;
@@ -85,6 +86,7 @@ string FontEngine::version () {
 /** Sets the font to be used.
  * @param[in] fname path to font file
  * @param[in] fontindex index of font in font collection (multi-font files, like TTC)
+ * @param[in] charMapID character map ID to assign
  * @return true on success */
 bool FontEngine::setFont (const string &fname, int fontindex, const CharMapID &charMapID) {
 	if (_currentFace && FT_Done_Face(_currentFace))
@@ -138,7 +140,7 @@ bool FontEngine::hasVerticalMetrics () const {
 }
 
 
-bool FontEngine::setCharMap (const CharMapID &charMapID) {
+bool FontEngine::setCharMap (const CharMapID &charMapID) const {
 	if (_currentFace) {
 		for (int i = 0; i < _currentFace->num_charmaps; i++) {
 			FT_CharMap ft_cmap = _currentFace->charmaps[i];
@@ -155,7 +157,7 @@ bool FontEngine::setCharMap (const CharMapID &charMapID) {
 /** Returns a character map that maps from glyph indexes to character codes
  *  of the current encoding.
  *  @param[out] charmap the resulting charmap */
-void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) {
+void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) const {
 	charmap.clear();
 	FT_UInt gid;  // index of current glyph
 	uint32_t charcode = FT_Get_First_Char(_currentFace, &gid);
@@ -164,12 +166,47 @@ void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) {
 			charmap.addRange(gid, gid, charcode);
 		charcode = FT_Get_Next_Char(_currentFace, charcode, &gid);
 	}
+	// In case the Unicode map of the font doesn't cover all characters, some
+	// of them could still be identified by their names if present in the font.
+	if (FT_HAS_GLYPH_NAMES(_currentFace)) {
+		NumericRanges<uint32_t> usedCodepoints;
+		for (size_t i=0; i < charmap.numRanges(); i++)
+			usedCodepoints.addRange(charmap.getRange(i).minval(), charmap.getRange(i).maxval());
+		if (charmap.empty())
+			addCharsByGlyphNames(1, getNumGlyphs(), charmap, usedCodepoints);
+		else {
+			addCharsByGlyphNames(1, charmap.minKey()-1, charmap, usedCodepoints);
+			for (size_t i=1; i < charmap.numRanges(); i++)
+				addCharsByGlyphNames(charmap.getRange(i-1).max()+1, charmap.getRange(i).min()-1, charmap, usedCodepoints);
+			addCharsByGlyphNames(charmap.maxKey()+1, getNumGlyphs(), charmap, usedCodepoints);
+		}
+	}
+}
+
+
+/** Looks for known glyph names in a given GID range and adds the corresponding
+ *  GID->code point mapping to a character map if the code point is not already present.
+ *  @param[in] minGID minimum GID of range to iterate
+ *  @param[in] maxGID maximum GID of range to iterate
+ *  @param[in,out] charmap character map taking the new mappings
+ *  @param[in,out] ucp collection of code points already present in the character map */
+void FontEngine::addCharsByGlyphNames (uint32_t minGID, uint32_t maxGID, RangeMap &charmap, CodepointRanges &ucp) const {
+	for (uint32_t gid=minGID; gid <= maxGID; gid++) {
+		char glyphName[64];
+		if (FT_Get_Glyph_Name(_currentFace, gid, glyphName, 64) == 0) {
+			const int32_t cp = Unicode::aglNameToCodepoint(glyphName);
+			if (cp && !ucp.valueExists(cp)) {
+				charmap.addRange(gid, gid, cp);
+				ucp.addRange(cp);
+			}
+		}
+	}
 }
 
 
 /** Creates a charmap that maps from the custom character encoding to Unicode.
  *  @return pointer to charmap if it could be created, 0 otherwise */
-unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () {
+unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () const {
 	auto charmap = util::make_unique<RangeMap>();
 	if (_currentFace) {
 		FT_CharMap ftcharmap = _currentFace->charmap;
@@ -330,7 +367,7 @@ int FontEngine::getNumGlyphs () const {
 }
 
 
-/** Returns the glyph name for a given charater code.
+/** Returns the glyph name for a given character code.
  * @param[in] c char code
  * @return glyph name */
 string FontEngine::getGlyphName (const Character &c) const {
@@ -370,17 +407,17 @@ int FontEngine::getCharMapIDs (vector<CharMapID> &charmapIDs) const {
 }
 
 
-CharMapID FontEngine::setUnicodeCharMap () {
+CharMapID FontEngine::setUnicodeCharMap () const {
 	if (_currentFace && FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) == 0)
-		return CharMapID(uint8_t(_currentFace->charmap->platform_id), uint8_t(_currentFace->charmap->encoding_id));
-	return CharMapID();
+		return {uint8_t(_currentFace->charmap->platform_id), uint8_t(_currentFace->charmap->encoding_id)};
+	return {};
 }
 
 
-CharMapID FontEngine::setCustomCharMap () {
+CharMapID FontEngine::setCustomCharMap () const {
 	if (_currentFace && FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) == 0)
-		return CharMapID(uint8_t(_currentFace->charmap->platform_id), uint8_t(_currentFace->charmap->encoding_id));
-	return CharMapID();
+		return {uint8_t(_currentFace->charmap->platform_id), uint8_t(_currentFace->charmap->encoding_id)};
+	return {};
 }
 
 

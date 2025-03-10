@@ -46,7 +46,7 @@ inline DPair to_DPair (const IntPoint &p) {
 }
 
 
-/** In order to flatten a curved path, all path segements are processed sequentially.
+/** In order to flatten a curved path, all path segments are processed sequentially.
  *  Depending on the type of the segment, one of the methods provided by this class
  *  is called. */
 class FlattenActions : public CurvedPath::IterationActions {
@@ -274,7 +274,7 @@ void PathClipper::reconstruct (const Polygons &polygons, CurvedPath &path) {
 /** Reconstructs a curved path from a single polygon.
  *  @param[in] polygon polygon to reconstruct
  *  @param[out] path the reconstructed curved path */
-void PathClipper::reconstruct (const Polygon &polygon, CurvedPath &path) {
+void PathClipper::reconstruct (const Polygon &polygon, CurvedPath &path) const {
 	size_t num_points = polygon.size();
 	if (num_points < 2)
 		return;

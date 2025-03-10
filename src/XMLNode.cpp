@@ -116,11 +116,10 @@ void XMLElement::clear () {
 bool XMLElement::empty (bool ignoreWhitespace) const {
 	if (!_firstChild || !ignoreWhitespace)
 		return _firstChild == nullptr;
-	for (const XMLNode *node : *this) {
-		if (!node->toWSNode())
-			return false;
-	}
-	return true;
+
+	return all_of(begin(), end(), [](const XMLNode *node) {
+		return !node->toWSNode();
+	});
 }
 
 
@@ -233,7 +232,7 @@ XMLNode* XMLElement::prepend (unique_ptr<XMLNode> child) {
  *  @param[in] child node to be inserted
  *  @param[in] sibling following sibling of 'child'
  *  @return raw pointer to inserted node */
-XMLNode* XMLElement::insertBefore (unique_ptr<XMLNode> child, XMLNode *sibling) {
+XMLNode* XMLElement::insertBefore (unique_ptr<XMLNode> child, const XMLNode *sibling) {
 	if (!child || (sibling && sibling->parent() != this))
 		return nullptr;
 	if (!sibling)
@@ -269,7 +268,7 @@ XMLNode* XMLElement::insertAfter (unique_ptr<XMLNode> child, XMLNode *sibling) {
  *  @param[in] last last node to wrap (or nullptr if all following siblings of 'first' are to be wrapped)
  *  @param[in] name name of the wrapper element to be created
  *  @return raw pointer to the new wrapper element */
-XMLElement* XMLElement::wrap (XMLNode *first, XMLNode *last, const string &name) {
+XMLElement* XMLElement::wrap (XMLNode *first, const XMLNode *last, const string &name) {
 	if (!first || !first->parent() || (last && first->parent() != last->parent()))
 		return nullptr;
 	XMLElement *parent = first->parent()->toElement();
@@ -297,7 +296,7 @@ XMLElement* XMLElement::wrap (XMLNode *first, XMLNode *last, const string &name)
  *  followed by C2,...,Cn.
  *  Example: unwrap a child element b of a:
  *  <a>text1<b><c/>text2<d/></b></a> => <a>text1<c/>text2<d/></a>
- *  @param[in] child child element to unwrap
+ *  @param[in] element element to unwrap
  *  @return raw pointer to the first node C1 of the unwrapped sequence or nullptr if element was empty */
 XMLNode* XMLElement::unwrap (XMLElement *element) {
 	if (!element || !element->parent())
@@ -495,7 +494,7 @@ void XMLText::append (unique_ptr<XMLNode> node) {
 }
 
 
-void XMLText::append (unique_ptr<XMLText> node) {
+void XMLText::append (const unique_ptr<XMLText> &node) {
 	if (node)
 		_text += node->_text;
 }
@@ -506,7 +505,7 @@ void XMLText::append (const string &str) {
 }
 
 
-void XMLText::prepend (unique_ptr<XMLNode> node) {
+void XMLText::prepend (const unique_ptr<XMLNode> &node) {
 	if (XMLText *textNode = node->toText())
 		_text = textNode->_text + _text;
 }
