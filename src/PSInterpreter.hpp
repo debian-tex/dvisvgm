@@ -96,10 +96,11 @@ struct PSDeviceInfo {
 /** This class provides methods to execute chunks of PostScript code and calls
  *  several template methods on invocation of selected PS operators (see PSActions). */
 class PSInterpreter {
-	enum Mode {PS_NONE, PS_RUNNING, PS_QUIT};
+	enum Mode {PS_NONE, PS_RUNNING, PS_QUIT, PS_EXCEPTION};
 
 	public:
 		explicit PSInterpreter (PSActions *actions=nullptr);
+		virtual ~PSInterpreter ();
 		PSInterpreter (const PSInterpreter &psi) =delete;
 		bool execute (const char *str, size_t len, bool flush=true);
 		bool execute (const char *str, bool flush=true)        {return execute(str, std::strlen(str), flush);}
@@ -122,20 +123,21 @@ class PSInterpreter {
 	protected:
 		void init ();
 		// callback functions
-		static int GSDLLCALL input (void *inst, char *buf, int len);
-		static int GSDLLCALL output (void *inst, const char *buf, int len);
-		static int GSDLLCALL error (void *inst, const char *buf, int len);
+		static int GSDLLCALL input (void *inst, char *buf, int len) noexcept;
+		static int GSDLLCALL output (void *inst, const char *buf, int len) noexcept;
+		static int GSDLLCALL error (void *inst, const char *buf, int len) noexcept;
 
 		void checkStatus (int status);
-		void callActions (InputReader &cib);
+		void processCommand ();
 
 	private:
 		Ghostscript _gs;
 		Mode _mode;                        ///< current execution mode
 		PSActions *_actions=nullptr;       ///< actions to be performed
 		size_t _bytesToRead=0;             ///< if > 0, maximal number of bytes to be processed by following calls of execute()
-		std::vector<char> _linebuf;
+		std::string _unprocessedChars;
 		std::string _errorMessage;         ///< text of error message
+		std::vector<std::string> _command; ///< current command being scanned
 		bool _inError=false;               ///< true if scanning error message
 		bool _initialized=false;           ///< true if PSInterpreter has been completely initialized
 		std::vector<std::string> _rawData; ///< raw data received
