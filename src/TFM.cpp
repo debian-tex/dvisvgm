@@ -20,6 +20,7 @@
 
 #include <fstream>
 #include <vector>
+#include "algorithm.hpp"
 #include "Length.hpp"
 #include "Message.hpp"
 #include "StreamReader.hpp"
@@ -83,10 +84,8 @@ void TFM::readTables (StreamReader &reader, int nw, int nh, int nd, int ni) {
 	read_words(reader, _heightTable, nh);
 	read_words(reader, _depthTable, nd);
 	read_words(reader, _italicTable, ni);
-	for (FixWord h : _heightTable)
-		_ascent = max(_ascent, h);
-	for (FixWord d : _depthTable)
-		_descent = max(_descent, d);
+	_ascent = nh > 0 ? *algo::max_element(_heightTable) : 0;
+	_descent = nd > 0 ? *algo::max_element(_depthTable) : 0;
 }
 
 

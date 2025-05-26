@@ -407,8 +407,6 @@ int PhysicalFont::traceAllGlyphs (bool includeCached, GFGlyphTracer::Callback *c
 	int count = 0;
 	if (type() == Type::MF && !CACHE_PATH.empty()) {
 		if (const FontMetrics *metrics = getMetrics()) {
-			int fchar = metrics->firstChar();
-			int lchar = metrics->lastChar();
 			string gfname;
 			if (createGF(gfname)) {
 				_cache.read(name(), CACHE_PATH);
@@ -416,6 +414,8 @@ int PhysicalFont::traceAllGlyphs (bool includeCached, GFGlyphTracer::Callback *c
 				GFGlyphTracer tracer(gfname, unitsPerEm()/ds, cb);
 				Glyph glyph;
 				tracer.setGlyph(glyph);
+				int fchar = metrics->firstChar();
+				int lchar = metrics->lastChar();
 				for (int i=fchar; i <= lchar; i++) {
 					if (includeCached || !_cache.getGlyph(i)) {
 						glyph.clear();
@@ -536,6 +536,10 @@ uint32_t PhysicalFontImpl::unicode (uint32_t c) const {
 	if (type() == Type::MF)
 		return Font::unicode(c);
 	Character chr = decodeChar(c);
+	if (_localCharMap) {
+		if (uint32_t mapped_char = _localCharMap->valueAt(chr.number()))
+			return mapped_char;
+	}
 	if (type() == Type::PFB) {
 		// try to get the Unicode point from the character name
 		string glyphname = glyphName(c);
@@ -552,10 +556,6 @@ uint32_t PhysicalFontImpl::unicode (uint32_t c) const {
 	if (chr.type() == Character::NAME || chr.number() == 0)
 		return Unicode::charToCodepoint(chr.number());
 
-	if (_localCharMap) {
-		if (uint32_t mapped_char = _localCharMap->valueAt(chr.number()))
-			return mapped_char;
-	}
 	// No Unicode equivalent found in the font file.
 	// Now we should look for a smart alternative but at the moment
 	// it's sufficient to simply choose a valid unused codepoint.
@@ -675,7 +675,7 @@ bool NativeFontImpl::findAndAssignBaseFontMap () {
 	FontEngine &fe = FontEngine::instance();
 	fe.setFont(*this);
 	fe.setUnicodeCharMap();
-	fe.buildGidToCharCodeMap(_toUnicodeMap);
+	_toUnicodeMap = fe.buildGidToCharCodeMap();
 	if (!_toUnicodeMap.addMissingMappings(fe.getNumGlyphs()))
 		Message::wstream(true) << "incomplete Unicode mapping for native font " << name() << " (" << filename() << ")\n";
 	return true;
@@ -717,7 +717,7 @@ const char* VirtualFontImpl::path () const {
 }
 
 
-void VirtualFontImpl::assignChar (uint32_t c, DVIVector &&dvi) {
+void VirtualFontImpl::assignChar (uint32_t c, DVIVector dvi) {
 	_charDefs.emplace(c, std::move(dvi));
 }
 

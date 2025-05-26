@@ -253,7 +253,7 @@ void DVIToSVG::enterBeginPage (unsigned pageno, const vector<int32_t> &c) {
 
 /** This template method is called by DVIReader::cmdEop() after
  *  executing the EOP actions. */
-void DVIToSVG::leaveEndPage (unsigned) {
+void DVIToSVG::leaveEndPage (unsigned) const {
 	if (!dynamic_cast<DVIToSVGActions*>(_actions.get()))
 		return;
 
@@ -351,13 +351,13 @@ void DVIToSVG::embedFonts () {
 	if (!_actions) // no dvi actions => no chars written => no fonts to embed
 		return;
 
+	auto usedFonts = FontManager::instance().getUniqueFonts();
 	auto &usedCharsMap = FontManager::instance().getUsedChars();
 	collect_chars(usedCharsMap);
 
 	GlyphTracerMessages messages;
 	unordered_set<const Font*> tracedFonts;  // collect unique fonts already traced
-	for (const auto &fontchar : usedCharsMap) {
-		const Font *font = fontchar.first;
+	for (auto font : usedFonts) {
 		if (auto ph_font = font_cast<const PhysicalFont*>(font)) {
 			// Check if glyphs should be traced. Only trace the glyphs of unique fonts, i.e.
 			// avoid retracing the same glyphs again if they are referenced in various sizes.
@@ -365,8 +365,11 @@ void DVIToSVG::embedFonts () {
 				ph_font->traceAllGlyphs(TRACE_MODE == 'a', &messages);
 				tracedFonts.insert(ph_font->uniqueFont());
 			}
-			if (font->path())  // does font file exist?
-				_svg.append(*ph_font, fontchar.second, &messages);
+			if (font->path()) { // does font file exist?
+				auto it = usedCharsMap.find(font);
+				if (it != usedCharsMap.end())
+					_svg.append(*ph_font, it->second, &messages);
+			}
 			else
 				Message::wstream(true) << "can't embed font '" << font->name() << "'\n";
 		}
@@ -377,18 +380,19 @@ void DVIToSVG::embedFonts () {
 }
 
 
-static vector<string> extract_prefixes (const char *ignorelist) {
+static vector<string> extract_prefixes (const string &ignorelist) {
 	vector<string> prefixes;
-	if (ignorelist) {
-		const char *left = ignorelist;
-		while (*left) {
-			while (*left && !isalnum(*left))
-				left++;
-			const char *right = left;
-			while (*right && isalnum(*right))
-				right++;
-			if (*left)
-				prefixes.emplace_back(left, right-left);
+	if (!ignorelist.empty()) {
+		auto left = ignorelist.begin();
+		while (left != ignorelist.end()) {
+			left = std::find_if(left, ignorelist.end(), [](char c) {
+				return isalnum(c);
+			});
+			auto right = std::find_if(left, ignorelist.end(), [](char c) {
+				return !isalnum(c);
+			});
+			if (left != ignorelist.end())
+				prefixes.emplace_back(left-ignorelist.begin(), right-left);
 			left = right;
 		}
 	}
@@ -402,10 +406,9 @@ static vector<string> extract_prefixes (const char *ignorelist) {
  *  e.g. "color, ps, em" or "color: ps em" etc.
  *  A single "*" in the ignore list disables all specials.
  *  @param[in] ignorelist list of handler names to ignore
- *  @param[in] pswarning if true, shows warning about disabled PS support
- *  @return the SpecialManager that handles special statements */
-void DVIToSVG::setProcessSpecials (const char *ignorelist, bool pswarning) {
-	if (ignorelist && strcmp(ignorelist, "*") == 0)  // ignore all specials?
+ *  @param[in] pswarning if true, shows warning about disabled PS support */
+void DVIToSVG::setProcessSpecials (const string &ignorelist, bool pswarning) {
+	if (ignorelist == "*")  // ignore all specials?
 		SpecialManager::instance().unregisterHandlers();
 	else {
 		auto ignoredHandlerName = extract_prefixes(ignorelist);
@@ -573,11 +576,10 @@ void DVIToSVG::HashSettings::setParameters (const string &paramstr) {
 				_algo = name;
 			else if (!name.empty()) {
 				string msg = "invalid hash parameter '" + name + "' (supported algorithms: ";
-				for (string str: HashFunction::supportedAlgorithms())
+				for (const string &str: HashFunction::supportedAlgorithms())
 					msg += str + ", ";
 				msg.pop_back();
-				msg.pop_back();
-				msg += ')';
+				msg.back() = ')';
 				throw MessageException(std::move(msg));
 			}
 		}

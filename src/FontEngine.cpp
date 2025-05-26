@@ -19,6 +19,7 @@
 *************************************************************************/
 
 #include <cmath>
+#include <set>
 #include <sstream>
 #include <ft2build.h>
 #include FT_ADVANCES_H
@@ -155,10 +156,9 @@ bool FontEngine::setCharMap (const CharMapID &charMapID) const {
 
 
 /** Returns a character map that maps from glyph indexes to character codes
- *  of the current encoding.
- *  @param[out] charmap the resulting charmap */
-void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) const {
-	charmap.clear();
+ *  of the current encoding. */
+RangeMap FontEngine::buildGidToCharCodeMap () const {
+	RangeMap charmap;
 	FT_UInt gid;  // index of current glyph
 	uint32_t charcode = FT_Get_First_Char(_currentFace, &gid);
 	while (gid) {
@@ -181,6 +181,7 @@ void FontEngine::buildGidToCharCodeMap (RangeMap &charmap) const {
 			addCharsByGlyphNames(charmap.maxKey()+1, getNumGlyphs(), charmap, usedCodepoints);
 		}
 	}
+	return charmap;
 }
 
 
@@ -212,20 +213,39 @@ unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () const {
 		FT_CharMap ftcharmap = _currentFace->charmap;
 		if (FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) != 0)
 			return nullptr;
-		RangeMap gidToCharCodeMap;
-		buildGidToCharCodeMap(gidToCharCodeMap);
+		RangeMap gidToCharCodeMap = buildGidToCharCodeMap();
 		if (FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) != 0)
 			return nullptr;
+		// collect character codes mapped to glyphs
+		set<uint32_t> assignedCharCodes;
+		for (const auto range : gidToCharCodeMap)
+			assignedCharCodes.insert(range.second);
+		// get code points for custom character codes from the font's Unicode map
+		set<uint32_t> assignedCodePoints;
 		FT_UInt gid;  // index of current glyph
-		uint32_t ucCharcode = FT_Get_First_Char(_currentFace, &gid);  // Unicode code point
+		uint32_t cp = FT_Get_First_Char(_currentFace, &gid);  // Unicode code point
 		while (gid) {
-			uint32_t customCharcode = gidToCharCodeMap.valueAt(gid);
-			charmap->addRange(customCharcode, customCharcode, ucCharcode);
-			ucCharcode = FT_Get_Next_Char(_currentFace, ucCharcode, &gid);
+			uint32_t charCode = gidToCharCodeMap.valueAt(gid);
+			charmap->addRange(charCode, charCode, cp);
+			assignedCharCodes.erase(charCode);
+			assignedCodePoints.insert(cp);
+			cp = FT_Get_Next_Char(_currentFace, cp, &gid);
 		}
 		FT_Set_Charmap(_currentFace, ftcharmap);
+		// assign code points from the PUA to characters not covered by the Unicode map
+		NumericRanges<uint32_t> pua({{0xE000, 0xF8FF}, {0xF0000, 0xFFFFD}, {0x100000, 0x10FFFD}});
+		auto puaIt = pua.valueIterator();
+		for (auto charCode : assignedCharCodes) {
+			for (; puaIt.valid(); ++puaIt) {
+				if (assignedCodePoints.find(*puaIt) == assignedCodePoints.end()) {
+					charmap->addRange(charCode, charCode, *puaIt);
+					assignedCodePoints.insert(*puaIt++);
+					break;
+				}
+			}
+		}
 	}
-	return charmap;
+	return charmap->empty() ? nullptr : std::move(charmap);
 }
 
 
@@ -487,7 +507,7 @@ static bool trace_outline (FT_Face face, const Font *font, int index, Glyph &gly
 					FT_Outline_Embolden(&outline, style->bold/font->scaledSize()*face->units_per_EM);
 			}
 		}
-		const FT_Outline_Funcs funcs = {moveto, lineto, quadto, cubicto, 0, 0};
+		constexpr FT_Outline_Funcs funcs = {moveto, lineto, quadto, cubicto, 0, 0};
 		FT_Outline_Decompose(&outline, &funcs, &glyph);
 		return true;
 	}

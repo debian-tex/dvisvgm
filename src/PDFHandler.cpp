@@ -22,6 +22,7 @@
 #include <iterator>
 #include <limits>
 #include <sstream>
+#include "algorithm.hpp"
 #include "FilePath.hpp"
 #include "FileSystem.hpp"
 #include "FontEngine.hpp"
@@ -227,10 +228,8 @@ void PDFHandler::initPage (int pageno, unique_ptr<SVGElement> context) {
 	string content = mtShow("pages/" + to_string(_pageno) + "/Contents", pattern);
 	if (content.empty())
 		content = mtShow("pages/" + to_string(_pageno) + "/Contents/*", pattern);
-	for (const string &entry : util::split(content, "\n")) {
-		if (!entry.empty())
-			_imgSeq.push_back(entry);
-	}
+	_imgSeq = util::split(content, "\n");
+	algo::erase_if(_imgSeq, util::IsEmptyString());
 }
 
 
@@ -278,7 +277,7 @@ void PDFHandler::elementClosed (XMLElement *trcElement) {
 	struct Handler {
 		const char *name;
 		void (PDFHandler::*func)(XMLElement*);
-	} handlers[10] = {
+	} handlers[] = {
 		{"page", &PDFHandler::doPage},
 		{"stroke_path", &PDFHandler::doStrokePath},
 		{"fill_path", &PDFHandler::doFillPath},
@@ -290,7 +289,7 @@ void PDFHandler::elementClosed (XMLElement *trcElement) {
 		{"pop_clip", &PDFHandler::doPopClip},
 		{"tile", &PDFHandler::doCloseTile},
 	};
-	auto it = find_if(begin(handlers), end(handlers), [&name](const Handler &handler) {
+	auto it = algo::find_if(handlers, [&name](const Handler &handler) {
 		return handler.name == name;
 	});
 	if (it != end(handlers))
@@ -717,11 +716,7 @@ void PDFHandler::doOpenTile (XMLElement *trcTileElement) {
 
 static unique_ptr<SVGElement> rect_path_elem (const vector<double> &coords) {
 	GraphicsPath<double> path;
-	path.moveto(coords[0], coords[1]);
-	path.lineto(coords[2], coords[1]);
-	path.lineto(coords[2], coords[3]);
-	path.lineto(coords[0], coords[3]);
-	path.closepath();
+	path.rect(coords[0], coords[1], coords[2], coords[3]);
 	ostringstream oss;
 	path.writeSVG(oss, SVGTree::RELATIVE_PATH_CMDS);
 	auto pathElement = util::make_unique<SVGElement>("path");
