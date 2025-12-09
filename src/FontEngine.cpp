@@ -155,16 +155,21 @@ bool FontEngine::setCharMap (const CharMapID &charMapID) const {
 }
 
 
-/** Returns a character map that maps from glyph indexes to character codes
- *  of the current encoding. */
-RangeMap FontEngine::buildGidToCharCodeMap () const {
+/** Returns a character map that maps from glyph indexes to Unicode code points */
+RangeMap FontEngine::buildGidToUnicodeMap () const {
 	RangeMap charmap;
-	FT_UInt gid;  // index of current glyph
-	uint32_t charcode = FT_Get_First_Char(_currentFace, &gid);
-	while (gid) {
-		if (!charmap.valueAt(gid))
-			charmap.addRange(gid, gid, charcode);
-		charcode = FT_Get_Next_Char(_currentFace, charcode, &gid);
+	if (!_currentFace)
+		return charmap;
+	FT_CharMap ft_cmap = _currentFace->charmap;
+	if (FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) == 0) {
+		FT_UInt gid;  // index of current glyph
+		uint32_t charcode = FT_Get_First_Char(_currentFace, &gid);
+		while (gid) {
+			if (!charmap.valueExists(gid))
+				charmap.addRange(gid, gid, charcode);
+			charcode = FT_Get_Next_Char(_currentFace, charcode, &gid);
+		}
+		FT_Set_Charmap(_currentFace, ft_cmap);
 	}
 	// In case the Unicode map of the font doesn't cover all characters, some
 	// of them could still be identified by their names if present in the font.
@@ -205,45 +210,107 @@ void FontEngine::addCharsByGlyphNames (uint32_t minGID, uint32_t maxGID, RangeMa
 }
 
 
-/** Creates a charmap that maps from the custom character encoding to Unicode.
- *  @return pointer to charmap if it could be created, 0 otherwise */
-unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () const {
-	auto charmap = util::make_unique<RangeMap>();
-	if (_currentFace) {
-		FT_CharMap ftcharmap = _currentFace->charmap;
-		if (FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) != 0)
-			return nullptr;
-		RangeMap gidToCharCodeMap = buildGidToCharCodeMap();
-		if (FT_Select_Charmap(_currentFace, FT_ENCODING_UNICODE) != 0)
-			return nullptr;
-		// collect character codes mapped to glyphs
-		set<uint32_t> assignedCharCodes;
-		for (const auto range : gidToCharCodeMap)
-			assignedCharCodes.insert(range.second);
-		// get code points for custom character codes from the font's Unicode map
-		set<uint32_t> assignedCodePoints;
+/** Returns a map that maps the character codes of the currently selected char map to their glyph IDs.
+ *  @param[in] face font face to build the map for
+ *  @param[out] gids all GIDs mapped to a char code
+ *  @return char code to GID map based on the data present in the font */
+static RangeMap build_charcode_to_gid_map (FT_Face face, set<uint32_t> &gids) {
+	RangeMap charmap;
+	FT_UInt gid;  // index of current glyph
+	uint32_t charcode = FT_Get_First_Char(face, &gid);
+	while (gid) {
+		charmap.addRange(charcode, charcode, gid);
+		gids.insert(gid);
+		charcode = FT_Get_Next_Char(face, charcode, &gid);
+	}
+	return charmap;
+}
+
+
+/** Returns a map that maps specified glyph IDs to Unicode code points based on the data in the font.
+ *  GIDs covered by the font's Unicode map are removed from set 'codePoints', the unmapped GIDs stay
+ *  in the set.
+ *  @param[in] face font face to build the map for
+ *  @param[in,out] gids glyph IDs to process; GIDs present in the resulting map are removed from this set
+ *  @param[out] codePoints code points successfully assigned to a GID
+ *  @return GID to code point map based on the data present in the font */
+static RangeMap build_gid_to_unicode_map (FT_Face face, set<uint32_t> &gids, set<uint32_t> &codePoints) {
+	RangeMap gidToUnicodeMap;
+	if (FT_Select_Charmap(face, FT_ENCODING_UNICODE) == 0) {
 		FT_UInt gid;  // index of current glyph
-		uint32_t cp = FT_Get_First_Char(_currentFace, &gid);  // Unicode code point
+		uint32_t cp = FT_Get_First_Char(face, &gid);  // Unicode code point
 		while (gid) {
-			uint32_t charCode = gidToCharCodeMap.valueAt(gid);
-			charmap->addRange(charCode, charCode, cp);
-			assignedCharCodes.erase(charCode);
-			assignedCodePoints.insert(cp);
-			cp = FT_Get_Next_Char(_currentFace, cp, &gid);
+			if (gids.find(gid) != gids.end()) {
+				gidToUnicodeMap.addRange(gid, gid, cp);
+				gids.erase(gid);
+				codePoints.insert(cp);
+			}
+			cp = FT_Get_Next_Char(face, cp, &gid);
 		}
-		FT_Set_Charmap(_currentFace, ftcharmap);
-		// assign code points from the PUA to characters not covered by the Unicode map
-		NumericRanges<uint32_t> pua({{0xE000, 0xF8FF}, {0xF0000, 0xFFFFD}, {0x100000, 0x10FFFD}});
-		auto puaIt = pua.valueIterator();
-		for (auto charCode : assignedCharCodes) {
-			for (; puaIt.valid(); ++puaIt) {
-				if (assignedCodePoints.find(*puaIt) == assignedCodePoints.end()) {
-					charmap->addRange(charCode, charCode, *puaIt);
-					assignedCodePoints.insert(*puaIt++);
-					break;
+		if (FT_HAS_GLYPH_NAMES(face)) {
+			for (auto gidIt = gids.begin(); gidIt != gids.end();) {
+				gid = *gidIt;
+				cp = gidToUnicodeMap.valueAt(gid);
+				if (!cp) {
+					char glyphName[64];
+					if (FT_Get_Glyph_Name(face, gid, glyphName, 64) == 0) {
+						cp = Unicode::aglNameToCodepoint(glyphName);
+						if (cp && codePoints.find(cp) == codePoints.end())
+							gidToUnicodeMap.addRange(gid, gid, cp);
+						else
+							cp = 0;
+					}
 				}
+				if (cp) {
+					codePoints.insert(cp);
+					gidIt = gids.erase(gidIt);
+				}
+				else ++gidIt;
 			}
 		}
+	}
+	return gidToUnicodeMap;
+}
+
+
+/** Creates a character map that maps from the custom character encoding to Unicode.
+ *  @return pointer to character map if it could be created, 0 otherwise */
+unique_ptr<const RangeMap> FontEngine::createCustomToUnicodeMap () const {
+	if (!_currentFace)
+		return nullptr;
+	auto charmap = util::make_unique<RangeMap>();
+	FT_CharMap ftcharmap = _currentFace->charmap;
+	if (FT_Select_Charmap(_currentFace, FT_ENCODING_ADOBE_CUSTOM) != 0)
+		return nullptr;
+
+	set<uint32_t> assignedGIDs;  // all GIDs assigned to a char code
+	const RangeMap charCodeToGIDMap = build_charcode_to_gid_map(_currentFace, assignedGIDs);
+
+	// get the code points for all GIDs assigned to custom character codes
+	set<uint32_t> assignedCodePoints;
+	RangeMap gidToUnicodeMap = build_gid_to_unicode_map(_currentFace, assignedGIDs, assignedCodePoints);
+
+	FT_Set_Charmap(_currentFace, ftcharmap);  // reassign initially active character map
+
+	// assign remaining GIDs to code points from a Private Use Area (PUA)
+	const NumericRanges<uint32_t> pua({{0xE000, 0xF8FF}, {0xF0000, 0xFFFFD}, {0x100000, 0x10FFFD}});
+	auto puaIt = pua.valueIterator();
+	for (const uint32_t gid : assignedGIDs) {
+		for (; puaIt.valid(); ++puaIt) {
+			if (assignedCodePoints.find(*puaIt) == assignedCodePoints.end()) {
+				gidToUnicodeMap.addRange(gid, gid, *puaIt);
+				assignedCodePoints.insert(*puaIt++);
+				break;
+			}
+		}
+	}
+	assignedCodePoints.clear();
+	// build the resulting map via char code -> GID -> code point
+	for (const auto entry : charCodeToGIDMap) {
+		const uint32_t charCode = entry.first;
+		const uint32_t gid = entry.second;
+		const uint32_t cp = gidToUnicodeMap.valueAt(gid);
+		charmap->addRange(charCode, charCode, cp);
 	}
 	return charmap->empty() ? nullptr : std::move(charmap);
 }

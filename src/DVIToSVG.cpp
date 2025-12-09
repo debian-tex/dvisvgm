@@ -161,6 +161,8 @@ void DVIToSVG::convert (const string &rangestr, pair<int,int> *pageinfo) {
 	PageRanges ranges;
 	if (!ranges.parse(rangestr, numberOfPages()))
 		throw MessageException("invalid page range format");
+	if (ranges.empty())
+		throw MessageException("selected page is not available");
 
 	Message::mstream(false, Message::MC_PAGE_NUMBER) << "pre-processing DVI file (format version "  << getDVIVersion() << ")\n";
 	if (auto actions = dynamic_cast<DVIToSVGActions*>(_actions.get())) {
@@ -188,7 +190,7 @@ void DVIToSVG::convert (const string &rangestr, pair<int,int> *pageinfo) {
 /** Writes the hash values of a selected set of pages to an output stream.
  *  @param[in] rangestr string describing the pages to convert
  *  @param[in,out] os stream the output is written to */
-void DVIToSVG::listHashes (const string &rangestr, std::ostream &os) {
+void DVIToSVG::listHashes (const string &rangestr, std::ostream &os) const {
 	PageRanges ranges;
 	if (!ranges.parse(rangestr, numberOfPages()))
 		throw MessageException("invalid page range format");

@@ -178,7 +178,7 @@ class PDFParser {
 
 
 /** If errors occur while parsing a sequence of PDF objects, an instance of this exception is thrown. */
-struct PDFException : public MessageException {
+struct PDFException : MessageException {
 	explicit PDFException (const std::string &msg) : MessageException(msg) {}
 };
 

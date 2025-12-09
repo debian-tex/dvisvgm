@@ -25,7 +25,7 @@
 #include "StreamReader.hpp"
 
 
-struct VFException : public MessageException {
+struct VFException : MessageException {
 	explicit VFException (const std::string &msg) : MessageException(msg) {}
 };
 

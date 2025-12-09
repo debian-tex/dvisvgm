@@ -22,7 +22,7 @@ Martin Gieseking <@PACKAGE_BUGREPORT@>
 :man source: dvisvgm
 :man version: @VERSION@
 :man manual: dvisvgm Manual
-:revdate: 2025-05-22 18:08 +0200
+:revdate: 2025-10-28 09:58 +0100
 
 Name
 ----
@@ -566,7 +566,7 @@ a hyphen, e.g. 5-12. Thus, a page sequence might look like this: 2-4,6,9-12,15. 
 if a page is given more than once or if page ranges overlap. dvisvgm always extracts the page
 numbers in ascending order and converts them only once.
 +
-In order to stay compatible with previous versions, the default page sequence is 1. dvisvgm
+In order to stay compatible with previous versions, the default page sequence is +1+. dvisvgm
 therefore converts only the first page and not the whole document if option *--page* is omitted.
 Usually, page ranges consist of two numbers denoting the first and last page to be converted.
 If the conversion should start at page 1, or if it should continue up to the last DVI page, the
@@ -575,6 +575,15 @@ pages up to page 10, +--page=10-+ converts all pages starting with page 10.
 Please consider that the page values don't refer to the page numbers printed on the
 corresponding page. Instead, the physical page count is expected, where the first page always
 gets number 1.
++
+To select the last page, expression +%P+ can be used instead of an explicit page number. It's
+replaced by the number of the last page. For example, +--page=1,%P+ converts the first and the
+last page of the document.
++
+Additionally, arithmetic expressions of the form +%(+'expr'+)+ in place of numbers are valid too.
+The resulting values are always rounded down to the nearest integer. See option *--output* for
+more information about the syntax and the supported arithmetic operators.
+Example: +--page=%(P-2)-+ converts the last three pages.
 +
 At the end of the range sequence an optional filter specifier can be appended in order to remove
 certain page numbers from the sequence. Currently, the two filters +:even+ and +:odd+ are supported

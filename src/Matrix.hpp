@@ -29,7 +29,7 @@
 #include "Pair.hpp"
 
 
-struct ParserException : public MessageException {
+struct ParserException : MessageException {
 	explicit ParserException (const std::string &msg) : MessageException(msg) {}
 };
 
@@ -85,27 +85,27 @@ class Matrix {
 };
 
 
-struct TranslationMatrix : public Matrix {
+struct TranslationMatrix : Matrix {
 	TranslationMatrix (double tx, double ty);
 };
 
 
-struct ScalingMatrix : public Matrix {
+struct ScalingMatrix : Matrix {
 	ScalingMatrix (double sx, double sy);
 };
 
 
-struct RotationMatrix : public Matrix {
+struct RotationMatrix : Matrix {
 	explicit RotationMatrix (double deg);
 };
 
 
-struct XSkewingMatrix : public Matrix {
+struct XSkewingMatrix : Matrix {
 	explicit XSkewingMatrix (double deg);
 };
 
 
-struct YSkewingMatrix : public Matrix {
+struct YSkewingMatrix : Matrix {
 	explicit YSkewingMatrix (double deg);
 };
 

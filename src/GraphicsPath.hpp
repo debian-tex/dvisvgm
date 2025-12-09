@@ -79,27 +79,27 @@ class Command : public CommandBase {
 };
 
 template <typename T>
-struct MoveTo : public Command<T, 1> {
+struct MoveTo : Command<T, 1> {
 	explicit MoveTo (const Pair<T> &p) : Command<T, 1>({p}) {}
 };
 
 template <typename T>
-struct LineTo : public Command<T, 1> {
+struct LineTo : Command<T, 1> {
 	explicit LineTo (const Pair<T> &p) : Command<T, 1>({p}) {}
 };
 
 template <typename T>
-struct CubicTo : public Command<T, 3> {
+struct CubicTo : Command<T, 3> {
 	explicit CubicTo (const Pair<T> &p1, const Pair<T> &p2, const Pair<T> &p3) : Command<T, 3>({p1, p2, p3}) {}
 };
 
 template <typename T>
-struct QuadTo : public Command<T, 2> {
+struct QuadTo : Command<T, 2> {
 	explicit QuadTo (const Pair<T> &p1, const Pair<T> &p2) : Command<T, 2>({p1, p2}) {}
 };
 
 template <typename T>
-struct ClosePath : public Command<T, 0> {
+struct ClosePath : Command<T, 0> {
 	ClosePath () : Command<T, 0>() {}
 };
 

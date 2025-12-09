@@ -27,12 +27,12 @@
 #include "MessageException.hpp"
 #include "StreamReader.hpp"
 
-struct DVIException : public MessageException {
+struct DVIException : MessageException {
 	explicit DVIException (const std::string &msg) : MessageException(msg) {}
 };
 
 
-struct DVIPrematureEOFException : public DVIException {
+struct DVIPrematureEOFException : DVIException {
 	explicit DVIPrematureEOFException () : DVIException("premature end of DVI stream") {}
 };
 
