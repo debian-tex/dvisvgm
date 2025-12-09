@@ -152,7 +152,7 @@ string SVGOutput::expandFormatString (string str, int page, int numPages, const 
 					auto endpos = str.find(')', pos);
 					if (endpos == string::npos)
 						throw MessageException("missing ')' in filename pattern");
-					else if (endpos-pos-1 > 1) {
+					if (endpos-pos-1 > 1) {
 						try {
 							Calculator calculator;
 							calculator.setVariable("p", page);

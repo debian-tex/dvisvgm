@@ -62,7 +62,7 @@ class DVIToSVG : public DVIReader {
 		double getXPos() const override       {return dviState().h+_tx;}
 		double getYPos() const override       {return dviState().v+_ty;}
 		void finishLine () override           {_prevYPos = std::numeric_limits<double>::min();}
-		void listHashes (const std::string &rangestr, std::ostream &os);
+		void listHashes (const std::string &rangestr, std::ostream &os) const;
 
 		FilePath getSVGFilePath (unsigned pageno) const;
 		const std::string& getUserBBoxString () const  {return _bboxFormatString;}

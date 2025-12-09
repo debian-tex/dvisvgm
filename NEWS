@@ -1,3 +1,17 @@
+dvisvgm-3.6 (2025-12-08)
+- removed the restriction to process PDF-1.x files only (GH issue #291)
+- option --page: added evaluation of %P which expands to the maximum page
+  number. Also, %(expr) is supported to evaluate arithmetic expressions,
+  like %(P-1)
+- option --page: page numbers greater than the maximum page number are no
+  longer replaced by the maximum page number but ignored
+- PDF handler: extended computation of opacity values (GH issue #292)
+- fixed lookup of character code 0 in character maps (GH issue #294)
+- fixed height and depth values shown when processing data created by
+  the 'preview' package
+- updated bundled brotli library to version 1.2.0
+- some code improvements
+
 dvisvgm-3.5 (2025-05-23)
 - fonts are now embedded in deterministic order (GH issue #288)
 - different glyphs are now always assigned to different Unicode code points

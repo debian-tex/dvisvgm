@@ -81,6 +81,8 @@ class NumericRanges {
 		void addRange (T first, T last);
 		void addRange (const Range &range)   {addRange(range.first, range.second);}
 		bool valueExists (T value) const;
+		void clear ()                        {_ranges.clear();}
+		bool empty () const                  {return _ranges.empty();}
 		size_t size () const                 {return _ranges.size();}
 		ConstIterator begin () const         {return _ranges.begin();}
 		ConstIterator end () const           {return _ranges.end();}

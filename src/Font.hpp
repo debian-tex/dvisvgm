@@ -445,7 +445,7 @@ C font_cast (typename util::set_const_of<Font>::by<typename std::remove_pointer<
 }
 
 
-struct FontException : public MessageException {
+struct FontException : MessageException {
 	explicit FontException (const std::string &msg) : MessageException(msg) {}
 };
 

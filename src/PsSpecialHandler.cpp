@@ -25,6 +25,7 @@
 #include "FileFinder.hpp"
 #include "FilePath.hpp"
 #include "FileSystem.hpp"
+#include "InputReader.hpp"
 #include "Message.hpp"
 #include "PathClipper.hpp"
 #include "PSPattern.hpp"
@@ -552,6 +553,10 @@ void PsSpecialHandler::dviEndPage (unsigned, SpecialActions &actions) {
 				w = actions.bbox().width();
 				h = max(0.0, -actions.bbox().minY());
 				d = max(0.0, actions.bbox().maxY());
+				if (d == 0)
+					h = actions.bbox().height();
+				else if (h == 0)
+					d = actions.bbox().height();
 				Message::mstream() << "\ncomputing extents based on data set by";
 			}
 			Message::mstream() << " preview package (version " << _previewHandler.version() << ")\n";

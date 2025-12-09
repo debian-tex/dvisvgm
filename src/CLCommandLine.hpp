@@ -59,7 +59,7 @@ class CommandLine {
 };
 
 
-struct CommandLineException : public MessageException {
+struct CommandLineException : MessageException {
 	explicit CommandLineException (const std::string &msg) : MessageException(msg) {}
 };
 

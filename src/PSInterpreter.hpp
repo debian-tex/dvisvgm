@@ -27,11 +27,10 @@
 #include <vector>
 #include "BoundingBox.hpp"
 #include "Ghostscript.hpp"
-#include "InputReader.hpp"
 #include "MessageException.hpp"
 
 
-struct PSException : public MessageException {
+struct PSException : MessageException {
 	explicit PSException (const std::string &msg) : MessageException(msg) {}
 };
 

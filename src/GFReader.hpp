@@ -31,7 +31,7 @@
 class CharInfo;
 
 
-struct GFException : public MessageException {
+struct GFException : MessageException {
 	explicit GFException (const std::string &msg) : MessageException(msg) {}
 };
 

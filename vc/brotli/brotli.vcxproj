@@ -180,6 +180,8 @@
     <ClCompile Include="..\..\libs\brotli\enc\memory.c" />
     <ClCompile Include="..\..\libs\brotli\enc\metablock.c" />
     <ClCompile Include="..\..\libs\brotli\enc\static_dict.c" />
+    <ClCompile Include="..\..\libs\brotli\enc\static_dict_lut.c" />
+    <ClCompile Include="..\..\libs\brotli\enc\static_init.c" />
     <ClCompile Include="..\..\libs\brotli\enc\utf8_util.c" />
   </ItemGroup>
   <ItemGroup>
@@ -206,20 +208,27 @@
     <ClInclude Include="..\..\libs\brotli\enc\compress_fragment.h" />
     <ClInclude Include="..\..\libs\brotli\enc\compress_fragment_two_pass.h" />
     <ClInclude Include="..\..\libs\brotli\enc\dictionary_hash.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\dictionary_hash_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\encoder_dict.h" />
     <ClInclude Include="..\..\libs\brotli\enc\entropy_encode.h" />
     <ClInclude Include="..\..\libs\brotli\enc\entropy_encode_static.h" />
     <ClInclude Include="..\..\libs\brotli\enc\fast_log.h" />
     <ClInclude Include="..\..\libs\brotli\enc\find_match_length.h" />
     <ClInclude Include="..\..\libs\brotli\enc\hash.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\hash_base.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\hash_composite_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\hash_forgetful_chain_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\hash_longest_match64_inc.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\hash_longest_match64_simd_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\hash_longest_match_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\hash_longest_match_quickly_inc.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\hash_longest_match_simd_inc.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\hash_rolling_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\hash_to_binary_tree_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\histogram.h" />
     <ClInclude Include="..\..\libs\brotli\enc\histogram_inc.h" />
     <ClInclude Include="..\..\libs\brotli\enc\literal_cost.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\matching_tag_mask.h" />
     <ClInclude Include="..\..\libs\brotli\enc\memory.h" />
     <ClInclude Include="..\..\libs\brotli\enc\metablock.h" />
     <ClInclude Include="..\..\libs\brotli\enc\metablock_inc.h" />
@@ -230,6 +239,8 @@
     <ClInclude Include="..\..\libs\brotli\enc\state.h" />
     <ClInclude Include="..\..\libs\brotli\enc\static_dict.h" />
     <ClInclude Include="..\..\libs\brotli\enc\static_dict_lut.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\static_dict_lut_inc.h" />
+    <ClInclude Include="..\..\libs\brotli\enc\static_init.h" />
     <ClInclude Include="..\..\libs\brotli\enc\utf8_util.h" />
     <ClInclude Include="..\..\libs\brotli\enc\write_bits.h" />
     <ClInclude Include="..\..\libs\brotli\include\brotli\decode.h" />
