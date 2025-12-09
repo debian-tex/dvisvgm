@@ -1,9 +1,10 @@
-dvisvgm (3.6+ds-1) UNRELEASED; urgency=medium
+dvisvgm (3.6+ds-1) unstable; urgency=medium
 
   * New upstream release, refresh patches.
   * Run self test during build.
+  * Bump Standards version, no changes needed.
 
- -- Hilmar Preuße <hille42@debian.org>  Tue, 09 Dec 2025 21:28:48 +0100
+ -- Hilmar Preuße <hille42@debian.org>  Tue, 09 Dec 2025 22:16:18 +0100
 
 dvisvgm (3.5+ds-1) unstable; urgency=medium
 

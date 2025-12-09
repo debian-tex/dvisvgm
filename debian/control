@@ -22,7 +22,7 @@ Build-Depends:
  python3 <!nocheck>,
  python3-lxml <!nocheck>
 Rules-Requires-Root: no
-Standards-Version: 4.6.2
+Standards-Version: 4.7.2
 Homepage: https://dvisvgm.de/
 Vcs-Git: https://github.com/debian-tex/dvisvgm.git
 Vcs-Browser: https://github.com/debian-tex/dvisvgm
